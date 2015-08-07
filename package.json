@@ -1,0 +1,24 @@
+{
+  "name": "react-lazyload",
+  "version": "0.0.1",
+  "description": "Lazyload your Component, Image or anything matters the performance.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonslyvia/react-lazyload.git"
+  },
+  "keywords": [
+    "react-component",
+    "react",
+    "lazyload"
+  ],
+  "author": "jasonslyvia <jasonslyvia@gmail.com> (http://undefinedblog.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jasonslyvia/react-lazyload/issues"
+  },
+  "homepage": "https://github.com/jasonslyvia/react-lazyload"
+}
