@@ -19,13 +19,13 @@ if (DEV_MODE) {
   );
 }
 else {
-  // plugins.push(
-  //   new webpack.optimize.UglifyJsPlugin({
-  //     compressor: {
-  //       warnings: false
-  //     }
-  //   })
-  // );
+  plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
+    })
+  );
 }
 
 var entry = [
