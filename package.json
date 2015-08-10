@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test",
     "demo:watch": "node server.js",
-    "demo:build": "NODE_ENV=production webpack --externals",
+    "demo:build": "NODE_ENV=production ./node_modules/.bin/webpack",
     "build": "./node_modules/.bin/babel src/ --out-dir lib/ --stage 0 --loose all"
   },
   "repository": {

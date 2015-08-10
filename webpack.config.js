@@ -29,6 +29,13 @@ else {
   );
 }
 
+var entry = [
+  './examples/app.js'
+].concat(DEV_MODE ? [
+  'webpack-dev-server/client?http://localhost:3000',
+  'webpack/hot/only-dev-server'
+] : []);
+
 module.exports = {
   module: {
     loaders: [{
@@ -38,13 +45,8 @@ module.exports = {
     }]
   },
 
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './examples/app'
-  ],
+  entry: entry,
 
-  cache: DEV_MODE,
   watch: DEV_MODE,
   debug: DEV_MODE,
   devtool: DEV_MODE ? '#inline-source-map' : false,
