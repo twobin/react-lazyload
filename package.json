@@ -1,10 +1,13 @@
 {
   "name": "react-lazyload",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Lazyload your Component, Image or anything matters the performance.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "npm run test",
+    "demo:watch": "node server.js",
+    "demo:build": "NODE_ENV=production webpack --externals",
+    "build": "./node_modules/.bin/babel src/ --out-dir lib/ --stage 0 --loose all"
   },
   "repository": {
     "type": "git",
@@ -20,5 +23,19 @@
   "bugs": {
     "url": "https://github.com/jasonslyvia/react-lazyload/issues"
   },
-  "homepage": "https://github.com/jasonslyvia/react-lazyload"
+  "homepage": "https://github.com/jasonslyvia/react-lazyload",
+  "devDependencies": {
+    "babel": "~5.8.21",
+    "babel-core": "~5.8.21",
+    "babel-loader": "~5.3.2",
+    "chai": "~3.2.0",
+    "istanbul": "~0.3.17",
+    "mocha": "~2.2.5",
+    "react-hot-loader": "~1.2.8",
+    "webpack": "~1.11.0",
+    "webpack-dev-server": "~1.10.1"
+  },
+  "dependencies": {
+    "react": "~0.13.3"
+  }
 }
