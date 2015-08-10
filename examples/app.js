@@ -21,11 +21,11 @@ class App extends Component {
         <LazyLoad key={5}>
           <Widget />
         </LazyLoad>
-        <LazyLoad key={6}>
-          <Widget />
+        <LazyLoad key={6} once>
+          <Widget text="Only update once!" />
         </LazyLoad>
-        <LazyLoad key={7}>
-          <Widget />
+        <LazyLoad key={7} once>
+          <Widget text="Only update once!" />
         </LazyLoad>
         <LazyLoad key={8}>
           <Widget />

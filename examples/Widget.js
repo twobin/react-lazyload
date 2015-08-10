@@ -28,7 +28,24 @@ class Widget extends Component {
   render() {
     return this.state.isReady ? (
       <div className="widget">
-        render times: {this.state.count}
+        {!!this.props.text ? (
+          <div className="widget-text once">
+            <code>
+              &lt;LazyLoad once&gt;<br />
+              &lt;Widget /&gt;<br />
+              &lt;/LazyLoad&gt;
+            </code>
+          </div>
+        ) : (
+          <div className="widget-text">
+            <code>
+              &lt;LazyLoad&gt;<br />
+              &lt;Widget /&gt;<br />
+              &lt;/LazyLoad&gt;
+            </code>
+          </div>
+        )}
+        <p>render times: {this.state.count}</p>
       </div>
     ) : (
       <div className="widget loading">

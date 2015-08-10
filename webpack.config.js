@@ -28,32 +28,38 @@ else {
   );
 }
 
-var entry = [
-  './examples/app.js'
-].concat(DEV_MODE ? [
+var entry = DEV_MODE ? [
   'webpack-dev-server/client?http://localhost:3000',
-  'webpack/hot/only-dev-server'
-] : []);
+  'webpack/hot/only-dev-server',
+  './examples/app.js'
+] : [
+  './examples/app.js'
+];
 
+var loaders = DEV_MODE ? [{
+  test: /\.jsx?$/,
+  loader: 'react-hot',
+  exclude: /node_modules/
+}, {
+  test: /\.jsx?$/,
+  loader: 'babel?stage=0&loose=all',
+  exclude: /node_modules/
+}] : [{
+  test: /\.jsx?$/,
+  loader: 'babel?stage=0&loose=all',
+  exclude: /node_modules/
+}];
 
 module.exports = {
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel?stage=0&loose=all',
-      exclude: /node_modules/
-    }].concat(DEV_MODE ? [{
-      test: /\.jsx?$/,
-      loader: 'react-hot',
-      exclude: /node_modules/
-    }] : [])
+    loaders: loaders
   },
 
   entry: entry,
 
   watch: DEV_MODE,
   debug: DEV_MODE,
-  devtool: DEV_MODE ? '#inline-source-map' : false,
+  devtool: DEV_MODE ? 'inline-source-map' : false,
 
   output: {
     path: path.join(__dirname, 'examples'),
