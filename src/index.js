@@ -22,8 +22,10 @@ const checkVisible = function(component) {
 
   const elementTop = top + scrollTop;
   const elementHeight = bottom - top;
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
-  if (elementTop < (scrollTop + window.innerHeight) && (elementTop + elementHeight) > scrollTop) {
+  if ((elementTop < (scrollTop + windowInnerHeight)) &&
+      ((elementTop + elementHeight) > scrollTop)) {
     component.setState({
       visible: true
     });
