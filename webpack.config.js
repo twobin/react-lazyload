@@ -36,13 +36,18 @@ var entry = [
   'webpack/hot/only-dev-server'
 ] : []);
 
+
 module.exports = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel-loader'],
+      loader: 'babel?stage=0&loose=all',
       exclude: /node_modules/
-    }]
+    }].concat(DEV_MODE ? [{
+      test: /\.jsx?$/,
+      loader: 'react-hot',
+      exclude: /node_modules/
+    }] : [])
   },
 
   entry: entry,
