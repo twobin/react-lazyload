@@ -28,7 +28,7 @@ class Widget extends Component {
   render() {
     return this.state.isReady ? (
       <div className="widget">
-        {!!this.props.text ? (
+        {this.props.once ? (
           <div className="widget-text once">
             <code>
               &lt;LazyLoad once&gt;<br />

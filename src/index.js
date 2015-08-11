@@ -7,7 +7,14 @@ import debounce from './utils/debounce';
 
 
 const listeners = [];
+let pending = [];
 
+/**
+ * Detect if element is visible in viewport, if so, set `visible` state to true.
+ * If `once` prop is provided true, remove component as listener after checkVisible
+ *
+ * @param  {React} component   React component that respond to scroll and resize
+ */
 const checkVisible = function(component) {
   const node = React.findDOMNode(component);
   const {top, bottom} = node.getBoundingClientRect();
@@ -31,15 +38,37 @@ const checkVisible = function(component) {
     });
 
     if (component.props.once) {
-      listeners.splice(listeners.indexOf(component), 1);
+      pending.push(component);
     }
+  }
+  else if (component.state.visible) {
+    component.setState({
+      visible: false
+    });
   }
 };
 
-const lazyLoadHandler = debounce(() => {
-  listeners.forEach(listener => {
-    checkVisible(listener);
+
+const purgePending = function() {
+  pending.forEach(component => {
+    const index = listeners.indexOf(component);
+    if (index !== -1) {
+      listeners.splice(index, 1);
+    }
   });
+
+  pending = [];
+};
+
+
+const lazyLoadHandler = debounce(() => {
+  for(let i = 0; i < listeners.length; ++i) {
+    const listener = listeners[i];
+    checkVisible(listener);
+  }
+
+  // Remove `once` component in listeners
+  purgePending();
 }, 300);
 
 
@@ -75,7 +104,7 @@ class LazyLoad extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState.visible || this.state.visible;
+    return nextState.visible;
   }
 
   render() {
