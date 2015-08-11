@@ -9,6 +9,7 @@ import debounce from './utils/debounce';
 const listeners = [];
 let pending = [];
 
+
 /**
  * Detect if element is visible in viewport, if so, set `visible` state to true.
  * If `once` prop is provided true, remove component as listener after checkVisible
@@ -33,9 +34,14 @@ const checkVisible = function(component) {
 
   if ((elementTop < (scrollTop + windowInnerHeight)) &&
       ((elementTop + elementHeight) > scrollTop)) {
-    component.setState({
-      visible: true
-    });
+
+    // Avoid extra render if previously is visible, yeah I mean `render` call,
+    // not actual DOM render
+    if (!component.state.visible) {
+      component.setState({
+        visible: true
+      });
+    }
 
     if (component.props.once) {
       pending.push(component);
@@ -91,6 +97,10 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.visible;
+  }
+
   componentWillUnmount() {
     const index = listeners.indexOf(this);
     if (index !== -1) {
@@ -103,12 +113,10 @@ class LazyLoad extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.visible;
-  }
-
   render() {
-    return addons.cloneWithProps(this.props.children, {visible: this.state.visible});
+    return addons.cloneWithProps(this.props.children, {
+      visible: this.state.visible
+    });
   }
 }
 
