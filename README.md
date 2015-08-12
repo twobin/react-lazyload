@@ -4,6 +4,10 @@ Lazyload your Components, Images or anything matters the performance.
 
 [Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
 
+## Demo
+
+![react-lazyload](http://ww3.sinaimg.cn/large/831e9385gw1euztky3z4bg208w0ftgzv.gif)
+
 ## Why it's better
 
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
@@ -34,13 +38,15 @@ const App = React.createClass({
         <LazyLoad>
           <MyComponent />
         </LazyLoad>
-        <LazyLoad once >       /* Once this component is loaded, LazyLoad will
-                                  not care about it anymore, stuff like images
-                                  should add `once` props to reduce listeners for
-                                  scroll/resize event and improve performance */
+        <LazyLoad once >        /* Once this component is loaded, LazyLoad will
+                                   not care about it anymore, stuff like images
+                                   should add `once` props to reduce listeners for
+                                   scroll/resize event and improve performance */
           <MyComponent />
         </LazyLoad>
-        <LazyLoad>
+        <LazyLoad offset={100}> /* This component will be loaded when it's top
+                                   edge is 100px from viewport. It's useful to
+                                   make user ignorant about lazy load effect. */
           <MyComponent />
         </LazyLoad>
         <LazyLoad>
@@ -61,6 +67,26 @@ React.render(<App />, document.body);
 Type: Bool Default: false
 
 Once the lazy loaded component is loaded, do not detect scroll/resize event anymore. Useful for images or simple components.
+
+### offset
+
+Type: Number Default: 0
+
+Say if you want to preload a module even if it's 100px below the viewport (user have to scroll 100px more to see this module), you can set `offset` props to `100`. On the other hand, if you want to delay loading a module even if it's top edge has already appeared at viewport, set `offset` props to negative number will make it delay loading.
+
+## Props added to children
+
+Like the example above, `<MyComponent>` will get following extra props:
+
+### visible
+
+Type: Bool
+
+Is component currently visible
+
+### firstTimeVisible
+
+Is component first time visible, useful for children component's `componentWillReceiveProps` detect whether or not should query new data.
 
 ## Scripts
 

@@ -10,19 +10,19 @@ class Widget extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    if(this.state.isReady) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== this.props.id || nextProps.firstTimeVisible) {
       this.setState({
         isReady: false
       });
-    }
 
-    setTimeout(() => {
-      this.setState({
-        isReady: true,
-        count: this.state.count + 1
-      });
-    }, 500);
+      setTimeout(() => {
+        this.setState({
+          isReady: true,
+          count: this.state.count + 1
+        });
+      }, 500);
+    }
   }
 
   render() {
@@ -46,6 +46,7 @@ class Widget extends Component {
           </div>
         )}
         <p>render times: {this.state.count}</p>
+        <p>props from parent: {this.props.id}</p>
       </div>
     ) : (
       <div className="widget loading">

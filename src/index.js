@@ -32,12 +32,13 @@ const checkVisible = function(component) {
   const elementHeight = bottom - top;
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
-  if ((elementTop < (scrollTop + windowInnerHeight)) &&
-      ((elementTop + elementHeight) > scrollTop)) {
+  if ((elementTop < (scrollTop + windowInnerHeight + component.props.offset)) &&
+      ((elementTop + elementHeight + component.props.offset) > scrollTop)) {
 
     // Avoid extra render if previously is visible, yeah I mean `render` call,
     // not actual DOM render
     if (!component.state.visible) {
+      component._firstTimeVisible = component._firstTimeVisible === undefined;
       component.setState({
         visible: true
       });
@@ -48,6 +49,10 @@ const checkVisible = function(component) {
     }
   }
   else if (component.state.visible) {
+    if (component._firstTimeVisible !== undefined) {
+      component._firstTimeVisible = false;
+    }
+
     component.setState({
       visible: false
     });
@@ -115,18 +120,21 @@ class LazyLoad extends Component {
 
   render() {
     return addons.cloneWithProps(this.props.children, {
-      visible: this.state.visible
+      visible: this.state.visible,
+      firstTimeVisible: this._firstTimeVisible
     });
   }
 }
 
 LazyLoad.propTypes = {
   once: PropTypes.bool,
+  offset: PropTypes.number,
   children: PropTypes.node
 };
 
 LazyLoad.defaultProps = {
-  once: false
+  once: false,
+  offset: 0
 };
 
 export default LazyLoad;
