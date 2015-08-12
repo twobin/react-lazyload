@@ -74,6 +74,20 @@ Type: Number Default: 0
 
 Say if you want to preload a module even if it's 100px below the viewport (user have to scroll 100px more to see this module), you can set `offset` props to `100`. On the other hand, if you want to delay loading a module even if it's top edge has already appeared at viewport, set `offset` props to negative number will make it delay loading.
 
+### scroll
+
+Type: Bool Default: true
+
+Respond to `scroll` event, this is default behaviour.
+
+### resize
+
+Type: Bool Default: false
+
+Respond to `resize` event, set it to `true` if you do need LazyLoad listen resize event.
+
+**NOTICE** If you tend to support legacy IE, set this props carefully, refer to [this question](http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer) for further reading.
+
 ## Props added to children
 
 Like the example above, `<MyComponent>` will get following extra props:

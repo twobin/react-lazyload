@@ -94,8 +94,12 @@ class LazyLoad extends Component {
 
   componentDidMount() {
     if (listeners.length === 0) {
-      on(window, 'scroll', lazyLoadHandler);
-      on(window, 'resize', lazyLoadHandler);
+      if (this.props.scroll) {
+        on(window, 'scroll', lazyLoadHandler);
+      }
+      if (this.props.resize) {
+        on(window, 'resize', lazyLoadHandler);
+      }
     }
 
     listeners.push(this);
@@ -129,12 +133,16 @@ class LazyLoad extends Component {
 LazyLoad.propTypes = {
   once: PropTypes.bool,
   offset: PropTypes.number,
+  scroll: PropTypes.bool,
+  resize: PropTypes.bool,
   children: PropTypes.node
 };
 
 LazyLoad.defaultProps = {
   once: false,
-  offset: 0
+  offset: 0,
+  scroll: true,
+  resize: false
 };
 
 export default LazyLoad;

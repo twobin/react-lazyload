@@ -1,6 +1,6 @@
 {
   "name": "react-lazyload",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Lazyload your Component, Image or anything matters the performance.",
   "main": "lib/index.js",
   "scripts": {
