@@ -110,6 +110,12 @@ class LazyLoad extends Component {
     return nextState.visible;
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.visible && this._firstTimeVisible) {
+      this._firstTimeVisible = false;
+    }
+  }
+
   componentWillUnmount() {
     const index = listeners.indexOf(this);
     if (index !== -1) {
