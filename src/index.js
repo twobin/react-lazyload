@@ -111,7 +111,7 @@ class LazyLoad extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.visible && this._firstTimeVisible) {
+    if (this.state.visible && nextState.visible && this._firstTimeVisible) {
       this._firstTimeVisible = false;
     }
   }
