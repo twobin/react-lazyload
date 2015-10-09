@@ -1,6 +1,6 @@
 {
   "name": "react-lazyload",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Lazyload your Component, Image or anything matters the performance.",
   "main": "lib/index.js",
   "scripts": {
@@ -33,9 +33,10 @@
     "mocha": "~2.2.5",
     "react-hot-loader": "~1.2.8",
     "webpack": "~1.11.0",
-    "webpack-dev-server": "~1.10.1"
+    "webpack-dev-server": "~1.10.1",
+    "react": "~0.13.3"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "~0.13.3"
   }
 }
