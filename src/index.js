@@ -1,7 +1,8 @@
 /**
  * react-lazyload
  */
-import React, {Component, PropTypes, addons} from 'react/addons';
+import React, {Component, PropTypes} from 'react';
+import ReactDom from 'react-dom';
 import {on, off} from './utils/event';
 import debounce from './utils/debounce';
 
@@ -17,7 +18,7 @@ let pending = [];
  * @param  {React} component   React component that respond to scroll and resize
  */
 const checkVisible = function(component) {
-  const node = React.findDOMNode(component);
+  const node = ReactDom.findDOMNode(component);
   const {top, bottom} = node.getBoundingClientRect();
 
   const supportPageOffset = window.pageXOffset !== undefined;
@@ -129,7 +130,7 @@ class LazyLoad extends Component {
   }
 
   render() {
-    return addons.cloneWithProps(this.props.children, {
+    return React.cloneElement(this.props.children, {
       visible: this.state.visible,
       firstTimeVisible: this._firstTimeVisible
     });
