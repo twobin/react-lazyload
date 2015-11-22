@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDom from 'react-dom';
 import LazyLoad from '../src/';
 import Widget from './Widget';
 
@@ -56,4 +57,4 @@ class App extends Component {
   }
 }
 
-React.render(<App />, document.getElementById('container'));
+ReactDom.render(<App />, document.getElementById('container'));
