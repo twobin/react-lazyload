@@ -17,6 +17,16 @@ Let's say there is a `fixed` date picker on the page, when user pick a different
 
 Using `LazyLoad` component will help ease this situation by only update components in viewport.
 
+## Installation
+
+```
+$ npm install --save react-lazyload
+
+// If you tend to support React v0.13, you should use v0.2.4 which is the
+// latest compatible version
+$ npm install --save react-lazyload@0.2.4
+```
+
 ## Usage
 
 ```
@@ -104,6 +114,11 @@ Is component first time visible, useful for children component's `componentWillR
 $ npm run demo:watch
 $ npm run build
 ```
+
+## Contributors
+
+1. [lancehub](https://github.com/lancehub)
+
 
 ## License
 
