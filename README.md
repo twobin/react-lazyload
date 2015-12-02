@@ -31,6 +31,7 @@ $ npm install --save react-lazyload@0.2.4
 
 ```
 import React from 'react';
+import ReacrDOM from 'react-dom';
 import LazyLoad from 'react-lazyload';
 import MyComponent from './MyComponent';
 
@@ -63,7 +64,7 @@ const App = React.createClass({
   }
 });
 
-React.render(<App />, document.body);
+ReactDOM.render(<App />, document.body);
 ```
 
 ## Props
