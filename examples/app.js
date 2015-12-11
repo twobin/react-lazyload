@@ -52,6 +52,16 @@ class App extends Component {
             );
           })}
         </div>
+        <h1>LazyLoad in Overflow Container</h1>
+        <div className="widget-list overflow">
+          {this.state.arr.map((el, index) => {
+            return (
+              <LazyLoad once={el.once} key={index} wheel={true}>
+                <Widget once={el.once} id={el.uniqueId} />
+              </LazyLoad>
+            );
+          })}
+        </div>
       </div>
     );
   }

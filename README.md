@@ -87,6 +87,12 @@ Type: Bool Default: true
 
 Respond to `scroll` event, this is default behaviour.
 
+### wheel
+
+Type: Bool Default: false
+
+Respond to `wheel` event, this behavior allows for lazy loading within overflow containers. If this is set to true, scroll events will not be monitored. This setting **is not IE8 compatible.**
+
 ### resize
 
 Type: Bool Default: false
