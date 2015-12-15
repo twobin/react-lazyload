@@ -8,7 +8,7 @@ Lazyload your Components, Images or anything matters the performance.
 
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
  - Support both `one-time lazy load` and `continuous lazy load` mode
- - `scroll` / `resize` event handler is debounced so you won't suffer with frequent update
+ - `wheel` / `mousewheel` / `resize` event handler is debounced so you won't suffer frequent update
  - IE 8 compatible
 
 ## Who should use it
