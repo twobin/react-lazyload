@@ -95,8 +95,11 @@ class LazyLoad extends Component {
 
   componentDidMount() {
     if (listeners.length === 0) {
-      if (this.props.scroll) {
-        on(window, 'scroll', lazyLoadHandler);
+      if (window.hasOwnProperty('onwheel')) {
+        on(window, 'wheel', lazyLoadHandler);
+      }
+      else {
+        on(window, 'mousewheel', lazyLoadHandler);
       }
       if (this.props.resize) {
         on(window, 'resize', lazyLoadHandler);
@@ -124,7 +127,8 @@ class LazyLoad extends Component {
     }
 
     if (listeners.length === 0) {
-      off(window, 'scroll', lazyLoadHandler);
+      off(window, 'wheel', lazyLoadHandler);
+      off(window, 'mousewheel', lazyLoadHandler);
       off(window, 'resize', lazyLoadHandler);
     }
   }
@@ -140,7 +144,6 @@ class LazyLoad extends Component {
 LazyLoad.propTypes = {
   once: PropTypes.bool,
   offset: PropTypes.number,
-  scroll: PropTypes.bool,
   resize: PropTypes.bool,
   children: PropTypes.node
 };
@@ -148,8 +151,7 @@ LazyLoad.propTypes = {
 LazyLoad.defaultProps = {
   once: false,
   offset: 0,
-  scroll: true,
-  resize: false
+  resize: false,
 };
 
 export default LazyLoad;

@@ -81,12 +81,6 @@ Type: Number Default: 0
 
 Say if you want to preload a module even if it's 100px below the viewport (user have to scroll 100px more to see this module), you can set `offset` props to `100`. On the other hand, if you want to delay loading a module even if it's top edge has already appeared at viewport, set `offset` props to negative number will make it delay loading.
 
-### scroll
-
-Type: Bool Default: true
-
-Respond to `scroll` event, this is default behaviour.
-
 ### resize
 
 Type: Bool Default: false
