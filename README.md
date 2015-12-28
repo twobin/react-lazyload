@@ -77,9 +77,11 @@ Once the lazy loaded component is loaded, do not detect scroll/resize event anym
 
 ### offset
 
-Type: Number Default: 0
+Type: Number/Array(Number) Default: 0
 
 Say if you want to preload a module even if it's 100px below the viewport (user have to scroll 100px more to see this module), you can set `offset` props to `100`. On the other hand, if you want to delay loading a module even if it's top edge has already appeared at viewport, set `offset` props to negative number will make it delay loading.
+
+If you provide this props with array like `[200, 200]`, it will set top edge offset and bottom edge offset respectively.
 
 ### resize
 
