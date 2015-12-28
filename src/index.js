@@ -33,13 +33,12 @@ const checkVisible = function(component) {
   const elementHeight = bottom - top;
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
-  let {offset, offsets = []} = component.props;
-  if (offsets.length < 2) {
-    offsets = [offset, offset];
-  }
+  let offsets = Array.isArray(component.props.offset) ?
+                component.props.offset :
+                [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  if ((elementTop < (scrollTop + windowInnerHeight + offsets[1])) &&
-      ((elementTop + elementHeight + offsets[0]) > scrollTop)) {
+  if ((elementTop < (scrollTop + windowInnerHeight + offsets[0])) &&
+      ((elementTop + elementHeight + offsets[1]) > scrollTop)) {
 
     // Avoid extra render if previously is visible, yeah I mean `render` call,
     // not actual DOM render
@@ -148,8 +147,7 @@ class LazyLoad extends Component {
 
 LazyLoad.propTypes = {
   once: PropTypes.bool,
-  offset: PropTypes.number,
-  offsets: PropTypes.array,
+  offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   resize: PropTypes.bool,
   children: PropTypes.node
 };
@@ -157,7 +155,6 @@ LazyLoad.propTypes = {
 LazyLoad.defaultProps = {
   once: false,
   offset: 0,
-  offsets: [],
   resize: false,
 };
 
