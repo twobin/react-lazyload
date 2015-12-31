@@ -35,6 +35,13 @@ class App extends Component {
     });
   }
 
+  handleQuickJump(index) {
+    const nodeList = document.querySelectorAll('.widget-list .widget');
+    if (nodeList[index]) {
+      window.scrollTo(0, nodeList[index].getBoundingClientRect().top + window.pageYOffset);
+    }
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -42,6 +49,12 @@ class App extends Component {
           <a className="update-btn button-secondary pure-button" onClick={::this.handleClick}>Update</a>
           <p className="desc">Clicking this button will make all <code>Widgets</code> in <strong> visible area </strong>reload data from server.</p>
           <p className="desc">Pay attention to <code>props from parent</code> block in <code>Widget</code> to identify how LazyLoad works.</p>
+        </div>
+        <div className="quick-jump">
+          <h4>Quick jump to: </h4>
+          {this.state.arr.map((el, index) => {
+            return <a href="javascript:;" onClick={this.handleQuickJump.bind(this, index)} key={index}>{index+1}</a>;
+          })}
         </div>
         <div className="widget-list">
           {this.state.arr.map((el, index) => {

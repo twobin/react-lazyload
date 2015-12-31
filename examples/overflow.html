@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>react-lazyload demo</title>
+  <style type="text/css">
+  /*!
+Pure v0.6.0
+Copyright 2014 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-button{display:inline-block;zoom:1;line-height:normal;white-space:nowrap;vertical-align:middle;text-align:center;cursor:pointer;-webkit-user-drag:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.pure-button::-moz-focus-inner{padding:0;border:0}.pure-button{font-family:inherit;font-size:100%;padding:.5em 1em;color:#444;color:rgba(0,0,0,.8);border:1px solid #999;border:0 rgba(0,0,0,0);background-color:#E6E6E6;text-decoration:none;border-radius:2px}.pure-button-hover,.pure-button:hover,.pure-button:focus{filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000', GradientType=0);background-image:-webkit-gradient(linear,0 0,0 100%,from(transparent),color-stop(40%,rgba(0,0,0,.05)),to(rgba(0,0,0,.1)));background-image:-webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));background-image:-moz-linear-gradient(top,rgba(0,0,0,.05) 0,rgba(0,0,0,.1));background-image:-o-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1))}.pure-button:focus{outline:0}.pure-button-active,.pure-button:active{box-shadow:0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset;border-color:#000\9}.pure-button[disabled],.pure-button-disabled,.pure-button-disabled:hover,.pure-button-disabled:focus,.pure-button-disabled:active{border:0;background-image:none;filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);filter:alpha(opacity=40);-khtml-opacity:.4;-moz-opacity:.4;opacity:.4;cursor:not-allowed;box-shadow:none}.pure-button-hidden{display:none}.pure-button::-moz-focus-inner{padding:0;border:0}.pure-button-primary,.pure-button-selected,a.pure-button-primary,a.pure-button-selected{background-color:#0078e7;color:#fff}
+</style>
+  <style type="text/css">
+  * {
+    box-sizing: border-box;
+  }
+
+  .widget-list {
+    width: 800px;
+    margin: 0 auto;
+    counter-reset: widgets;
+  }
+
+  .overflow-wrapper h1 {
+    text-align: center;
+  }
+
+  .widget-list.overflow {
+    padding: 20px 30px;
+    height: 500px;
+    overflow-y: scroll;
+    border: 1px #d9d9d9 dotted;
+  }
+
+  .widget {
+    position: relative;
+    border: 1px #ccc solid;
+    background: #eee;
+  }
+
+  .widget:before {
+    content: counter(widgets);
+    counter-increment: widgets;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #ccc;
+    font: 120px/1 Arial;
+  }
+
+  .widget-text {
+    line-height: 16px;
+  }
+
+  .once code {
+    color: #f40;
+  }
+
+  .loading {
+    border: 1px #f40 dashed;
+  }
+
+  .loading, .widget {
+    width: 100%;
+    height: 200px;
+    text-align: center;
+    padding-top: 50px;
+    margin: 10px 0;
+  }
+
+  .op {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    width: 250px;
+    border: 1px #eee dotted;
+  }
+
+  .button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(66, 184, 221); /* this is a light blue */
+  }
+  </style>
+  <!--[if IE 8]>
+    <script src="//g.alicdn.com/dt/op-base/2.1.8/js/compat.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div id="container"></div>
+  <script type="text/javascript" src="js/vendors.js"></script>
+  <script type="text/javascript" src="js/overflow.js"></script>
+</body>
+</html>

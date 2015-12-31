@@ -37,16 +37,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="wrapper">
+      <div className="wrapper overflow-wrapper">
         <div className="op">
           <a className="update-btn button-secondary pure-button" onClick={::this.handleClick}>Update</a>
           <p className="desc">Clicking this button will make all <code>Widgets</code> in <strong> visible area </strong>reload data from server.</p>
           <p className="desc">Pay attention to <code>props from parent</code> block in <code>Widget</code> to identify how LazyLoad works.</p>
         </div>
-        <div className="widget-list">
+        <h1>LazyLoad in Overflow Container</h1>
+        <div className="widget-list overflow">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index}>
+              <LazyLoad once={el.once} key={index} wheel={true} scroll={false}>
                 <Widget once={el.once} id={el.uniqueId} />
               </LazyLoad>
             );
