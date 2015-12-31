@@ -83,6 +83,18 @@ Say if you want to preload a module even if it's 100px below the viewport (user 
 
 If you provide this props with array like `[200, 200]`, it will set top edge offset and bottom edge offset respectively.
 
+### scroll
+
+Type: Bool Default: true
+
+ONLY SET THIS TO `false` IF YOU SET `wheel` PROPS `true`.
+
+### wheel
+
+Type: Bool Default: false
+
+For overflow containers, scroll event not propagated to `window`, so you should use `wheel` props to make LazyLoad listen `wheel` event instead of `scroll`. Check [this demo](https://jasonslyvia.github.io/react-lazyload/examples/overflow.html) for detail.
+
 ### resize
 
 Type: Bool Default: false
