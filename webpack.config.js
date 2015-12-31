@@ -20,6 +20,7 @@ if (DEV_MODE) {
 }
 else {
   plugins.push(
+    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
@@ -32,9 +33,12 @@ var entry = DEV_MODE ? [
   'webpack-dev-server/client?http://localhost:3000',
   'webpack/hot/only-dev-server',
   './examples/app.js'
-] : [
-  './examples/app.js'
-];
+] : {
+  app: './examples/app.js',
+  overflow: './examples/overflow.js',
+  scroll: './examples/scroll.js',
+  vendors: ['react']
+};
 
 var loaders = DEV_MODE ? [{
   test: /\.jsx?$/,
@@ -59,11 +63,11 @@ module.exports = {
 
   watch: DEV_MODE,
   debug: DEV_MODE,
-  devtool: DEV_MODE ? 'inline-source-map' : false,
+  devtool: DEV_MODE ? 'inline-source-map' : 'source-map',
 
   output: {
-    path: path.join(__dirname, 'examples'),
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'examples/js/'),
+    filename: '[name].js'
   },
 
   plugins: plugins,
