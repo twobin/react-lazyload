@@ -4,6 +4,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDom from 'react-dom';
 import {on, off} from './utils/event';
+import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 
 
@@ -12,14 +13,35 @@ let pending = [];
 
 
 /**
- * Detect if element is visible in viewport, if so, set `visible` state to true.
- * If `once` prop is provided true, remove component as listener after checkVisible
- *
- * @param  {React} component   React component that respond to scroll and resize
+ * Check if `component` is visible in overflow container `parent`
+ * @param  {node} component React component
+ * @param  {node} parent    component's scroll parent
+ * @return {bool}
  */
-const checkVisible = function(component) {
+const checkOverflowVisible = function(component, parent) {
   const node = ReactDom.findDOMNode(component);
-  const {top, bottom} = node.getBoundingClientRect();
+
+  const scrollTop = parent.scrollTop();
+  const { height: elementHeight } = node.getBoundingClientRect();
+
+  let offsets = Array.isArray(component.props.offset) ?
+                component.props.offset :
+                [component.props.offset, component.props.offset]; // Be compatible with previous API
+  const elementTop = node.offsetTop;
+
+  return (elementTop < (scrollTop + offsets[0])) &&
+         ((elementTop + elementHeight + offsets[1]) > scrollTop);
+}
+
+/**
+ * Check if `component` is visible in document
+ * @param  {node} component React component
+ * @return {bool}
+ */
+const checkNormalVisible = function(component) {
+  const node = ReactDom.findDOMNode(component);
+
+  const { top, bottom } = node.getBoundingClientRect();
 
   const supportPageOffset = window.pageXOffset !== undefined;
   const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
@@ -37,9 +59,25 @@ const checkVisible = function(component) {
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  if ((elementTop < (scrollTop + windowInnerHeight + offsets[0])) &&
-      ((elementTop + elementHeight + offsets[1]) > scrollTop)) {
+  return (elementTop < (scrollTop + windowInnerHeight + offsets[0])) &&
+         ((elementTop + elementHeight + offsets[1]) > scrollTop);
+}
 
+
+/**
+ * Detect if element is visible in viewport, if so, set `visible` state to true.
+ * If `once` prop is provided true, remove component as listener after checkVisible
+ *
+ * @param  {React} component   React component that respond to scroll and resize
+ */
+const checkVisible = function(component) {
+  const node = ReactDom.findDOMNode(component);
+  const parent = scrollParent(node);
+  const isOverflow = parent !== (node.ownerDocument || document);
+
+  const visible = isOverflow ? checkOverflowVisible(component, parent) : checkNormalVisible(component);
+
+  if (visible) {
     // Avoid extra render if previously is visible, yeah I mean `render` call,
     // not actual DOM render
     if (!component.state.visible) {
@@ -92,6 +130,10 @@ class LazyLoad extends Component {
   constructor(props) {
     super(props);
 
+    if (props.scroll === true && props.wheel === true) {
+      console && console.warn('[react-lazyload] Don\'t use both `scroll` and `wheel` event in LazyLoad component, pick one!');
+    }
+
     this.state = {
       visible: false
     };
@@ -99,12 +141,19 @@ class LazyLoad extends Component {
 
   componentDidMount() {
     if (listeners.length === 0) {
-      if (window.hasOwnProperty('onwheel')) {
-        on(window, 'wheel', lazyLoadHandler);
+      if (this.props.scroll) {
+        on(window, 'scroll', lazyLoadHandler);
       }
-      else {
-        on(window, 'mousewheel', lazyLoadHandler);
+
+      if (this.props.wheel) {
+        if (window.hasOwnProperty('onwheel')) {
+          on(window, 'wheel', lazyLoadHandler);
+        }
+        else {
+          on(window, 'mousewheel', lazyLoadHandler);
+        }
       }
+
       if (this.props.resize) {
         on(window, 'resize', lazyLoadHandler);
       }
@@ -134,6 +183,7 @@ class LazyLoad extends Component {
       off(window, 'wheel', lazyLoadHandler);
       off(window, 'mousewheel', lazyLoadHandler);
       off(window, 'resize', lazyLoadHandler);
+      off(window, 'scroll', lazyLoadHandler);
     }
   }
 
@@ -148,6 +198,8 @@ class LazyLoad extends Component {
 LazyLoad.propTypes = {
   once: PropTypes.bool,
   offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
+  scroll: PropTypes.bool,
+  wheel: PropTypes.bool,
   resize: PropTypes.bool,
   children: PropTypes.node
 };
@@ -155,6 +207,8 @@ LazyLoad.propTypes = {
 LazyLoad.defaultProps = {
   once: false,
   offset: 0,
+  scroll: true,
+  wheel: false,
   resize: false,
 };
 
