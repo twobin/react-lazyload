@@ -37,6 +37,7 @@ var entry = DEV_MODE ? [
   app: './examples/app.js',
   overflow: './examples/overflow.js',
   scroll: './examples/scroll.js',
+  throttle: './examples/throttle.js',
   vendors: ['react']
 };
 
