@@ -1,4 +1,4 @@
-export default function debounce(func, wait, immediate) {
+export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result;
 
   const later = function() {
@@ -35,4 +35,18 @@ export default function debounce(func, wait, immediate) {
 
     return result;
   };
+}
+
+export function throttle(func, wait) {
+  let call = false;
+  return function() {
+    if (!call) {
+      func.call();
+      call = true;
+
+      setTimeout(function(){
+        call = false;
+      }, wait);
+    }
+  }
 }
