@@ -32,8 +32,14 @@ $ npm install --save react-lazyload@0.2.4
 ```
 import React from 'react';
 import ReacrDOM from 'react-dom';
-import LazyLoad from 'react-lazyload';
+import createLazyLoad from 'react-lazyload';
 import MyComponent from './MyComponent';
+
+const LazyLoad = createLazyLoad({
+  eventType: 'scroll resize wheel',
+  rateLimit: 'debounce',
+  wait: 300
+});
 
 const App = React.createClass({
   render() {
@@ -67,6 +73,36 @@ const App = React.createClass({
 ReactDOM.render(<App />, document.body);
 ```
 
+## Options
+
+By default, you will import a factory from `react-lazyload` which will create a `LazyLoad` component according to options you passed in.
+
+### eventType
+
+Type: String Default: 'scroll'
+
+Which kind of events should LazyLoad listen to. Multiple event types can be a string separated by a white space. Eg. 'scroll wheel'.
+
+Other options would be `'wheel'` or `'resize'`.
+
+For overflow containers, scroll event not propagated to `window`, so you should use `wheel` props to make LazyLoad listen `wheel` event instead of `scroll`. Check [this demo](https://jasonslyvia.github.io/react-lazyload/examples/overflow.html) for detail.
+
+**NOTICE** If you tend to support legacy IE, set this props carefully, refer to [this question](http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer) for further reading.
+
+### rateLimit
+
+Type: String Default: 'debounce'
+
+Which kind of rate limit method should we use. It is highly recommended to use at lease one kind of rate limit method because of the high invoke frequency of `scroll` event.
+
+An alternative option would be `'throttle'`.
+
+### wait
+
+Type: Number Default: 300
+
+How many ms should rate limit method wait.
+
 ## Props
 
 ### once
@@ -82,26 +118,6 @@ Type: Number/Array(Number) Default: 0
 Say if you want to preload a module even if it's 100px below the viewport (user have to scroll 100px more to see this module), you can set `offset` props to `100`. On the other hand, if you want to delay loading a module even if it's top edge has already appeared at viewport, set `offset` props to negative number will make it delay loading.
 
 If you provide this props with array like `[200, 200]`, it will set top edge offset and bottom edge offset respectively.
-
-### scroll
-
-Type: Bool Default: true
-
-ONLY SET THIS TO `false` IF YOU SET `wheel` PROPS `true`.
-
-### wheel
-
-Type: Bool Default: false
-
-For overflow containers, scroll event not propagated to `window`, so you should use `wheel` props to make LazyLoad listen `wheel` event instead of `scroll`. Check [this demo](https://jasonslyvia.github.io/react-lazyload/examples/overflow.html) for detail.
-
-### resize
-
-Type: Bool Default: false
-
-Respond to `resize` event, set it to `true` if you do need LazyLoad listen resize event.
-
-**NOTICE** If you tend to support legacy IE, set this props carefully, refer to [this question](http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer) for further reading.
 
 ## Props added to children
 
