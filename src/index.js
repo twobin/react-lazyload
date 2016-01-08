@@ -21,7 +21,7 @@ let pending = [];
 const checkOverflowVisible = function(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const scrollTop = parent.scrollTop();
+  const scrollTop = parent.scrollTop;
   const { height: elementHeight } = node.getBoundingClientRect();
 
   let offsets = Array.isArray(component.props.offset) ?
