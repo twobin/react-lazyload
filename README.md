@@ -4,6 +4,8 @@ Lazyload your Components, Images or anything matters the performance.
 
 [Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
 
+> 2.0.0-beta is out, try it out [here](https://github.com/jasonslyvia/react-lazyload/tree/2.0.0-beta2)
+
 ## Why it's better
 
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
