@@ -188,6 +188,14 @@ class LazyLoad extends Component {
   }
 
   render() {
+    /**
+     * For components like images, they shouldn't be rendered until it appears
+     * in the viewport.
+     */
+    if (this.props.once && !this.state.visible) {
+      return null;
+    }
+
     return React.cloneElement(this.props.children, {
       visible: this.state.visible,
       firstTimeVisible: this._firstTimeVisible
