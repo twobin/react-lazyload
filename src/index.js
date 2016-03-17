@@ -72,6 +72,10 @@ const checkNormalVisible = function(component) {
  */
 const checkVisible = function(component) {
   const node = ReactDom.findDOMNode(component);
+  if (!node) {
+    return;
+  }
+
   const parent = scrollParent(node);
   const isOverflow = parent !== (node.ownerDocument || document);
 
@@ -221,3 +225,5 @@ LazyLoad.defaultProps = {
 };
 
 export default LazyLoad;
+
+export lazyload from './decorator';
