@@ -9,8 +9,6 @@ var path = require('path');
 var serverOptions = {
   quiet: false,
   noInfo: false,
-  hot: true,
-  lazy: false,
   historyApiFallback: true,
   publicPath: config.output.publicPath,
   contentBase: path.join(__dirname, 'examples'),

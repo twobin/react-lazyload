@@ -18,7 +18,7 @@
     "curly": [1],
     "eqeqeq": [1],
     "guard-for-in": [2],
-    "no-empty-label": [1],
+    "no-labels": [1],
     "no-eval": [1],
     "no-extra-bind": [1],
     "no-implied-eval": [1],

@@ -14,8 +14,6 @@ var DEV_MODE = process.env.NODE_ENV !== 'production';
 
 if (DEV_MODE) {
   plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
   );
 }
 else {
@@ -29,22 +27,8 @@ else {
   );
 }
 
-var entry = DEV_MODE ? [
-  'webpack-dev-server/client?http://localhost:3000',
-  'webpack/hot/only-dev-server',
-  './examples/app.js'
-] : {
-  app: './examples/app.js',
-  overflow: './examples/overflow.js',
-  scroll: './examples/scroll.js',
-  vendors: ['react']
-};
 
 var loaders = DEV_MODE ? [{
-  test: /\.jsx?$/,
-  loader: 'react-hot',
-  exclude: /node_modules/
-}, {
   test: /\.jsx?$/,
   loader: 'babel?stage=0&loose=all',
   exclude: /node_modules/
@@ -59,15 +43,21 @@ module.exports = {
     loaders: loaders
   },
 
-  entry: entry,
+  entry: {
+    app: './examples/app.js',
+    overflow: './examples/overflow.js',
+    scroll: './examples/scroll.js',
+    decorator: './examples/decorator.js',
+    vendors: ['react']
+  },
 
   watch: DEV_MODE,
-  debug: DEV_MODE,
   devtool: DEV_MODE ? 'inline-source-map' : 'source-map',
 
   output: {
     path: path.join(__dirname, 'examples/js/'),
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/js/'
   },
 
   plugins: plugins,
