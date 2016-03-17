@@ -12,6 +12,7 @@ Lazyload your Components, Images or anything matters the performance.
  - Support both `one-time lazy load` and `continuous lazy load` mode
  - `wheel` / `mousewheel` / `resize` event handler is debounced so you won't suffer frequent update
  - IE 8 compatible
+ - Decorator supported
 
 ## Who should use it
 
@@ -67,6 +68,22 @@ const App = React.createClass({
 });
 
 ReactDOM.render(<App />, document.body);
+```
+
+If you want to have your component lazyloaded by default, try this handy decorator:
+
+```
+import {lazyload} from 'react-lazyload';
+
+@lazyload({
+  once: true,
+  offset: 100
+})
+class MyComponent extends React.Component {
+  render() {
+    return <div>this component is lazyloaded by default!</div>;
+  }
+}
 ```
 
 ## Props
