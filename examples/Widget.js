@@ -5,7 +5,7 @@ class Widget extends Component {
     super(props);
 
     this.state = {
-      isReady: false,
+      isReady: (props.once && props.visible) || false,
       count: 0
     };
   }
