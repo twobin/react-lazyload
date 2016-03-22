@@ -197,7 +197,7 @@ class LazyLoad extends Component {
      * in the viewport.
      */
     if (this.props.once && !this.state.visible) {
-      return null;
+      return <span></span>;
     }
 
     return React.cloneElement(this.props.children, {
