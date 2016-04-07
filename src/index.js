@@ -6,7 +6,7 @@ import ReactDom from 'react-dom';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
-
+import throttle from './utils/throttle';
 
 const TYPES = ['img', 'iframe'];
 const listeners = [];
@@ -121,7 +121,7 @@ const purgePending = function purgePending() {
 };
 
 
-const lazyLoadHandler = debounce(() => {
+const lazyLoadHandler = () => {
   for (let i = 0; i < listeners.length; ++i) {
     const listener = listeners[i];
     checkVisible(listener);
@@ -129,7 +129,10 @@ const lazyLoadHandler = debounce(() => {
 
   // Remove `once` component in listeners
   purgePending();
-}, 300);
+};
+
+// Depending on component's props
+let finalLazyLoadHandler = null;
 
 
 class LazyLoad extends Component {
@@ -147,20 +150,32 @@ class LazyLoad extends Component {
 
   componentDidMount() {
     if (listeners.length === 0) {
-      if (this.props.scroll) {
-        on(window, 'scroll', lazyLoadHandler);
+      const { scroll, wheel, resize } = this.props;
+
+      if (this.props.throttle !== undefined) {
+        finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
+                                                         this.props.throttle :
+                                                         300);
+      } else {
+        finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
+                                                         this.props.debounce :
+                                                         300);
       }
 
-      if (this.props.wheel) {
+      if (scroll) {
+        on(window, 'scroll', finalLazyLoadHandler);
+      }
+
+      if (wheel) {
         if (window.hasOwnProperty('onwheel')) {
-          on(window, 'wheel', lazyLoadHandler);
+          on(window, 'wheel', finalLazyLoadHandler);
         } else {
-          on(window, 'mousewheel', lazyLoadHandler);
+          on(window, 'mousewheel', finalLazyLoadHandler);
         }
       }
 
-      if (this.props.resize) {
-        on(window, 'resize', lazyLoadHandler);
+      if (resize) {
+        on(window, 'resize', finalLazyLoadHandler);
       }
     }
 
@@ -185,10 +200,10 @@ class LazyLoad extends Component {
     }
 
     if (listeners.length === 0) {
-      off(window, 'wheel', lazyLoadHandler);
-      off(window, 'mousewheel', lazyLoadHandler);
-      off(window, 'resize', lazyLoadHandler);
-      off(window, 'scroll', lazyLoadHandler);
+      off(window, 'wheel', finalLazyLoadHandler);
+      off(window, 'mousewheel', finalLazyLoadHandler);
+      off(window, 'resize', finalLazyLoadHandler);
+      off(window, 'scroll', finalLazyLoadHandler);
     }
   }
 
@@ -238,7 +253,9 @@ LazyLoad.propTypes = {
   scroll: PropTypes.bool,
   wheel: PropTypes.bool,
   resize: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
+  throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
 };
 
 LazyLoad.defaultProps = {
