@@ -110,11 +110,11 @@ Type: Bool Default: true
 
 ONLY SET THIS TO `false` IF YOU SET `wheel` PROPS `true`.
 
-### wheel
+### overflow
 
 Type: Bool Default: false
 
-For overflow containers, scroll event not propagated to `window`, so you should use `wheel` props to make LazyLoad listen `wheel` event instead of `scroll`. Check [this demo](https://jasonslyvia.github.io/react-lazyload/examples/overflow.html) for detail.
+If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
 
 ### resize
 

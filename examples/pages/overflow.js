@@ -40,7 +40,7 @@ export default class Overflow extends Component {
         <div className="widget-list overflow">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index} wheel={true} scroll={false}>
+              <LazyLoad once={el.once} key={index} overflow throttle={100}>
                 <Widget once={el.once} id={el.uniqueId} />
               </LazyLoad>
             );
