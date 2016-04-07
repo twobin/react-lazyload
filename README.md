@@ -46,7 +46,7 @@ const App = React.createClass({
         <LazyLoad>
           <img src="tiger.jpg" height="200" />
                                 /*
-                                  Lazy loading images are supported out of box,
+                                  Lazy loading images is supported out of box,
                                   no extra config needed, set `height` for better
                                   experience
                                  */
