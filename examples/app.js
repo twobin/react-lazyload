@@ -6,10 +6,12 @@ import Decorator from './pages/decorator';
 import Normal from './pages/Normal';
 import Scroll from './pages/Scroll';
 import Overflow from './pages/Overflow';
+import Image from './pages/Image';
 
 const Home = () => (
   <ul>
     <li><Link to="/normal">normal</Link></li>
+    <li><Link to="/image">using with <code>&lt;img&gt;</code></Link></li>
     <li><Link to="/decorator">using with <code>decorator</code></Link></li>
     <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
     <li><Link to="/overflow">using inside overflow container</Link></li>
@@ -19,6 +21,7 @@ const Home = () => (
 const routes = (
   <Router history={hashHistory}>
     <Route path="/" component={Home} />
+    <Route path="/image" component={Image} />
     <Route path="/decorator" component={Decorator} />
     <Route path="/normal" component={Normal} />
     <Route path="/scroll" component={Scroll} />
