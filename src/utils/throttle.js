@@ -1,3 +1,4 @@
+/*eslint-disable */
 export default function throttle(fn, threshhold, scope) {
   threshhold || (threshhold = 250);
   var last,

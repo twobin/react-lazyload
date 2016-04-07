@@ -1,13 +1,16 @@
 export default function debounce(func, wait, immediate) {
-  let timeout, args, context, timestamp, result;
+  let timeout;
+  let args;
+  let context;
+  let timestamp;
+  let result;
 
-  const later = function() {
+  const later = function later() {
     const last = +(new Date()) - timestamp;
 
     if (last < wait && last >= 0) {
       timeout = setTimeout(later, wait - last);
-    }
-    else {
+    } else {
       timeout = null;
       if (!immediate) {
         result = func.apply(context, args);
@@ -18,7 +21,7 @@ export default function debounce(func, wait, immediate) {
     }
   };
 
-  return function() {
+  return function debounced() {
     context = this;
     args = arguments;
     timestamp = +(new Date());

@@ -1,5 +1,5 @@
 import LazyLoad from './';
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 
 const getDisplayName = (WrappedComponent) => {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -17,6 +17,6 @@ export default (options = {}) => {
           </LazyLoad>
         );
       }
-    }
+    };
   };
 };

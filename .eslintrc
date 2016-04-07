@@ -3,6 +3,11 @@
   "extends": "airbnb",
   "rules": {
     "comma-dangle": 0,
-    "no-console": 0
+    "no-console": 0,
+    "react/prefer-stateless-function": 1,
+    "arrow-body-style": 1,
+    "no-nested-ternary": 0,
+    "no-param-reassign": 0,
+    "prefer-rest-params": 0
   }
 }
