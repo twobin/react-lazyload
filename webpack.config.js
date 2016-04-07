@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict';
 
 var webpack = require('webpack');
@@ -12,13 +13,8 @@ var plugins = [
 
 var DEV_MODE = process.env.NODE_ENV !== 'production';
 
-if (DEV_MODE) {
+if (!DEV_MODE) {
   plugins.push(
-  );
-}
-else {
-  plugins.push(
-    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
@@ -27,28 +23,17 @@ else {
   );
 }
 
-
-var loaders = DEV_MODE ? [{
-  test: /\.jsx?$/,
-  loader: 'babel?stage=0&loose=all',
-  exclude: /node_modules/
-}] : [{
-  test: /\.jsx?$/,
-  loader: 'babel?stage=0&loose=all',
-  exclude: /node_modules/
-}];
-
 module.exports = {
   module: {
-    loaders: loaders
+    loaders: [{
+      test: /\.jsx?$/,
+      loader: 'babel?stage=0&loose=all',
+      exclude: /node_modules/
+    }]
   },
 
   entry: {
     app: './examples/app.js',
-    overflow: './examples/overflow.js',
-    scroll: './examples/scroll.js',
-    decorator: './examples/decorator.js',
-    vendors: ['react']
   },
 
   watch: DEV_MODE,
@@ -56,7 +41,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, 'examples/js/'),
-    filename: '[name].js',
+    filename: 'bundle.min.js',
     publicPath: '/js/'
   },
 

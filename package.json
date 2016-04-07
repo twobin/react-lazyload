@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run test",
-    "demo:watch": "node server.js",
+    "demo:watch": "./node_modules/.bin/webpack-dev-server --inline --config webpack.config.js --content-base examples",
     "demo:build": "NODE_ENV=production ./node_modules/.bin/webpack",
     "build": "./node_modules/.bin/babel src/ --out-dir lib/ --stage 0 --loose all"
   },
@@ -27,15 +27,20 @@
   "devDependencies": {
     "babel": "~5.8.21",
     "babel-core": "~5.8.21",
+    "babel-eslint": "^6.0.2",
     "babel-loader": "~5.3.2",
     "chai": "~3.2.0",
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-react": "^4.3.0",
     "istanbul": "~0.3.17",
     "mocha": "~2.2.5",
-    "react-hot-loader": "~1.2.8",
-    "webpack": "~1.11.0",
-    "webpack-dev-server": "~1.10.1",
     "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+    "react-hot-loader": "~1.2.8",
+    "react-router": "^2.0.1",
+    "webpack": "~1.11.0",
+    "webpack-dev-server": "~1.10.1"
   },
   "peerDependencies": {
     "react": "^0.14.3",

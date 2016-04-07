@@ -6,7 +6,7 @@ class Widget extends Component {
 
     this.state = {
       isReady: (props.once && props.visible) || false,
-      count: 0
+      count: props.once ? 1 : 0
     };
   }
 
@@ -32,7 +32,7 @@ class Widget extends Component {
           <div className="widget-text once">
             <code>
               &lt;LazyLoad once&gt;<br />
-              &lt;Widget /&gt;<br />
+              &nbsp;&nbsp;&lt;Widget /&gt;<br />
               &lt;/LazyLoad&gt;
             </code>
           </div>
@@ -40,7 +40,7 @@ class Widget extends Component {
           <div className="widget-text">
             <code>
               &lt;LazyLoad&gt;<br />
-              &lt;Widget /&gt;<br />
+              &nbsp;&nbsp;&lt;Widget /&gt;<br />
               &lt;/LazyLoad&gt;
             </code>
           </div>

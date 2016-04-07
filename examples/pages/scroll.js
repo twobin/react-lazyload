@@ -1,21 +1,16 @@
 import React, {Component} from 'react';
-import ReactDom from 'react-dom';
-import LazyLoad from '../src/';
-import Widget from './Widget';
+import LazyLoad from '../../src/';
+import Widget from '../components/Widget';
+import Operation from '../components/Operation';
+import {uniqueId} from '../utils';
 
-window.React = React;
-
-function uniqueId() {
- return (Math.random().toString(36) + '00000000000000000').slice(2, 10);
-}
-
-class App extends Component {
+export default class Scroll extends Component {
   constructor() {
     super();
 
     const id = uniqueId();
     this.state = {
-      arr: [0, 1, 2, 3, 4, 5, 6, 7].map(index => {
+      arr: Array(20).fill(0).map((a, index) => {
         return {
           uniqueId: id,
           once: [6, 7].indexOf(index) > -1
@@ -47,11 +42,7 @@ class App extends Component {
   render() {
     return (
       <div className="wrapper">
-        <div className="op">
-          <a className="update-btn button-secondary pure-button" onClick={::this.handleClick}>Update</a>
-          <p className="desc">Clicking this button will make all <code>Widgets</code> in <strong> visible area </strong>reload data from server.</p>
-          <p className="desc">Pay attention to <code>props from parent</code> block in <code>Widget</code> to identify how LazyLoad works.</p>
-        </div>
+        <Operation type="scroll" onClickUpdate={::this.handleClick} />
         <div className="quick-jump">
           <h4>Quick jump to: </h4>
           {this.state.arr.map((el, index) => {
@@ -72,4 +63,3 @@ class App extends Component {
   }
 }
 
-ReactDom.render(<App />, document.getElementById('container'));

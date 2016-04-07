@@ -1,60 +1,29 @@
-import React, {Component} from 'react';
-import ReactDom from 'react-dom';
-import LazyLoad from '../src/';
-import Widget from './Widget';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Router, Route, hashHistory, Link} from 'react-router';
 
-function uniqueId() {
- return (Math.random().toString(36) + '00000000000000000').slice(2, 10);
-}
+import Decorator from './pages/decorator';
+import Normal from './pages/Normal';
+import Scroll from './pages/Scroll';
+import Overflow from './pages/Overflow';
 
-class App extends Component {
-  constructor() {
-    super();
+const Home = () => (
+  <ul>
+    <li><Link to="/normal">normal</Link></li>
+    <li><Link to="/decorator">using with <code>decorator</code></Link></li>
+    <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
+    <li><Link to="/overflow">using inside overflow container</Link></li>
+  </ul>
+);
 
-    const id = uniqueId();
-    this.state = {
-      arr: [0, 1, 2, 3, 4, 5, 6, 7].map(index => {
-        return {
-          uniqueId: id,
-          once: [6, 7].indexOf(index) > -1
-        };
-      })
-    };
-  }
+const routes = (
+  <Router history={hashHistory}>
+    <Route path="/" component={Home} />
+    <Route path="/decorator" component={Decorator} />
+    <Route path="/normal" component={Normal} />
+    <Route path="/scroll" component={Scroll} />
+    <Route path="/overflow" component={Overflow} />
+  </Router>
+);
 
-  handleClick() {
-    const id = uniqueId();
-
-    this.setState({
-      arr: this.state.arr.map(el => {
-        return {
-          ...el,
-          uniqueId: id
-        };
-      })
-    });
-  }
-
-  render() {
-    return (
-      <div className="wrapper">
-        <div className="op">
-          <a className="update-btn button-secondary pure-button" onClick={::this.handleClick}>Update</a>
-          <p className="desc">Clicking this button will make all <code>Widgets</code> in <strong> visible area </strong>reload data from server.</p>
-          <p className="desc">Pay attention to <code>props from parent</code> block in <code>Widget</code> to identify how LazyLoad works.</p>
-        </div>
-        <div className="widget-list">
-          {this.state.arr.map((el, index) => {
-            return (
-              <LazyLoad once={el.once} key={index}>
-                <Widget once={el.once} id={el.uniqueId} />
-              </LazyLoad>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-}
-
-ReactDom.render(<App />, document.getElementById('container'));
+ReactDOM.render(routes, document.getElementById('app'));
