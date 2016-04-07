@@ -12,12 +12,6 @@ Lazyload your Components, Images or anything matters the performance.
  - IE 8 compatible
  - Decorator supported
 
-## Who should use it
-
-Let's say there is a `fixed` date picker on the page, when user pick a different date, all components displaying data should send ajax request with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one page.
-
-Using `LazyLoad` component will help ease this situation by only update components in viewport.
-
 ## Installation
 
 ```
@@ -136,7 +130,7 @@ Type: Bool / Number Default: false
 
 If you prefer `throttle` rather than `debounce`, you can set this props to `true` or provide a specific number.
 
-**NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously.
+**NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
 
 
 ## Props added to children
@@ -159,6 +153,12 @@ Is component first time visible, useful for children component's `componentWillR
 $ npm run demo:watch
 $ npm run build
 ```
+
+## Who should use it
+
+Let's say there is a `fixed` date picker on the page, when user pick a different date, all components displaying data should send ajax request with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one page.
+
+Using `LazyLoad` component will help ease this situation by only update components in viewport.
 
 ## Contributors
 
