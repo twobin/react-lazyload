@@ -32,7 +32,7 @@ $ npm install --save react-lazyload@0.2.4
 
 ## Usage
 
-```
+```javascript
 import React from 'react';
 import ReacrDOM from 'react-dom';
 import LazyLoad from 'react-lazyload';
@@ -72,7 +72,7 @@ ReactDOM.render(<App />, document.body);
 
 If you want to have your component lazyloaded by default, try this handy decorator:
 
-```
+```javascript
 import {lazyload} from 'react-lazyload';
 
 @lazyload({
