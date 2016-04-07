@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 export default ({ type, onClickUpdate }) => (
   <div className="op">
     <div className="top-link">
-      <a href={`https://github.com/jasonslyvia/react-lazyload/tree/master/examples/components/${type}.js`}
+      <a href={`https://github.com/jasonslyvia/react-lazyload/tree/master/examples/pages/${type}.js`}
         target="_blank" title="Checkout source file in Github"
       >
         source
