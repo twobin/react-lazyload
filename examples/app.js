@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, hashHistory, Link} from 'react-router';
+import { Router, Route, hashHistory, Link } from 'react-router';
 
 import Decorator from './pages/decorator';
-import Normal from './pages/Normal';
-import Scroll from './pages/Scroll';
-import Overflow from './pages/Overflow';
-import Image from './pages/Image';
+import Normal from './pages/normal';
+import Scroll from './pages/scroll';
+import Overflow from './pages/overflow';
+import Image from './pages/image';
+import Throttle from './pages/throttle';
 
 const Home = () => (
   <ul>
@@ -15,6 +16,7 @@ const Home = () => (
     <li><Link to="/decorator">using with <code>decorator</code></Link></li>
     <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
     <li><Link to="/overflow">using inside overflow container</Link></li>
+    <li><Link to="/throttle">using <code>throttle</code></Link></li>
   </ul>
 );
 
@@ -26,6 +28,7 @@ const routes = (
     <Route path="/normal" component={Normal} />
     <Route path="/scroll" component={Scroll} />
     <Route path="/overflow" component={Overflow} />
+    <Route path="/throttle" component={Throttle} />
   </Router>
 );
 
