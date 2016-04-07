@@ -23,15 +23,18 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
   const scrollTop = parent.scrollTop;
+  const parentBottom = scrollTop + parent.offsetHeight;
   const { height: elementHeight } = node.getBoundingClientRect();
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
-  const elementTop = node.offsetTop;
 
-  return (elementTop < (scrollTop + offsets[0])) &&
-         ((elementTop + elementHeight + offsets[1]) > scrollTop);
+  const elementTop = node.offsetTop;
+  const elementBottom = elementTop + elementHeight;
+
+  return (elementTop >= (scrollTop + offsets[0])) &&
+         ((elementBottom + offsets[1]) <= parentBottom);
 };
 
 /**
@@ -55,13 +58,15 @@ const checkNormalVisible = function checkNormalVisible(component) {
   const elementTop = top + scrollTop;
   const elementHeight = bottom - top;
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const elementBottom = elementTop + elementHeight;
+  const documentBottom = scrollTop + windowInnerHeight;
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (elementTop < (scrollTop + windowInnerHeight + offsets[0])) &&
-         ((elementTop + elementHeight + offsets[1]) > scrollTop);
+  return (elementTop >= (scrollTop + offsets[0])) &&
+         ((elementBottom + offsets[1]) <= documentBottom);
 };
 
 
@@ -139,19 +144,13 @@ class LazyLoad extends Component {
   constructor(props) {
     super(props);
 
-    if (props.scroll === true && props.wheel === true) {
-      console && console.warn('[react-lazyload] Don\'t use both `scroll` and `wheel` event in LazyLoad component, pick one!');
-    }
-
     this.state = {
       visible: false
     };
   }
 
   componentDidMount() {
-    if (listeners.length === 0) {
-      const { scroll, wheel, resize } = this.props;
-
+    if (!finalLazyLoadHandler) {
       if (this.props.throttle !== undefined) {
         finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
                                                          this.props.throttle :
@@ -161,17 +160,18 @@ class LazyLoad extends Component {
                                                          this.props.debounce :
                                                          300);
       }
+    }
+
+    if (this.props.overflow) {
+      const parent = scrollParent(ReactDom.findDOMNode(this));
+      if (parent && !this.scrollListened) {
+        parent.addEventListener('scroll', finalLazyLoadHandler);
+      }
+    } else {
+      const { scroll, resize } = this.props;
 
       if (scroll) {
         on(window, 'scroll', finalLazyLoadHandler);
-      }
-
-      if (wheel) {
-        if (window.hasOwnProperty('onwheel')) {
-          on(window, 'wheel', finalLazyLoadHandler);
-        } else {
-          on(window, 'mousewheel', finalLazyLoadHandler);
-        }
       }
 
       if (resize) {
@@ -194,6 +194,14 @@ class LazyLoad extends Component {
   }
 
   componentWillUnmount() {
+    if (this.props.overflow) {
+      const parent = scrollParent(ReactDom.findDOMNode(this));
+      if (parent) {
+        parent.removeEventListener('scroll', finalLazyLoadHandler);
+        this.scrollListened = false;
+      }
+    }
+
     const index = listeners.indexOf(this);
     if (index !== -1) {
       listeners.splice(index, 1);
@@ -242,7 +250,7 @@ class LazyLoad extends Component {
 
     return React.cloneElement(this.props.children, {
       visible: this.state.visible,
-      firstTimeVisible: this._firstTimeVisible
+      firstTimeVisible: this._firstTimeVisible,
     });
   }
 }
@@ -250,9 +258,9 @@ class LazyLoad extends Component {
 LazyLoad.propTypes = {
   once: PropTypes.bool,
   offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
-  scroll: PropTypes.bool,
-  wheel: PropTypes.bool,
+  overflow: PropTypes.bool,
   resize: PropTypes.bool,
+  scroll: PropTypes.bool,
   children: PropTypes.node,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
@@ -261,9 +269,9 @@ LazyLoad.propTypes = {
 LazyLoad.defaultProps = {
   once: false,
   offset: 0,
-  scroll: true,
-  wheel: false,
+  overflow: false,
   resize: false,
+  scroll: true
 };
 
 export default LazyLoad;

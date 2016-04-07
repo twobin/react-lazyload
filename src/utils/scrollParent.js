@@ -11,12 +11,17 @@ export default (node) => {
   const overflowRegex = /(scroll|auto)/;
   let parent = node;
 
-  while(parent) {
+  while (parent) {
     if (!parent.parentNode) {
       return node.ownerDocument || document;
     }
 
-    const { position, overflow, overflowX, overflowY } = parent.style;
+    const style = window.getComputedStyle(parent);
+    const position = style.position;
+    const overflow = style.overflow;
+    const overflowX = style['overflow-x'];
+    const overflowY = style['overflow-y'];
+
     if (position === 'static' && excludeStaticParent) {
       continue;
     }
@@ -29,4 +34,4 @@ export default (node) => {
   }
 
   return node.ownerDocument || document;
-}
+};
