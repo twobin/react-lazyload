@@ -4,8 +4,6 @@ Lazyload your Components, Images or anything matters the performance.
 
 [Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
 
-> 2.0.0-beta is out, try it out [here](https://github.com/jasonslyvia/react-lazyload/tree/2.0.0-beta2)
-
 ## Why it's better
 
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
@@ -125,6 +123,21 @@ Type: Bool Default: false
 Respond to `resize` event, set it to `true` if you do need LazyLoad listen resize event.
 
 **NOTICE** If you tend to support legacy IE, set this props carefully, refer to [this question](http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer) for further reading.
+
+### debounce
+
+Type: Bool / Number Default: true
+
+By default, LazyLoad will have all event handlers debounced in 300ms for better performance. You can disable this by setting `debounce` to `false`, or change debounce time by setting a number value.
+
+### throttle
+
+Type: Bool / Number Default: false
+
+If you prefer `throttle` rather than `debounce`, you can set this props to `true` or provide a specific number.
+
+**NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously.
+
 
 ## Props added to children
 

@@ -39,7 +39,7 @@ export default class Throttle extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index} throttle={200}>
+              <LazyLoad once={el.once} key={index} throttle={100}>
                 <Widget once={el.once} id={el.uniqueId} />
               </LazyLoad>
             );
