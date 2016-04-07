@@ -46,12 +46,16 @@ const App = React.createClass({
           <MyComponent />
         </LazyLoad>
         <LazyLoad>
-          <MyComponent />
+          <img src="tiger.jpg" height="200" />
+                                /*
+                                  Lazy loading images are supported out of box,
+                                  no extra config needed, set `height` for better
+                                  experience
+                                 */
         </LazyLoad>
         <LazyLoad once >        /* Once this component is loaded, LazyLoad will
-                                   not care about it anymore, stuff like images
-                                   should add `once` props to reduce listeners for
-                                   scroll/resize event and improve performance */
+                                   not care about it anymore, set this to `true`
+                                   if you're concerned about improving performance */
           <MyComponent />
         </LazyLoad>
         <LazyLoad offset={100}> /* This component will be loaded when it's top
