@@ -8,7 +8,7 @@ import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
 
-const TYPES = ['img', 'iframe'];
+const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
 
@@ -33,8 +33,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const elementTop = node.offsetTop;
   const elementBottom = elementTop + elementHeight;
 
-  return (elementTop >= (scrollTop + offsets[0])) &&
-         ((elementBottom + offsets[1]) <= parentBottom);
+  return (elementTop >= (scrollTop - offsets[0])) &&
+         ((elementBottom - offsets[1]) <= parentBottom);
 };
 
 /**
@@ -45,7 +45,7 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top, bottom } = node.getBoundingClientRect();
+  const { top, height: elementHeight } = node.getBoundingClientRect();
 
   const supportPageOffset = window.pageXOffset !== undefined;
   const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
@@ -56,7 +56,6 @@ const checkNormalVisible = function checkNormalVisible(component) {
                                         document.body.scrollTop;
 
   const elementTop = top + scrollTop;
-  const elementHeight = bottom - top;
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
   const elementBottom = elementTop + elementHeight;
   const documentBottom = scrollTop + windowInnerHeight;
@@ -65,8 +64,8 @@ const checkNormalVisible = function checkNormalVisible(component) {
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (elementTop >= (scrollTop + offsets[0])) &&
-         ((elementBottom + offsets[1]) <= documentBottom);
+  return (elementTop >= (scrollTop - offsets[0])) &&
+         ((elementBottom - offsets[1]) <= documentBottom);
 };
 
 
@@ -92,24 +91,16 @@ const checkVisible = function checkVisible(component) {
   if (visible) {
     // Avoid extra render if previously is visible, yeah I mean `render` call,
     // not actual DOM render
-    if (!component.state.visible) {
-      component._firstTimeVisible = component._firstTimeVisible === undefined;
-      component.setState({
-        visible: true
-      });
-    }
+    if (!component.visible) {
+      if (component.props.once) {
+        pending.push(component);
+      }
 
-    if (component.props.once) {
-      pending.push(component);
+      component.visible = true;
+      component.forceUpdate();
     }
-  } else if (component.state.visible) {
-    if (component._firstTimeVisible !== undefined) {
-      component._firstTimeVisible = false;
-    }
-
-    component.setState({
-      visible: false
-    });
+  } else {
+    component.visible = false;
   }
 };
 
@@ -144,19 +135,17 @@ class LazyLoad extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      visible: false
-    };
+    this.visible = false;
   }
 
   componentDidMount() {
     if (!finalLazyLoadHandler) {
-      if (this.props.throttle !== undefined) {
-        finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
+      if (this.props.debounce !== undefined) {
+        finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.throttle === 'number' ?
                                                          this.props.throttle :
                                                          300);
       } else {
-        finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
+        finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.debounce === 'number' ?
                                                          this.props.debounce :
                                                          300);
       }
@@ -164,10 +153,11 @@ class LazyLoad extends Component {
 
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent && !this.scrollListened) {
+      if (parent && parent.getAttribute(LISTEN_FLAG) === null) {
         parent.addEventListener('scroll', finalLazyLoadHandler);
+        parent.setAttribute(LISTEN_FLAG, 1);
       }
-    } else {
+    } else if (listeners.length === 0) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
@@ -183,14 +173,8 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.visible;
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.visible && nextState.visible && this._firstTimeVisible) {
-      this._firstTimeVisible = false;
-    }
+  shouldComponentUpdate() {
+    return this.visible;
   }
 
   componentWillUnmount() {
@@ -198,7 +182,7 @@ class LazyLoad extends Component {
       const parent = scrollParent(ReactDom.findDOMNode(this));
       if (parent) {
         parent.removeEventListener('scroll', finalLazyLoadHandler);
-        this.scrollListened = false;
+        parent.removeAttribute(LISTEN_FLAG);
       }
     }
 
@@ -215,48 +199,20 @@ class LazyLoad extends Component {
     }
   }
 
-  renderPrimitive(child = {}) {
-    let height;
-    if (child.props) {
-      height = parseFloat(child.props.height);
-      if (!height) {
-        console.warn(`[react-lazyload] It is recommended to set \`height\` to primitive tags
-                      like \`img\`, \`iframe\` for better lazy load experience.`);
-      }
-    }
-
-    return (
-      <div style={{ height: height || 100 }} className="lazyload-placeholder"></div>
-    );
-  }
-
   render() {
     if (React.Children.count(this.props.children) > 1) {
       console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
     }
 
-    const child = this.props.children;
-    if (TYPES.indexOf(child.type) > -1 && !this.state.visible) {
-      return this.renderPrimitive(child);
-    }
-
-    /**
-     * For components like images, they shouldn't be rendered until it appears
-     * in the viewport.
-     */
-    if (this.props.once && !this.state.visible) {
-      return <span></span>;
-    }
-
-    return React.cloneElement(this.props.children, {
-      visible: this.state.visible,
-      firstTimeVisible: this._firstTimeVisible,
-    });
+    return this.visible ?
+           this.props.children :
+           <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
   }
 }
 
 LazyLoad.propTypes = {
   once: PropTypes.bool,
+  height: PropTypes.number.isRequired,
   offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   overflow: PropTypes.bool,
   resize: PropTypes.bool,
@@ -268,6 +224,7 @@ LazyLoad.propTypes = {
 
 LazyLoad.defaultProps = {
   once: false,
+  height: 100,
   offset: 0,
   overflow: false,
   resize: false,

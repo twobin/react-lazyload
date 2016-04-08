@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import LazyLoad from '../../src/';
 import Widget from '../components/Widget';
 import Operation from '../components/Operation';
-import {uniqueId} from '../utils';
+import { uniqueId } from '../utils';
 
 export default class Normal extends Component {
   constructor() {
@@ -39,8 +39,8 @@ export default class Normal extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index}>
-                <Widget once={el.once} id={el.uniqueId} />
+              <LazyLoad once={el.once} key={index} height={200}>
+                <Widget once={el.once} id={el.uniqueId} count={index + 1} />
               </LazyLoad>
             );
           })}

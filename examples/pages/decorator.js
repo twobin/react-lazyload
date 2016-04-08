@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
-import {lazyload} from '../../src/';
+import React, { Component } from 'react';
+import { lazyload } from '../../src/';
 import Widget from '../components/Widget';
 import Operation from '../components/Operation';
-import {uniqueId} from '../utils';
+import { uniqueId } from '../utils';
 
-@lazyload()
+@lazyload({
+  height: 200,
+  throttle: 100
+})
 class MyWidget extends Component {
   render() {
     return <Widget {...this.props} />;
@@ -42,7 +45,7 @@ export default class Decorator extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <MyWidget key={index} once={el.once} id={el.uniqueId} />
+              <MyWidget key={index} once={el.once} id={el.uniqueId} count={index + 1} />
             );
           })}
         </div>

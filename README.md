@@ -4,22 +4,20 @@ Lazyload your Components, Images or anything matters the performance.
 
 [Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
 
+**Version 2.0.0 is currently in beta, but it's highly recommended to use 2.0.0 for simplicity.**
+
 ## Why it's better
 
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
  - Support both `one-time lazy load` and `continuous lazy load` mode
- - `wheel` / `mousewheel` / `resize` event handler is debounced so you won't suffer frequent update
+ - `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
  - IE 8 compatible
  - Decorator supported
 
 ## Installation
 
 ```
-$ npm install --save react-lazyload
-
-// If you tend to support React v0.13, you should use v0.2.4 which is the
-// latest compatible version
-$ npm install --save react-lazyload@0.2.4
+$ npm install --save react-lazyload@2.0.0-beta.3
 ```
 
 ## Usage
@@ -34,23 +32,21 @@ const App = React.createClass({
   render() {
     return (
       <div className="list">
-        <LazyLoad>
-          <MyComponent />
+        <LazyLoad height={200}>
+          <img src="tiger.jpg" /> /*
+                                    Lazy loading images is supported out of box,
+                                    no extra config needed, set `height` for better
+                                    experience
+                                   */
         </LazyLoad>
-        <LazyLoad>
-          <img src="tiger.jpg" height="200" />
-                                /*
-                                  Lazy loading images is supported out of box,
-                                  no extra config needed, set `height` for better
-                                  experience
-                                 */
-        </LazyLoad>
-        <LazyLoad once >        /* Once this component is loaded, LazyLoad will
+        <LazyLoad height={200} once >        
+                                  /* Once this component is loaded, LazyLoad will
                                    not care about it anymore, set this to `true`
                                    if you're concerned about improving performance */
           <MyComponent />
         </LazyLoad>
-        <LazyLoad offset={100}> /* This component will be loaded when it's top
+        <LazyLoad height={200} offset={100}> 
+                                /* This component will be loaded when it's top
                                    edge is 100px from viewport. It's useful to
                                    make user ignorant about lazy load effect. */
           <MyComponent />
@@ -72,6 +68,7 @@ If you want to have your component lazyloaded by default, try this handy decorat
 import {lazyload} from 'react-lazyload';
 
 @lazyload({
+  height: 200,
   once: true,
   offset: 100
 })
@@ -83,6 +80,12 @@ class MyComponent extends React.Component {
 ```
 
 ## Props
+
+### height
+
+Type: Number Default: 100 Required: true
+
+In the first round of render, LazyLoad will render a placeholder for your component and measure if this component is visible. Set `height` properly will make LazyLoad calculate more precisely.
 
 ### once
 
@@ -132,20 +135,6 @@ If you prefer `throttle` rather than `debounce`, you can set this props to `true
 
 **NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
 
-
-## Props added to children
-
-Like the example above, `<MyComponent>` will get following extra props:
-
-### visible
-
-Type: Bool
-
-Is component currently visible
-
-### firstTimeVisible
-
-Is component first time visible, useful for children component's `componentWillReceiveProps` detect whether or not should query new data.
 
 ## Scripts
 

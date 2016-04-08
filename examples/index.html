@@ -18,7 +18,6 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
   .widget-list {
     width: 800px;
     margin: 0 auto;
-    counter-reset: widgets;
   }
   .widget-list.overflow {
     position: relative;
@@ -31,9 +30,7 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     border: 1px #ccc solid;
     background: #eee;
   }
-  .widget:before {
-    content: counter(widgets);
-    counter-increment: widgets;
+  .widget-counter {
     position: absolute;
     top: 0;
     left: 0;
@@ -96,6 +93,8 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     display: block;
     text-align: center;
     margin: 20px 0;
+    height: 300px;
+    max-width: 100%;
   }
   code {
     background: #eee;

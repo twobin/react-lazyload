@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import LazyLoad from '../../src/';
 import Widget from '../components/Widget';
 import Operation from '../components/Operation';
-import {uniqueId} from '../utils';
+import { uniqueId } from '../utils';
 
-export default class Throttle extends Component {
+export default class Debounce extends Component {
   constructor() {
     super();
 
@@ -39,8 +39,8 @@ export default class Throttle extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index} throttle={100}>
-                <Widget once={el.once} id={el.uniqueId} />
+              <LazyLoad once={el.once} key={index} debounce={200} height={200}>
+                <Widget once={el.once} id={el.uniqueId} count={ index + 1 } />
               </LazyLoad>
             );
           })}

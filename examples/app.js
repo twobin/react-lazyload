@@ -7,7 +7,7 @@ import Normal from './pages/normal';
 import Scroll from './pages/scroll';
 import Overflow from './pages/overflow';
 import Image from './pages/image';
-import Throttle from './pages/throttle';
+import Debounce from './pages/debounce';
 
 const Home = () => (
   <ul>
@@ -16,7 +16,7 @@ const Home = () => (
     <li><Link to="/decorator">using with <code>decorator</code></Link></li>
     <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
     <li><Link to="/overflow">using inside overflow container</Link></li>
-    <li><Link to="/throttle">using <code>throttle</code></Link></li>
+    <li><Link to="/debounce">using <code>debounce</code></Link></li>
   </ul>
 );
 
@@ -28,7 +28,7 @@ const routes = (
     <Route path="/normal" component={Normal} />
     <Route path="/scroll" component={Scroll} />
     <Route path="/overflow" component={Overflow} />
-    <Route path="/throttle" component={Throttle} />
+    <Route path="/debounce" component={Debounce} />
   </Router>
 );
 

@@ -5,13 +5,13 @@ class Widget extends Component {
     super(props);
 
     this.state = {
-      isReady: (props.once && props.visible) || false,
-      count: props.once ? 1 : 0
+      isReady: true,
+      count: 1
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.id !== this.props.id || nextProps.firstTimeVisible) {
+    if (nextProps.id !== this.props.id && this.props.id) {
       this.setState({
         isReady: false
       });
@@ -22,12 +22,17 @@ class Widget extends Component {
           count: this.state.count + 1
         });
       }, 500);
+    } else {
+      this.setState({
+        isReady: true
+      });
     }
   }
 
   render() {
     return this.state.isReady ? (
       <div className="widget">
+        <span className="widget-counter">{this.props.count}</span>
         {this.props.once ? (
           <div className="widget-text once">
             <code>

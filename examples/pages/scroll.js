@@ -33,7 +33,7 @@ export default class Scroll extends Component {
   }
 
   handleQuickJump(index) {
-    const nodeList = document.querySelectorAll('.widget-list .widget');
+    const nodeList = document.querySelectorAll('.widget-list .widget-wrapper');
     if (nodeList[index]) {
       window.scrollTo(0, nodeList[index].getBoundingClientRect().top + window.pageYOffset);
     }
@@ -52,9 +52,11 @@ export default class Scroll extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index}>
-                <Widget once={el.once} id={el.uniqueId} />
-              </LazyLoad>
+              <div className="widget-wrapper">
+                <LazyLoad once={el.once} key={index} height={200}>
+                  <Widget once={el.once} id={el.uniqueId} count={ index + 1 } />
+                </LazyLoad>
+              </div>
             );
           })}
         </div>
