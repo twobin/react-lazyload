@@ -105,13 +105,7 @@ If you provide this props with array like `[200, 200]`, it will set top edge off
 
 Type: Bool Default: true
 
-ONLY SET THIS TO `false` IF YOU SET `wheel` PROPS `true`.
-
-### overflow
-
-Type: Bool Default: false
-
-If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
+Listen and react to scroll event.
 
 ### resize
 
@@ -120,6 +114,12 @@ Type: Bool Default: false
 Respond to `resize` event, set it to `true` if you do need LazyLoad listen resize event.
 
 **NOTICE** If you tend to support legacy IE, set this props carefully, refer to [this question](http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer) for further reading.
+
+### overflow
+
+Type: Bool Default: false
+
+If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
 
 ### debounce
 
