@@ -17,7 +17,7 @@ Lazyload your Components, Images or anything matters the performance.
 ## Installation
 
 ```
-$ npm install --save react-lazyload@2.0.0-beta.3
+$ npm install --save react-lazyload@2.0.0-beta.4
 ```
 
 ## Usage
