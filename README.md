@@ -1,10 +1,8 @@
-# react-lazyload [![Build Status](https://travis-ci.org/jasonslyvia/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload)
+# react-lazyload [![Build Status](https://travis-ci.org/jasonslyvia/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/jasonslyvia/react-lazyload/badge.svg?branch=master&service=github)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master)
 
 Lazyload your Components, Images or anything matters the performance.
 
 [Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
-
-**Version 2.0.0 is currently in beta, but it's highly recommended to use 2.0.0 for simplicity.**
 
 ## Why it's better
 
@@ -17,7 +15,7 @@ Lazyload your Components, Images or anything matters the performance.
 ## Installation
 
 ```
-$ npm install --save react-lazyload@2.0.0-beta.4
+$ npm install --save react-lazyload@2.0.0
 ```
 
 ## Usage

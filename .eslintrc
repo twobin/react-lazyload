@@ -1,6 +1,12 @@
 {
   "parser": "babel-eslint",
   "extends": "airbnb",
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "chai": true
+  },
   "rules": {
     "comma-dangle": 0,
     "no-console": 0,
