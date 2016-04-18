@@ -192,8 +192,6 @@ class LazyLoad extends Component {
     }
 
     if (listeners.length === 0) {
-      off(window, 'wheel', finalLazyLoadHandler);
-      off(window, 'mousewheel', finalLazyLoadHandler);
       off(window, 'resize', finalLazyLoadHandler);
       off(window, 'scroll', finalLazyLoadHandler);
     }
