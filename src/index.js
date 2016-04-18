@@ -98,7 +98,7 @@ const checkVisible = function checkVisible(component) {
       component.visible = true;
       component.forceUpdate();
     }
-  } else {
+  } else if (!(component.props.once && component.visible)) {
     component.visible = false;
   }
 };
@@ -127,6 +127,7 @@ const lazyLoadHandler = () => {
 };
 
 // Depending on component's props
+let delayType;
 let finalLazyLoadHandler = null;
 
 
@@ -150,15 +151,34 @@ class LazyLoad extends Component {
   }
 
   componentDidMount() {
+    // It's unlikely to change delay type for an application, this is mainly
+    // designed for tests
+    let needResetFinalLazyLoadHandler = false;
+    if (this.props.debounce !== undefined && delayType === 'throttle') {
+      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try set them unanimously');
+      needResetFinalLazyLoadHandler = true;
+    } else if (delayType === 'debounce' && this.props.debounce === undefined) {
+      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try set them unanimously');
+      needResetFinalLazyLoadHandler = true;
+    }
+
+    if (needResetFinalLazyLoadHandler) {
+      off(window, 'scroll', finalLazyLoadHandler);
+      off(window, 'resize', finalLazyLoadHandler);
+      finalLazyLoadHandler = null;
+    }
+
     if (!finalLazyLoadHandler) {
       if (this.props.debounce !== undefined) {
         finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.throttle === 'number' ?
                                                          this.props.throttle :
                                                          300);
+        delayType = 'debounce';
       } else {
         finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.debounce === 'number' ?
                                                          this.props.debounce :
                                                          300);
+        delayType = 'throttle';
       }
     }
 
@@ -168,7 +188,7 @@ class LazyLoad extends Component {
         parent.addEventListener('scroll', finalLazyLoadHandler);
         parent.setAttribute(LISTEN_FLAG, 1);
       }
-    } else if (listeners.length === 0) {
+    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
