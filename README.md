@@ -9,13 +9,15 @@ Lazyload your Components, Images or anything matters the performance.
  - Take performance in mind, only 2 event listeners for all lazy-loaded components
  - Support both `one-time lazy load` and `continuous lazy load` mode
  - `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
- - IE 8 compatible
  - Decorator supported
+ - Thoroughly tested
 
 ## Installation
 
+> 2.0.0 is finally out, read [Upgrade Guide](https://github.com/jasonslyvia/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
+
 ```
-$ npm install --save react-lazyload@2.0.0
+$ npm install --save react-lazyload
 ```
 
 ## Usage
