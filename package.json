@@ -47,7 +47,6 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.2.5",
     "react": "^0.14.3",
-    "react-addons-test-utils": "^15.0.1",
     "react-dom": "^0.14.3",
     "react-hot-loader": "~1.2.8",
     "react-router": "^2.0.1",
