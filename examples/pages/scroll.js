@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import LazyLoad from '../../src/';
 import Widget from '../components/Widget';
 import Operation from '../components/Operation';
-import {uniqueId} from '../utils';
+import { uniqueId } from '../utils';
 
 export default class Scroll extends Component {
   constructor() {
@@ -10,12 +10,10 @@ export default class Scroll extends Component {
 
     const id = uniqueId();
     this.state = {
-      arr: Array(20).fill(0).map((a, index) => {
-        return {
-          uniqueId: id,
-          once: [6, 7].indexOf(index) > -1
-        };
-      })
+      arr: Array(20).fill(0).map((a, index) => ({
+        uniqueId: id,
+        once: [6, 7].indexOf(index) > -1
+      }))
     };
   }
 
@@ -23,16 +21,15 @@ export default class Scroll extends Component {
     const id = uniqueId();
 
     this.setState({
-      arr: this.state.arr.map(el => {
-        return {
-          ...el,
-          uniqueId: id
-        };
-      })
+      arr: this.state.arr.map(el => ({ ...el, uniqueId: id }))
     });
   }
 
-  handleQuickJump(index) {
+  handleQuickJump(index, e) {
+    if (e) {
+      e.preventDefault();
+    }
+
     const nodeList = document.querySelectorAll('.widget-list .widget-wrapper');
     if (nodeList[index]) {
       window.scrollTo(0, nodeList[index].getBoundingClientRect().top + window.pageYOffset);
@@ -45,20 +42,18 @@ export default class Scroll extends Component {
         <Operation type="scroll" onClickUpdate={::this.handleClick} />
         <div className="quick-jump">
           <h4>Quick jump to: </h4>
-          {this.state.arr.map((el, index) => {
-            return <a href="javascript:;" onClick={this.handleQuickJump.bind(this, index)} key={index}>{index+1}</a>;
-          })}
+          {this.state.arr.map((el, index) => (
+            <a onClick={this.handleQuickJump.bind(this, index)} key={index}>{index + 1}</a>
+          ))}
         </div>
         <div className="widget-list">
-          {this.state.arr.map((el, index) => {
-            return (
-              <div className="widget-wrapper">
-                <LazyLoad once={el.once} key={index} height={200}>
-                  <Widget once={el.once} id={el.uniqueId} count={ index + 1 } />
-                </LazyLoad>
-              </div>
-            );
-          })}
+          {this.state.arr.map((el, index) => (
+            <div className="widget-wrapper" key={index}>
+              <LazyLoad once={el.once} height={200}>
+                <Widget once={el.once} id={el.uniqueId} count={ index + 1 } />
+              </LazyLoad>
+            </div>
+          ))}
         </div>
       </div>
     );

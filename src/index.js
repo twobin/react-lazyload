@@ -33,8 +33,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const elementTop = node.offsetTop;
   const elementBottom = elementTop + elementHeight;
 
-  return (elementTop >= (scrollTop - offsets[0])) &&
-         ((elementBottom - offsets[1]) <= parentBottom);
+  return (elementTop - offsets[0] <= parentBottom) &&
+         (elementBottom + offsets[1] >= scrollTop);
 };
 
 /**
@@ -45,27 +45,26 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top, height: elementHeight } = node.getBoundingClientRect();
-
   const supportPageOffset = window.pageXOffset !== undefined;
   const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
-
   const scrollTop = supportPageOffset ? window.pageYOffset :
                                         isCSS1Compat ?
                                         document.documentElement.scrollTop :
                                         document.body.scrollTop;
 
-  const elementTop = top + scrollTop;
-  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const { top, height: elementHeight } = node.getBoundingClientRect();
+  const elementTop = top + scrollTop; // element top relative to document
   const elementBottom = elementTop + elementHeight;
+
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
   const documentBottom = scrollTop + windowInnerHeight;
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (elementTop >= (scrollTop - offsets[0])) &&
-         ((elementBottom - offsets[1]) <= documentBottom);
+  return (elementTop - offsets[0] <= documentBottom) &&
+         (elementBottom + offsets[1] >= scrollTop);
 };
 
 
@@ -136,6 +135,18 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
+
+    if (React.Children.count(this.props.children) > 1) {
+      console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
+    }
+
+    if (typeof this.props.height !== 'number') {
+      console.warn('[react-lazyload] Please add `height` props to <LazyLoad> for better performance.');
+    }
+
+    if (this.props.wheel) { // eslint-disable-line
+      console.warn('[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.');
+    }
   }
 
   componentDidMount() {
@@ -198,10 +209,6 @@ class LazyLoad extends Component {
   }
 
   render() {
-    if (React.Children.count(this.props.children) > 1) {
-      console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
-    }
-
     return this.visible ?
            this.props.children :
            <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;

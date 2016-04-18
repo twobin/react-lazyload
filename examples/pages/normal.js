@@ -39,7 +39,7 @@ export default class Normal extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index} height={200}>
+              <LazyLoad once={el.once} key={index} height={200} offset={[-100, 0]}>
                 <Widget once={el.once} id={el.uniqueId} count={index + 1} />
               </LazyLoad>
             );

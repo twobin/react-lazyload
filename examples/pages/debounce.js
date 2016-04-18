@@ -39,7 +39,7 @@ export default class Debounce extends Component {
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (
-              <LazyLoad once={el.once} key={index} debounce={200} height={200}>
+              <LazyLoad once={el.once} key={index} debounce={500} height={200}>
                 <Widget once={el.once} id={el.uniqueId} count={ index + 1 } />
               </LazyLoad>
             );
