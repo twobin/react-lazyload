@@ -155,10 +155,10 @@ class LazyLoad extends Component {
     // designed for tests
     let needResetFinalLazyLoadHandler = false;
     if (this.props.debounce !== undefined && delayType === 'throttle') {
-      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try set them unanimously');
+      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try to set them unanimously');
       needResetFinalLazyLoadHandler = true;
     } else if (delayType === 'debounce' && this.props.debounce === undefined) {
-      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try set them unanimously');
+      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try to set them unanimously');
       needResetFinalLazyLoadHandler = true;
     }
 
@@ -231,7 +231,9 @@ class LazyLoad extends Component {
   render() {
     return this.visible ?
            this.props.children :
-           <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
+             this.props.placeholder ?
+                <div style={{ minHeight: this.props.height }}>{this.props.placeholder}</div> :
+                <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
   }
 }
 
@@ -244,7 +246,8 @@ LazyLoad.propTypes = {
   scroll: PropTypes.bool,
   children: PropTypes.node,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-  debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
+  debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  placeholder: PropTypes.node
 };
 
 LazyLoad.defaultProps = {
