@@ -121,11 +121,15 @@ Type: Bool Default: false
 
 If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
 
+[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/overflow)
+
 ### debounce
 
 Type: Bool / Number Default: true
 
 By default, LazyLoad will have all event handlers debounced in 300ms for better performance. You can disable this by setting `debounce` to `false`, or change debounce time by setting a number value.
+
+[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
 
 ### throttle
 
@@ -134,6 +138,14 @@ Type: Bool / Number Default: false
 If you prefer `throttle` rather than `debounce`, you can set this props to `true` or provide a specific number.
 
 **NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
+
+### placeholder
+
+Type: Any Default: undefined
+
+Specify a placeholder for your lazy loaded component.
+
+[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/placeholder)
 
 
 ## Scripts

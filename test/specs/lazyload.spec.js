@@ -116,6 +116,20 @@ describe('LazyLoad', () => {
         done();
       }, 500);
     });
+
+    it('should render `placeholder` if provided', () => {
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={9999} placeholder={<span className="my-placeholder"></span>}>
+            <Test className="test"></Test>
+          </LazyLoad>
+          <LazyLoad height={9999} placeholder={<span className="my-placeholder"></span>}>
+            <Test className="test"></Test>
+          </LazyLoad>
+        </div>, div);
+
+      expect(document.querySelector('.my-placeholder')).to.exist;
+    });
   });
 
   describe('Checking visibility', () => {

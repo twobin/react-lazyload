@@ -8,15 +8,17 @@ import Scroll from './pages/scroll';
 import Overflow from './pages/overflow';
 import Image from './pages/image';
 import Debounce from './pages/debounce';
+import Placeholder from './pages/placeholder';
 
 const Home = () => (
-  <ul>
+  <ul className="nav">
     <li><Link to="/normal">normal</Link></li>
     <li><Link to="/image">using with <code>&lt;img&gt;</code></Link></li>
     <li><Link to="/decorator">using with <code>decorator</code></Link></li>
     <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
     <li><Link to="/overflow">using inside overflow container</Link></li>
     <li><Link to="/debounce">using <code>debounce</code></Link></li>
+    <li><Link to="/placeholder">custom placeholder</Link></li>
   </ul>
 );
 
@@ -29,6 +31,7 @@ const routes = (
     <Route path="/scroll" component={Scroll} />
     <Route path="/overflow" component={Overflow} />
     <Route path="/debounce" component={Debounce} />
+    <Route path="/placeholder" component={Placeholder} />
   </Router>
 );
 
