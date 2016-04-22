@@ -1,22 +1,21 @@
-import LazyLoad from './index';
+import LazyLoad from '.';
 import React, { Component } from 'react';
 
-const getDisplayName = (WrappedComponent) => {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-};
+const getDisplayName = (WrappedComponent) => WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
-export default (options = {}) => {
-  return function lazyload(WrappedComponent) {
-    return class LazyLoadDecorated extends Component {
-      static displayName = `LazyLoad${getDisplayName(WrappedComponent)}`;
+export default (options = {}) => function lazyload(WrappedComponent) {
+  return class LazyLoadDecorated extends Component {
+    constructor() {
+      super();
+      this.displayName = `LazyLoad${getDisplayName(WrappedComponent)}`;
+    }
 
-      render() {
-        return (
-          <LazyLoad {...options}>
-            <WrappedComponent {...this.props} />
-          </LazyLoad>
-        );
-      }
-    };
+    render() {
+      return (
+        <LazyLoad {...options}>
+          <WrappedComponent {...this.props} />
+        </LazyLoad>
+      );
+    }
   };
 };

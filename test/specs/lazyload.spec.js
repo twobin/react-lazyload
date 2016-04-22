@@ -132,7 +132,7 @@ describe('LazyLoad', () => {
           </LazyLoad>
         </div>, div);
 
-      expect(log).to.have.been.called.with(`[react-lazyload] A more specific \`height\` or \`minHeight\` for your own placeholder will result better lazyload performance.`);
+      expect(log).to.have.been.called.with('[react-lazyload] A more specific `height` or `minHeight` for your own placeholder will result better lazyload performance.');
       console.warn = warn;
     });
 

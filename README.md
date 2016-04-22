@@ -45,7 +45,7 @@ const App = React.createClass({
                                    if you're concerned about improving performance */
           <MyComponent />
         </LazyLoad>
-        <LazyLoad height={200} offset={100}> 
+        <LazyLoad height={200} offset={100}>
                                 /* This component will be loaded when it's top
                                    edge is 100px from viewport. It's useful to
                                    make user ignorant about lazy load effect. */
@@ -170,6 +170,7 @@ Using `LazyLoad` component will help ease this situation by only update componen
 ## Contributors
 
 1. [lancehub](https://github.com/lancehub)
+2. [doug-wade](https://github.com/doug-wade)
 
 
 ## License
