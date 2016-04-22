@@ -1,4 +1,4 @@
-import LazyLoad from './';
+import LazyLoad from './index';
 import React, { Component } from 'react';
 
 const getDisplayName = (WrappedComponent) => {
