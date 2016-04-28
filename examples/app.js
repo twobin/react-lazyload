@@ -9,6 +9,7 @@ import Overflow from './pages/overflow';
 import Image from './pages/image';
 import Debounce from './pages/debounce';
 import Placeholder from './pages/placeholder';
+import FadeIn from './pages/fadein';
 
 const Home = () => (
   <ul className="nav">
@@ -19,6 +20,7 @@ const Home = () => (
     <li><Link to="/overflow">using inside overflow container</Link></li>
     <li><Link to="/debounce">using <code>debounce</code></Link></li>
     <li><Link to="/placeholder">custom placeholder</Link></li>
+    <li><Link to="/fadein">cool <code>fadeIn</code> effect</Link></li>
   </ul>
 );
 
@@ -32,6 +34,7 @@ const routes = (
     <Route path="/overflow" component={Overflow} />
     <Route path="/debounce" component={Debounce} />
     <Route path="/placeholder" component={Placeholder} />
+    <Route path="/fadein" component={FadeIn} />
   </Router>
 );
 
