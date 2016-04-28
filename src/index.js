@@ -170,13 +170,13 @@ class LazyLoad extends Component {
 
     if (!finalLazyLoadHandler) {
       if (this.props.debounce !== undefined) {
-        finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.throttle === 'number' ?
-                                                         this.props.throttle :
+        finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
+                                                         this.props.debounce :
                                                          300);
         delayType = 'debounce';
       } else {
-        finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.debounce === 'number' ?
-                                                         this.props.debounce :
+        finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
+                                                         this.props.throttle :
                                                          300);
         delayType = 'throttle';
       }
