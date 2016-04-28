@@ -79,6 +79,10 @@ class MyComponent extends React.Component {
 }
 ```
 
+You should aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered. 
+
+So you can safely send request in your component's `componentDidMount` without worring about performance loss or add some pretty entering effect, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
+
 ## Props
 
 ### height
