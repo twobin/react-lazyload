@@ -24,7 +24,7 @@ $ npm install --save react-lazyload
 
 ```javascript
 import React from 'react';
-import ReacrDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import LazyLoad from 'react-lazyload';
 import MyComponent from './MyComponent';
 
