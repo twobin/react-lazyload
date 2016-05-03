@@ -151,6 +151,8 @@ Specify a placeholder for your lazy loaded component.
 
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/placeholder)
 
+**If you provide your own placeholder, do remember add appropriate `height` or `minHeight` to your placeholder element for better lazyload performance.**
+
 
 ## Scripts
 

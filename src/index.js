@@ -12,6 +12,9 @@ const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
 
+let warnedAboutPlaceholderHeight = false;
+const heightDiffThreshold = 20;
+
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -202,6 +205,17 @@ class LazyLoad extends Component {
 
     listeners.push(this);
     checkVisible(this);
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.props.placeholder) {
+        const node = ReactDom.findDOMNode(this);
+        if (!warnedAboutPlaceholderHeight &&
+            Math.abs(node.offsetHeight - this.props.height) > heightDiffThreshold) {
+          console.warn(`[react-lazyload] A more specific \`height\` or \`minHeight\` for your own placeholder will result better lazyload performance.`);
+          warnedAboutPlaceholderHeight = true;
+        }
+      }
+    }
   }
 
   shouldComponentUpdate() {
@@ -232,7 +246,7 @@ class LazyLoad extends Component {
     return this.visible ?
            this.props.children :
              this.props.placeholder ?
-                <div style={{ minHeight: this.props.height }}>{this.props.placeholder}</div> :
+                this.props.placeholder :
                 <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
   }
 }
