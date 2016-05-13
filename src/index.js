@@ -211,7 +211,7 @@ class LazyLoad extends Component {
         const node = ReactDom.findDOMNode(this);
         if (!warnedAboutPlaceholderHeight &&
             Math.abs(node.offsetHeight - this.props.height) > heightDiffThreshold) {
-          console.warn(`[react-lazyload] A more specific \`height\` or \`minHeight\` for your own placeholder will result better lazyload performance.`);
+          console.warn('[react-lazyload] A more specific `height` or `minHeight` for your own placeholder will result better lazyload performance.');
           warnedAboutPlaceholderHeight = true;
         }
       }
@@ -273,6 +273,6 @@ LazyLoad.defaultProps = {
   scroll: true
 };
 
+import decorator from './decorator';
+export const lazyload = decorator;
 export default LazyLoad;
-
-export lazyload from './decorator';

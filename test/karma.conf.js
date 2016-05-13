@@ -2,7 +2,7 @@
 // Generated on Wed Mar 18 2015 11:41:18 GMT+0800 (CST)
 'use strict';
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -13,9 +13,9 @@ module.exports = function(config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai'],
 
-    // list of files / patterns to l/oad in the browser
+    // list of files / patterns to load in the browser
     files: [
-      {pattern: 'test/specs/*.js', included: true, watched: false},
+      { pattern: 'test/specs/*.js', included: true, watched: false },
     ],
 
 
@@ -39,7 +39,11 @@ module.exports = function(config) {
         loaders: [{
           test: /\.js$/,
           include: /src|test|demo/,
-          loader: 'babel?stage=0&loose=all'
+          query: {
+            presets: ['stage-0', 'es2015', 'react'],
+            plugins: ['transform-decorators-legacy']
+          },
+          loader: 'babel'
         }],
         postLoaders: [{
           test: /\.js$/,

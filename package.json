@@ -4,11 +4,11 @@
   "description": "Lazyload your Component, Image or anything matters the performance.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start test/karma.conf.js",
-    "demo:watch": "./node_modules/.bin/webpack-dev-server --inline --config webpack.config.js --content-base examples --port 8721",
-    "demo:build": "NODE_ENV=production ./node_modules/.bin/webpack",
-    "build": "./node_modules/.bin/babel src/ --out-dir lib/ --stage 0 --loose all",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc src/"
+    "test": "karma start test/karma.conf.js",
+    "demo:watch": "webpack-dev-server --inline --config webpack.config.js --content-base examples --port 8721",
+    "demo:build": "NODE_ENV=production webpack",
+    "build": "babel src/ --out-dir lib/",
+    "lint": "eslint -c .eslintrc src/"
   },
   "repository": {
     "type": "git",
@@ -26,10 +26,15 @@
   },
   "homepage": "https://github.com/jasonslyvia/react-lazyload",
   "devDependencies": {
-    "babel": "~5.8.21",
-    "babel-core": "~5.8.21",
+    "babel": "~6.5.2",
+    "babel-cli": "^6.7.7",
+    "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.2",
-    "babel-loader": "~5.3.2",
+    "babel-loader": "~6.2.4",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
     "chai": "^3.2.0",
     "chai-spies": "^0.7.1",
     "eslint": "^2.7.0",
