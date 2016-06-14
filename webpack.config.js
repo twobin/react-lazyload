@@ -28,10 +28,6 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       loader: 'babel',
-      query: {
-        presets: ['stage-0', 'es2015'],
-        plugins: ['transform-react-jsx', 'transform-decorators-legacy']
-      },
       exclude: /node_modules/
     }]
   },
