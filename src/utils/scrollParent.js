@@ -2,7 +2,10 @@
  * @fileOverview Find scroll parent
  */
 
-export default (node) => {
+export default (node, scrollParentRef = null) => {
+  if(scrollParentRef){
+    return document.querySelector(scrollParentRef)
+  }
   if (!node) {
     return document;
   }

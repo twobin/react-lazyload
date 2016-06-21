@@ -19,6 +19,7 @@ const Home = () => (
     <li><Link to="/decorator">using with <code>decorator</code></Link></li>
     <li><Link to="/scroll">using with <code>scrollTo</code></Link></li>
     <li><Link to="/overflow">using inside overflow container</Link></li>
+    <li><Link to="/overflowparent">using inside overflow container (explicit parent)</Link></li>
     <li><Link to="/debounce">using <code>debounce</code></Link></li>
     <li><Link to="/placeholder">custom placeholder</Link></li>
     <li><Link to="/fadein">cool <code>fadeIn</code> effect</Link></li>

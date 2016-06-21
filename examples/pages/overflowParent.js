@@ -36,7 +36,7 @@ export default class OverflowParent extends Component {
     return (
       <div className="wrapper overflow-wrapper">
         <Operation type="overflow" onClickUpdate={::this.handleClick} />
-        <h1>LazyLoad in Overflow Container (explict parent)</h1>
+        <h1>LazyLoad in Overflow Container (explicit parent)</h1>
         <div className="widget-list overflow">
           {this.state.arr.map((el, index) => {
             return (
