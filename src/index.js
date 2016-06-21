@@ -186,7 +186,12 @@ class LazyLoad extends Component {
     }
 
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      let parent=null;
+      if(this.props.scrollParentRef)
+        parent = document.querySelector(this.props.scrollParentRef)
+      else
+      parent = scrollParent(ReactDom.findDOMNode(this));
+
       if (parent && parent.getAttribute(LISTEN_FLAG) === null) {
         parent.addEventListener('scroll', finalLazyLoadHandler);
         parent.setAttribute(LISTEN_FLAG, 1);
@@ -258,6 +263,7 @@ LazyLoad.propTypes = {
   overflow: PropTypes.bool,
   resize: PropTypes.bool,
   scroll: PropTypes.bool,
+  scrollParentRef: PropTypes.string,
   children: PropTypes.node,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
@@ -269,6 +275,7 @@ LazyLoad.defaultProps = {
   height: 100,
   offset: 0,
   overflow: false,
+  scrollParentRef: null,
   resize: false,
   scroll: true
 };

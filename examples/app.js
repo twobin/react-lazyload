@@ -6,6 +6,7 @@ import Decorator from './pages/decorator';
 import Normal from './pages/normal';
 import Scroll from './pages/scroll';
 import Overflow from './pages/overflow';
+import OverflowParent from './pages/overflowParent';
 import Image from './pages/image';
 import Debounce from './pages/debounce';
 import Placeholder from './pages/placeholder';
@@ -32,6 +33,7 @@ const routes = (
     <Route path="/normal" component={Normal} />
     <Route path="/scroll" component={Scroll} />
     <Route path="/overflow" component={Overflow} />
+    <Route path="/overflowparent" component={OverflowParent} />
     <Route path="/debounce" component={Debounce} />
     <Route path="/placeholder" component={Placeholder} />
     <Route path="/fadein" component={FadeIn} />
