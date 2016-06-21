@@ -82,8 +82,7 @@ const checkVisible = function checkVisible(component) {
   if (!node) {
     return;
   }
-
-  const parent = scrollParent(node);
+  const parent = scrollParent(node, component.props.scrollParentRef);
   const isOverflow = parent !== (node.ownerDocument || document);
 
   const visible = isOverflow ?
@@ -186,7 +185,9 @@ class LazyLoad extends Component {
     }
 
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      
+      const parent = scrollParent(ReactDom.findDOMNode(this), this.props.scrollParentRef);
+
       if (parent && parent.getAttribute(LISTEN_FLAG) === null) {
         parent.addEventListener('scroll', finalLazyLoadHandler);
         parent.setAttribute(LISTEN_FLAG, 1);
@@ -224,7 +225,7 @@ class LazyLoad extends Component {
 
   componentWillUnmount() {
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      const parent = scrollParent(ReactDom.findDOMNode(this), this.props.scrollParentRef);
       if (parent) {
         parent.removeEventListener('scroll', finalLazyLoadHandler);
         parent.removeAttribute(LISTEN_FLAG);
@@ -258,6 +259,7 @@ LazyLoad.propTypes = {
   overflow: PropTypes.bool,
   resize: PropTypes.bool,
   scroll: PropTypes.bool,
+  scrollParentRef: PropTypes.string,
   children: PropTypes.node,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
@@ -269,6 +271,7 @@ LazyLoad.defaultProps = {
   height: 100,
   offset: 0,
   overflow: false,
+  scrollParentRef: null,
   resize: false,
   scroll: true
 };
