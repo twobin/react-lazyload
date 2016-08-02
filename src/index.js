@@ -12,8 +12,6 @@ const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
 
-const heightDiffThreshold = 20;
-
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -152,14 +150,14 @@ class LazyLoad extends Component {
       }
     }
 
-    // It's unlikely to change delay type for an application, this is mainly
+    // It's unlikely to change delay type on the fly, this is mainly
     // designed for tests
     let needResetFinalLazyLoadHandler = false;
     if (this.props.debounce !== undefined && delayType === 'throttle') {
-      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try to set them unanimously');
+      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try setting them unanimously');
       needResetFinalLazyLoadHandler = true;
     } else if (delayType === 'debounce' && this.props.debounce === undefined) {
-      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try to set them unanimously');
+      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try setting them unanimously');
       needResetFinalLazyLoadHandler = true;
     }
 
