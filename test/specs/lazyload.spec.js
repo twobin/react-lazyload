@@ -117,25 +117,6 @@ describe('LazyLoad', () => {
       }, 500);
     });
 
-    it('should warn if custom placeholder has a largely varied `height` than `this.props.height`', () => {
-      const log = chai.spy();
-      const warn = console.warn;
-      console.warn = log;
-
-      ReactDOM.render(
-        <div>
-          <LazyLoad height={9999} placeholder={<div className="my-placeholder-without-height"></div>}>
-            <Test className="test" />
-          </LazyLoad>
-          <LazyLoad height={9999} placeholder={<div className="my-placeholder-without-height"></div>}>
-            <Test className="test" />
-          </LazyLoad>
-        </div>, div);
-
-      expect(log).to.have.been.called.with('[react-lazyload] A more specific `height` or `minHeight` for your own placeholder will result better lazyload performance.');
-      console.warn = warn;
-    });
-
     it('should render `placeholder` if provided', () => {
       ReactDOM.render(
         <div>

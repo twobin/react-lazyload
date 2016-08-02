@@ -12,7 +12,6 @@ const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
 
-let warnedAboutPlaceholderHeight = false;
 const heightDiffThreshold = 20;
 
 
@@ -25,19 +24,23 @@ const heightDiffThreshold = 20;
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const scrollTop = parent.scrollTop;
-  const parentBottom = scrollTop + parent.offsetHeight;
-  const { height: elementHeight } = node.getBoundingClientRect();
+  const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // calculate top and height of the intersection of the element's scrollParent and viewport
+  const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
+  const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+
+  // check whether the element is visible in the intersection
+  const { top, height } = node.getBoundingClientRect();
+  const offsetTop = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  const elementTop = node.offsetTop;
-  const elementBottom = elementTop + elementHeight;
-
-  return (elementTop - offsets[0] <= parentBottom) &&
-         (elementBottom + offsets[1] >= scrollTop);
+  return (offsetTop - offsets[0] <= intersectionHeight) &&
+         (offsetTop + height + offsets[1] >= 0);
 };
 
 /**
@@ -48,26 +51,16 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const supportPageOffset = window.pageXOffset !== undefined;
-  const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
-  const scrollTop = supportPageOffset ? window.pageYOffset :
-                                        isCSS1Compat ?
-                                        document.documentElement.scrollTop :
-                                        document.body.scrollTop;
-
   const { top, height: elementHeight } = node.getBoundingClientRect();
-  const elementTop = top + scrollTop; // element top relative to document
-  const elementBottom = elementTop + elementHeight;
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
-  const documentBottom = scrollTop + windowInnerHeight;
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (elementTop - offsets[0] <= documentBottom) &&
-         (elementBottom + offsets[1] >= scrollTop);
+  return (top - offsets[0] <= windowInnerHeight) &&
+         (top + elementHeight + offsets[1] >= 0);
 };
 
 
@@ -146,16 +139,19 @@ class LazyLoad extends Component {
       console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
     }
 
-    if (typeof this.props.height !== 'number') {
-      console.warn('[react-lazyload] Please add `height` props to <LazyLoad> for better performance.');
-    }
-
     if (this.props.wheel) { // eslint-disable-line
       console.warn('[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.');
     }
   }
 
   componentDidMount() {
+    // Warn the user if placeholder and height is not specified and the rendered height is 0
+    if (process.env.NODE_ENV !== 'production') {
+      if (!this.props.placeholder && !this.props.height && ReactDom.findDOMNode(this).offsetHeight === 0) {
+        console.warn('[react-lazyload] Please add `height` props to <LazyLoad> for better performance.');
+      }
+    }
+
     // It's unlikely to change delay type for an application, this is mainly
     // designed for tests
     let needResetFinalLazyLoadHandler = false;
@@ -207,17 +203,6 @@ class LazyLoad extends Component {
 
     listeners.push(this);
     checkVisible(this);
-
-    if (process.env.NODE_ENV !== 'production') {
-      if (this.props.placeholder) {
-        const node = ReactDom.findDOMNode(this);
-        if (!warnedAboutPlaceholderHeight &&
-            Math.abs(node.offsetHeight - this.props.height) > heightDiffThreshold) {
-          console.warn('[react-lazyload] A more specific `height` or `minHeight` for your own placeholder will result better lazyload performance.');
-          warnedAboutPlaceholderHeight = true;
-        }
-      }
-    }
   }
 
   shouldComponentUpdate() {
@@ -255,7 +240,7 @@ class LazyLoad extends Component {
 
 LazyLoad.propTypes = {
   once: PropTypes.bool,
-  height: PropTypes.number.isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   offset: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   overflow: PropTypes.bool,
   resize: PropTypes.bool,
@@ -268,7 +253,6 @@ LazyLoad.propTypes = {
 
 LazyLoad.defaultProps = {
   once: false,
-  height: 100,
   offset: 0,
   overflow: false,
   resize: false,

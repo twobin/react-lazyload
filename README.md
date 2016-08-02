@@ -87,9 +87,9 @@ So you can safely send request in your component's `componentDidMount` without w
 
 ### height
 
-Type: Number Default: 100 Required: true
+Type: Number/String Default: undefined
 
-In the first round of render, LazyLoad will render a placeholder for your component and measure if this component is visible. Set `height` properly will make LazyLoad calculate more precisely.
+In the first round of render, LazyLoad will render a placeholder for your component if no placeholder is provided and measure if this component is visible. Set `height` properly will make LazyLoad calculate more precisely. The value can be number or string like `'100%'`. You can also use css to set the height of the placeholder instead of using `height`.
 
 ### once
 
