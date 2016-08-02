@@ -24,19 +24,23 @@ const heightDiffThreshold = 20;
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const scrollTop = parent.scrollTop;
-  const parentBottom = scrollTop + parent.offsetHeight;
-  const { height: elementHeight } = node.getBoundingClientRect();
+  const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
+  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // calculate top and height of the intersection of the element's scrollParent and viewport
+  const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
+  const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+
+  // check whether the element is visible in the intersection
+  const { top, height } = node.getBoundingClientRect();
+  const offsetTop = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  const elementTop = node.offsetTop;
-  const elementBottom = elementTop + elementHeight;
-
-  return (elementTop - offsets[0] <= parentBottom) &&
-         (elementBottom + offsets[1] >= scrollTop);
+  return (offsetTop - offsets[0] <= intersectionHeight) &&
+         (offsetTop + height + offsets[1] >= 0);
 };
 
 /**
@@ -47,26 +51,16 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const supportPageOffset = window.pageXOffset !== undefined;
-  const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
-  const scrollTop = supportPageOffset ? window.pageYOffset :
-                                        isCSS1Compat ?
-                                        document.documentElement.scrollTop :
-                                        document.body.scrollTop;
-
   const { top, height: elementHeight } = node.getBoundingClientRect();
-  const elementTop = top + scrollTop; // element top relative to document
-  const elementBottom = elementTop + elementHeight;
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
-  const documentBottom = scrollTop + windowInnerHeight;
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  return (elementTop - offsets[0] <= documentBottom) &&
-         (elementBottom + offsets[1] >= scrollTop);
+  return (top - offsets[0] <= windowInnerHeight) &&
+         (top + elementHeight + offsets[1] >= 0);
 };
 
 
