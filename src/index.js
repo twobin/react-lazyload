@@ -145,7 +145,7 @@ class LazyLoad extends Component {
   componentDidMount() {
     // Warn the user if placeholder and height is not specified and the rendered height is 0
     if (process.env.NODE_ENV !== 'production') {
-      if (!this.props.placeholder && !this.props.height && ReactDom.findDOMNode(this).offsetHeight === 0) {
+      if (!this.props.placeholder && this.props.height === undefined && ReactDom.findDOMNode(this).offsetHeight === 0) {
         console.warn('[react-lazyload] Please add `height` props to <LazyLoad> for better performance.');
       }
     }
