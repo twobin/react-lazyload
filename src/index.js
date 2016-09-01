@@ -140,7 +140,7 @@ class LazyLoad extends Component {
       if (React.Children.count(this.props.children) > 1) {
         console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
       }
-  
+
       if (this.props.wheel) { // eslint-disable-line
         console.warn('[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.');
       }
@@ -184,9 +184,12 @@ class LazyLoad extends Component {
 
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent && parent.getAttribute(LISTEN_FLAG) === null) {
-        parent.addEventListener('scroll', finalLazyLoadHandler);
-        parent.setAttribute(LISTEN_FLAG, 1);
+      if (parent) {
+        const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
+        if (listenerCount === 1) {
+          parent.addEventListener('scroll', finalLazyLoadHandler);
+        }
+        parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
     } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
@@ -212,8 +215,13 @@ class LazyLoad extends Component {
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
       if (parent) {
-        parent.removeEventListener('scroll', finalLazyLoadHandler);
-        parent.removeAttribute(LISTEN_FLAG);
+        const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
+        if (listenerCount === 0) {
+          parent.removeEventListener('scroll', finalLazyLoadHandler);
+          parent.removeAttribute(LISTEN_FLAG);
+        } else {
+          parent.setAttribute(LISTEN_FLAG, listenerCount);
+        }
       }
     }
 
