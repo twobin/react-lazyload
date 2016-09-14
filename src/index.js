@@ -61,6 +61,11 @@ const checkNormalVisible = function checkNormalVisible(component) {
          (top + elementHeight + offsets[1] >= 0);
 };
 
+function isOverflow(node, parent) {
+  return parent !== node.ownerDocument &&
+         parent !== document &&
+         parent !== document.documentElement;
+}
 
 /**
  * Detect if element is visible in viewport, if so, set `visible` state to true.
@@ -75,11 +80,7 @@ const checkVisible = function checkVisible(component) {
   }
 
   const parent = scrollParent(node);
-  const isOverflow = parent !== node.ownerDocument &&
-                     parent !== document &&
-                     parent !== document.documentElement;
-
-  const visible = isOverflow ?
+  const visible = isOverflow(node, parent) ?
                   checkOverflowVisible(component, parent) :
                   checkNormalVisible(component);
 
@@ -132,15 +133,43 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
-
+    this.__node = null;
   }
 
   componentDidMount() {
+    const node = ReactDom.findDOMNode(this);
+    if (node) this.setupListeners(node);
+    this.__node = node;
+  }
+
+  shouldComponentUpdate() {
+    return this.visible;
+  }
+
+  componentDidUpdate() {
+    const node = ReactDom.findDOMNode(this);
+    if (node === this.__node) return; // no need to reset
+
+    // remove listeners if there is no DOM node
+    if (this.__node && !node) this.teardownListeners(this.__node);
+
+    // else, setup listeners for a new DOM node
+    else if (node && !this.__node) this.setupListeners(node);
+
+    // remember for next time
+    this.__node = node;
+  }
+
+  componentWillUnmount() {
+    if (this.__node) this.teardownListeners(this.__node);
+  }
+
+  setupListeners(node) {
     if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
       if (React.Children.count(this.props.children) > 1) {
         console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
       }
-  
+
       if (this.props.wheel) { // eslint-disable-line
         console.warn('[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.');
       }
@@ -182,12 +211,13 @@ class LazyLoad extends Component {
       }
     }
 
-    if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent && parent.getAttribute(LISTEN_FLAG) === null) {
+    const parent = scrollParent(node);
+    if (this.props.overflow && parent && isOverflow(node, parent)) {
+      const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
+      if (listenerCount === 1) {
         parent.addEventListener('scroll', finalLazyLoadHandler);
-        parent.setAttribute(LISTEN_FLAG, 1);
       }
+      parent.setAttribute(LISTEN_FLAG, listenerCount);
     } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
 
@@ -204,16 +234,15 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate() {
-    return this.visible;
-  }
-
-  componentWillUnmount() {
-    if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent) {
+  teardownListeners(node) {
+    const parent = scrollParent(node);
+    if (this.props.overflow && parent && isOverflow(node, parent)) {
+      const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
+      if (listenerCount === 0) {
         parent.removeEventListener('scroll', finalLazyLoadHandler);
         parent.removeAttribute(LISTEN_FLAG);
+      } else {
+        parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
     }
 
@@ -233,7 +262,7 @@ class LazyLoad extends Component {
            this.props.children :
              this.props.placeholder ?
                 this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
+        <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
   }
 }
 
