@@ -33,5 +33,5 @@ export default (node) => {
     parent = parent.parentNode;
   }
 
-  return node.ownerDocument || document;
+  return node.ownerDocument || node.documentElement || document;
 };
