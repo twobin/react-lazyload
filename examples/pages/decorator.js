@@ -20,7 +20,7 @@ export default class Decorator extends Component {
 
     const id = uniqueId();
     this.state = {
-      arr: Array(20).fill(0).map((a, index) => ({
+      arr: Array.apply(null, Array(20)).map((a, index) => ({
         uniqueId: id,
         once: [6, 7].indexOf(index) > -1
       }))
