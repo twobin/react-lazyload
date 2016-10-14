@@ -151,6 +151,28 @@ Specify a placeholder for your lazy loaded component.
 
 **If you provide your own placeholder, do remember add appropriate `height` or `minHeight` to your placeholder element for better lazyload performance.**
 
+## Utility
+
+### forceCheck
+
+This is avaible to manually trigger checking for elements in viewport. Helpful when LazyLoad compoents enter the viewport without resize or scroll events, e.g. when the components' container was hidden then become visible.
+
+Import `forceCheck`:
+
+```javascript
+
+import {forceCheck} from 'react-lazyload';
+
+```
+
+Then call the function:
+
+```javascript
+
+forceCheck();
+
+```
+
 
 ## Scripts
 
