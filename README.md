@@ -77,7 +77,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-You should aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered. 
+You should aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered.
 
 So you can safely send request in your component's `componentDidMount` without worring about performance loss or add some pretty entering effect, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
 
@@ -150,6 +150,12 @@ Specify a placeholder for your lazy loaded component.
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/placeholder)
 
 **If you provide your own placeholder, do remember add appropriate `height` or `minHeight` to your placeholder element for better lazyload performance.**
+
+### unmountIfInvisible
+
+Type: Bool Default: false
+
+The lazy loaded component is unmounted and replaced by the placeholder when it is no longer visible in the viewport.
 
 ## Utility
 
