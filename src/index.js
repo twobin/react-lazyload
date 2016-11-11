@@ -11,7 +11,7 @@ import throttle from './utils/throttle';
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
-
+let checkHorizontalScroll = false;
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -21,24 +21,43 @@ let pending = [];
  */
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
+  if(!!component.props.checkHorizontalScroll) {
+    const { left: parentLeft, width: parentWidth } = parent.getBoundingClientRect();
+    const windowInnerWidth = window.innerWidth || document.documentElement.clientWidth;
 
-  const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
-  const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+    // calculate left and width of the intersection of the element's scrollParent and viewport
+    const intersectionLeft = Math.max(parentLeft, 0); // intersection's left relative to viewport
+    const intersectionWidth = Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // Width
 
-  // calculate top and height of the intersection of the element's scrollParent and viewport
-  const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
-  const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+    // check whether the element is visible in the intersection
+    const { left, width } = node.getBoundingClientRect();
+    const offsetLeft = left - intersectionLeft; // element's left relative to intersection
 
-  // check whether the element is visible in the intersection
-  const { top, height } = node.getBoundingClientRect();
-  const offsetTop = top - intersectionTop; // element's top relative to intersection
+    const offsets = Array.isArray(component.props.offset) ?
+                  component.props.offset :
+                  [component.props.offset, component.props.offset]; // Be compatible with previous API
 
-  const offsets = Array.isArray(component.props.offset) ?
-                component.props.offset :
-                [component.props.offset, component.props.offset]; // Be compatible with previous API
+    return (offsetLeft - offsets[0] <= intersectionWidth) &&
+           (offsetLeft + width + offsets[1] >= 0);
+  } else {
+    const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
+    const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
-  return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0);
+    // calculate top and height of the intersection of the element's scrollParent and viewport
+    const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
+    const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+
+    // check whether the element is visible in the intersection
+    const { top, height } = node.getBoundingClientRect();
+    const offsetTop = top - intersectionTop; // element's top relative to intersection
+
+    const offsets = Array.isArray(component.props.offset) ?
+                  component.props.offset :
+                  [component.props.offset, component.props.offset]; // Be compatible with previous API
+
+    return (offsetTop - offsets[0] <= intersectionHeight) &&
+           (offsetTop + height + offsets[1] >= 0);
+  }
 };
 
 /**
@@ -255,7 +274,8 @@ LazyLoad.propTypes = {
   children: PropTypes.node,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-  placeholder: PropTypes.node
+  placeholder: PropTypes.node,
+  checkHorizontalScroll : PropTypes.bool
 };
 
 LazyLoad.defaultProps = {
@@ -263,7 +283,8 @@ LazyLoad.defaultProps = {
   offset: 0,
   overflow: false,
   resize: false,
-  scroll: true
+  scroll: true,
+  checkHorizontalScroll: false
 };
 
 import decorator from './decorator';
