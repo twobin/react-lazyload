@@ -11,7 +11,6 @@ import throttle from './utils/throttle';
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
-let checkHorizontalScroll = false;
 
 /**
  * Check if `component` is visible in overflow container `parent`
