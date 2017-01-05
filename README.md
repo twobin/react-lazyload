@@ -161,7 +161,7 @@ The lazy loaded component is unmounted and replaced by the placeholder when it i
 
 ### forceCheck
 
-This is avaible to manually trigger checking for elements in viewport. Helpful when LazyLoad compoents enter the viewport without resize or scroll events, e.g. when the components' container was hidden then become visible.
+This is avaible to manually trigger checking for elements in viewport. Helpful when LazyLoad components enter the viewport without resize or scroll events, e.g. when the components' container was hidden then become visible.
 
 Import `forceCheck`:
 
