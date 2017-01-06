@@ -2,7 +2,7 @@
 
 Lazyload your Components, Images or anything matters the performance.
 
-[Online Demo](//jasonslyvia.github.io/react-lazyload/examples/)
+[Demo](//jasonslyvia.github.io/react-lazyload/examples/)
 
 ## Why it's better
 
