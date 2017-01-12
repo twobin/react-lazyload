@@ -22,7 +22,7 @@ let pending = [];
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top: parentTop, height: parentHeight, widht: parentWidth} = parent.getBoundingClientRect();
+  const { top: parentTop, height: parentHeight, width: parentWidth} = parent.getBoundingClientRect();
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
   const xAxisLazyLoad = parent.classList.contains('lazyloading-x-axis');
 
