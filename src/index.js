@@ -22,15 +22,16 @@ let pending = [];
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
+  const { top: parentTop, height: parentHeight, widht: parentWidth} = parent.getBoundingClientRect();
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const xAxisLazyLoad = parent.classList.contains('lazyloading-x-axis');
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
   const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
 
   // check whether the element is visible in the intersection
-  const { top, height } = node.getBoundingClientRect();
+  const { top, height, left } = node.getBoundingClientRect();
   const offsetTop = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
@@ -38,7 +39,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0);
+         (offsetTop + height + offsets[1] >= 0) &&
+         (xAxisLazyLoad ? (left < parentWidth && left >= 0) : true);
 };
 
 /**
