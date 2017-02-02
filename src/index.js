@@ -25,9 +25,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const { top: parentTop, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect();
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
   const xAxisLazyLoad = parent.classList.contains('lazyload-x-axis');
-  const xAxisLazyLoadOffset = parent.dataset('lazyload-offset') || 0;
-  const device = parent.dataset('lazyload-device');
-  const virtualWidth = (device === 'handheld' ? parentWidth : (parentWidth + parseInt(xAxisLazyLoadOffset)));
+  const isHandheldDevice = parent.classList.contains('lazyload-handheld');
+  const virtualWidth = (isHandheldDevice ? parentWidth : (parentWidth * 2));
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
