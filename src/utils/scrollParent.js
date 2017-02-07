@@ -26,7 +26,7 @@ export default (node) => {
       continue;
     }
 
-    if (overflowRegex.test(overflow + overflowX + overflowY)) {
+    if (overflowRegex.test(overflow + overflowX + overflowY) || parent.classList.contains('lazyload-x-axis')) {
       return parent;
     }
 
