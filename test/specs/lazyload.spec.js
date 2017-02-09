@@ -181,7 +181,7 @@ describe('LazyLoad', () => {
       expect(container.querySelector('.treasure')).to.not.exist;
 
       container.scrollTop = 200;
-      // since scroll event is throttle, has to wait for a delay to make assertion
+      // since scroll event is throttled, has to wait for a delay to make assertion
       setTimeout(() => {
         expect(container.querySelector('.lazyload-placeholder')).to.not.exist;
         expect(container.querySelector('.treasure')).to.exist;
@@ -278,6 +278,34 @@ describe('LazyLoad', () => {
         expect(document.querySelector('.lazyload-placeholder')).to.exist;
         done();
       }, 500);
+    });
+  });
+
+  describe('Overflow', () => {
+    // https://github.com/jasonslyvia/react-lazyload/issues/71
+    // http://stackoverflow.com/a/6433475/761124
+    it('should not detect a overflow container when only one of the scroll property is auto\/scroll', () => {
+      ReactDOM.render(
+        <div
+          id="realOverflowContainer"
+          style={{ height: '600px', overflow: 'auto' }}
+        >
+          <div
+            id="fakeOverflowContainer"
+            style={{ height: '300px', overflowX: 'hidden' }}
+            className="container"
+          >
+            <LazyLoad height={200} overflow><div style={{ height: '200px' }} className="something">123</div></LazyLoad>
+            <LazyLoad height={200} overflow><div style={{ height: '200px' }} className="something">123</div></LazyLoad>
+            <LazyLoad height={200} overflow><div style={{ height: '200px' }} className="treasure">123</div></LazyLoad>
+          </div>
+        </div>
+      , div);
+
+      const container = document.querySelector('.container');
+      expect(container.querySelector('.something')).to.exist;
+      expect(container.querySelector('.lazyload-placeholder')).not.to.exist;
+      expect(container.querySelector('.treasure')).to.exist;
     });
   });
 });

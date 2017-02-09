@@ -74,13 +74,9 @@ const checkVisible = function checkVisible(component) {
     return;
   }
 
-  const parent = scrollParent(node);
-  const isOverflow = parent !== node.ownerDocument &&
-                     parent !== document &&
-                     parent !== document.documentElement;
-
+  const isOverflow = component.props.overflow;
   const visible = isOverflow ?
-                  checkOverflowVisible(component, parent) :
+                  checkOverflowVisible(component, scrollParent(node)) :
                   checkNormalVisible(component);
 
   if (visible) {
@@ -135,7 +131,6 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
-
   }
 
   componentDidMount() {

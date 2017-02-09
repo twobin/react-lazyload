@@ -26,7 +26,7 @@ export default (node) => {
       continue;
     }
 
-    if (overflowRegex.test(overflow + overflowX + overflowY)) {
+    if (overflowRegex.test(overflow) && overflowRegex.test(overflowX) && overflowRegex.test(overflowY)) {
       return parent;
     }
 
