@@ -121,10 +121,10 @@ describe('LazyLoad', () => {
       ReactDOM.render(
         <div>
           <LazyLoad height={9999} placeholder={<div className="my-placeholder" style={{ height: '9999px' }}></div>}>
-            <Test className="test"></Test>
+            <Test className="test" />
           </LazyLoad>
           <LazyLoad height={9999} placeholder={<div className="my-placeholder" style={{ height: '9999px' }}></div>}>
-            <Test className="test"></Test>
+            <Test className="test" />
           </LazyLoad>
         </div>, div);
 

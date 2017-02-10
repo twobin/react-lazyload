@@ -216,7 +216,7 @@ class LazyLoad extends Component {
   componentWillUnmount() {
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent) {
+      if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
           parent.removeEventListener('scroll', finalLazyLoadHandler);
