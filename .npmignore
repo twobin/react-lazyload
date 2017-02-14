@@ -1,1 +1,6 @@
 examples/
+.babalrc
+.eslintrc
+webpack.config.js
+src/
+test/
