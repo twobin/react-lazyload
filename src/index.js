@@ -93,6 +93,10 @@ const checkVisible = function checkVisible(component) {
 
       component.visible = true;
       component.forceUpdate();
+
+      setTimeout(() => {
+          component.onContentVisible(component);
+      }, 0);
     }
   } else if (!(component.props.once && component.visible)) {
     component.visible = false;
@@ -138,6 +142,8 @@ class LazyLoad extends Component {
   }
 
   componentDidMount() {
+    this.onContentVisible = this.props.onContentVisible;
+
     if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
       if (React.Children.count(this.props.children) > 1) {
         console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
@@ -258,7 +264,8 @@ LazyLoad.propTypes = {
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  onContentVisible: PropTypes.func
 };
 
 LazyLoad.defaultProps = {
