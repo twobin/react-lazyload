@@ -15,7 +15,8 @@ export default function debounce(func, wait, immediate) {
       if (!immediate) {
         result = func.apply(context, args);
         if (!timeout) {
-          context = args = null;
+          context = null;
+          args = null;
         }
       }
     }
@@ -33,7 +34,8 @@ export default function debounce(func, wait, immediate) {
 
     if (callNow) {
       result = func.apply(context, args);
-      context = args = null;
+      context = null;
+      args = null;
     }
 
     return result;

@@ -37,7 +37,7 @@ module.exports = function (config) {
       devtool: 'inline-source-map',
       module: {
         loaders: [{
-          test: /\.js$/,
+          test: /\.jsx?$/,
           include: /src|test|demo/,
           query: {
             presets: ['stage-0', 'es2015', 'react'],
@@ -50,6 +50,9 @@ module.exports = function (config) {
           include: /src/,
           loader: 'istanbul-instrumenter'
         }]
+      },
+      resolve: {
+        extensions: ['', '.js', '.jsx']
       }
     },
 

@@ -8,10 +8,10 @@ import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
 
+const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
-
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -22,7 +22,15 @@ let pending = [];
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top: parentTop, height: parentHeight } = parent.getBoundingClientRect();
+  let parentTop;
+  let parentHeight;
+
+  try {
+    ({ top: parentTop, height: parentHeight } = parent.getBoundingClientRect());
+  } catch (e) {
+    ({ top: parentTop, height: parentHeight } = defaultBoundingClientRect);
+  }
+
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
@@ -30,7 +38,15 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
 
   // check whether the element is visible in the intersection
-  const { top, height } = node.getBoundingClientRect();
+  let top;
+  let height;
+
+  try {
+    ({ top, height } = node.getBoundingClientRect());
+  } catch (e) {
+    ({ top, height } = defaultBoundingClientRect);
+  }
+
   const offsetTop = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
@@ -49,7 +65,14 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top, height: elementHeight } = node.getBoundingClientRect();
+  let top;
+  let elementHeight;
+
+  try {
+    ({ top, height: elementHeight } = node.getBoundingClientRect());
+  } catch (e) {
+    ({ top, height: elementHeight } = defaultBoundingClientRect);
+  }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
@@ -104,7 +127,7 @@ const checkVisible = function checkVisible(component) {
 
 
 const purgePending = function purgePending() {
-  pending.forEach(component => {
+  pending.forEach((component) => {
     const index = listeners.indexOf(component);
     if (index !== -1) {
       listeners.splice(index, 1);
@@ -243,7 +266,7 @@ class LazyLoad extends Component {
            this.props.children :
              this.props.placeholder ?
                 this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
+                <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
   }
 }
 
