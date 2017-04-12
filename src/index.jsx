@@ -1,12 +1,13 @@
 /**
  * react-lazyload
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
+import PropTypes from 'prop-types'
 
 const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
 const LISTEN_FLAG = 'data-lazyload-listened';
