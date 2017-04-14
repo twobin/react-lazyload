@@ -66,6 +66,9 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
+  // If this element is hidden by css rules somehow, it's definitely invisible
+  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
+
   let top;
   let elementHeight;
 
