@@ -10,6 +10,7 @@ Lazyload your Components, Images or anything matters the performance.
  - Support both `one-time lazy load` and `continuous lazy load` mode
  - `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
  - Decorator supported
+ - Server Side Rendering friendly
  - Thoroughly tested
 
 ## Installation
