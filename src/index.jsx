@@ -14,6 +14,22 @@ const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
 
+// try to handle passive events
+let passiveEventSupported = false;
+try {
+  let opts = Object.defineProperty({}, 'passive', {
+    get: function () {
+      passiveEventSupported = true;
+    }
+  });
+  window.addEventListener("test", null, opts);
+}
+catch (e) { }
+// if they are supported, setup the optional params
+// IMPORTANT: FALSE doubles as the default CAPTURE value!
+const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
+
+
 /**
  * Check if `component` is visible in overflow container `parent`
  * @param  {node} component React component
@@ -192,12 +208,12 @@ class LazyLoad extends Component {
     }
 
     if (needResetFinalLazyLoadHandler) {
-      off(window, 'scroll', finalLazyLoadHandler);
-      off(window, 'resize', finalLazyLoadHandler);
+      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+      off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
     }
 
-    if (!finalLazyLoadHandler) {
+    if (!finalLazyLoadHandler && passiveEvent === false) {
       if (this.props.debounce !== undefined) {
         finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
                                                          this.props.debounce :
@@ -209,6 +225,8 @@ class LazyLoad extends Component {
                                                          300);
         delayType = 'throttle';
       }
+    } else {
+      finalLazyLoadHandler = lazyLoadHandler;
     }
 
     if (this.props.overflow) {
@@ -216,7 +234,7 @@ class LazyLoad extends Component {
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
         if (listenerCount === 1) {
-          parent.addEventListener('scroll', finalLazyLoadHandler);
+          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
         }
         parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
@@ -224,11 +242,11 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
-        on(window, 'scroll', finalLazyLoadHandler);
+        on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
-        on(window, 'resize', finalLazyLoadHandler);
+        on(window, 'resize', finalLazyLoadHandler, passiveEvent);
       }
     }
 
@@ -246,7 +264,7 @@ class LazyLoad extends Component {
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
-          parent.removeEventListener('scroll', finalLazyLoadHandler);
+          parent.removeEventListener('scroll', finalLazyLoadHandler, passiveEvent);
           parent.removeAttribute(LISTEN_FLAG);
         } else {
           parent.setAttribute(LISTEN_FLAG, listenerCount);
@@ -260,8 +278,8 @@ class LazyLoad extends Component {
     }
 
     if (listeners.length === 0) {
-      off(window, 'resize', finalLazyLoadHandler);
-      off(window, 'scroll', finalLazyLoadHandler);
+      off(window, 'resize', finalLazyLoadHandler, passiveEvent);
+      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
     }
   }
 
