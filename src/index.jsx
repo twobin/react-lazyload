@@ -136,6 +136,10 @@ const checkVisible = function checkVisible(component) {
 
       component.visible = true;
       component.forceUpdate();
+
+      if (component.props.onContentVisible) {
+        component.props.onContentVisible();
+      }
     }
   } else if (!(component.props.once && component.visible)) {
     component.visible = false;
@@ -303,7 +307,8 @@ LazyLoad.propTypes = {
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  onContentVisible: PropTypes.func
 };
 
 LazyLoad.defaultProps = {
@@ -312,7 +317,8 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
+  onContentVisible: null
 };
 
 import decorator from './decorator';
