@@ -229,16 +229,7 @@ class LazyLoad extends Component {
       finalLazyLoadHandler = lazyLoadHandler;
     }
 
-    if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent && typeof parent.getAttribute === 'function') {
-        const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
-        if (listenerCount === 1) {
-          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
-        }
-        parent.setAttribute(LISTEN_FLAG, listenerCount);
-      }
-    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+    let bindWindowScroll = () => {
       const { scroll, resize } = this.props;
 
       if (scroll) {
@@ -248,6 +239,20 @@ class LazyLoad extends Component {
       if (resize) {
         on(window, 'resize', finalLazyLoadHandler, passiveEvent);
       }
+    };
+
+    if (this.props.overflow) {
+      const parent = scrollParent(ReactDom.findDOMNode(this));
+      if (parent && typeof parent.getAttribute === 'function') {
+        const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
+        if (listenerCount === 1) {
+          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
+          bindWindowScroll();
+        }
+        parent.setAttribute(LISTEN_FLAG, listenerCount);
+      }
+    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+      bindWindowScroll();
     }
 
     listeners.push(this);
