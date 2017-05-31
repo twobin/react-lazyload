@@ -190,6 +190,30 @@ describe('LazyLoad', () => {
         done();
       }, 500);
     });
+
+  it('Item inside overflow-container should be visitble when the document has scroll to show it', (done) => {
+
+      let firstHeight = window.innerHeight + 100;
+      ReactDOM.render(
+        <div style={{ overflow: 'scroll' }} className="container">
+          <LazyLoad height={ firstHeight } overflow><div style={{ height: `${ firstHeight }px` }} className="something">always can visited</div></LazyLoad>
+          <LazyLoad height={220} overflow><div style={{ height: '220px' }} className="treasure">overflow +220</div></LazyLoad>
+        </div>
+      , div);
+
+      const container = document.querySelector('.container');
+      expect(container.querySelector('.something')).to.exist;
+      expect(container.querySelector('.treasure')).to.not.exist;
+
+      window.scrollTo(0, 250);
+
+      // since scroll event is throttled, has to wait for a delay to make assertion
+      setTimeout(() => {
+        expect(container.querySelector('.treasure')).to.exist;
+        done();
+      }, 500);
+    });
+
   });
 
   describe('Decorator', () => {
