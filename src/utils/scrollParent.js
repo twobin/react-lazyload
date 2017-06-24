@@ -23,6 +23,7 @@ export default (node) => {
     const overflowY = style['overflow-y'];
 
     if (position === 'static' && excludeStaticParent) {
+      parent = parent.parentNode;
       continue;
     }
 
