@@ -188,9 +188,9 @@ $ npm run build
 
 ## Who should use it
 
-Let's say there is a `fixed` date picker on the page, when user pick a different date, all components displaying data should send ajax request with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one page.
+Let's say there is a `fixed` date picker on the page, when user picks a different date, all components displaying data should send ajax requests with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one time.
 
-Using `LazyLoad` component will help ease this situation by only update components in viewport.
+Using `LazyLoad` component will help ease this situation by only updating components visible in viewport.
 
 ## Contributors
 
