@@ -27,7 +27,8 @@ export default (node) => {
       continue;
     }
 
-    if (overflowRegex.test(overflow) && overflowRegex.test(overflowX) && overflowRegex.test(overflowY)) {
+    // https://github.com/jasonslyvia/react-lazyload/issues/84#issuecomment-308607651
+    if ( overflowRegex.test(overflowX) && overflowRegex.test(overflowY)) {
       return parent;
     }
 
