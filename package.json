@@ -1,6 +1,6 @@
 {
-  "name": "react-lazyload",
-  "version": "2.2.7",
+  "name": "react-lazyload2",
+  "version": "2.2.8",
   "description": "Lazyload your components, images or anything where performance matters.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jasonslyvia/react-lazyload.git"
+    "url": "https://github.com/zemzheng/react-lazyload2.git"
   },
   "keywords": [
     "react-component",
@@ -20,11 +20,14 @@
     "lazyload"
   ],
   "author": "jasonslyvia <jasonslyvia@gmail.com> (http://undefinedblog.com/)",
+  "contributors" : [
+      "Zem Zheng <zemzheng@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jasonslyvia/react-lazyload/issues"
+    "url": "https://github.com/zemzheng/react-lazyload2/issues"
   },
-  "homepage": "https://github.com/jasonslyvia/react-lazyload",
+  "homepage": "https://github.com/zemzheng/react-lazyload2",
   "dependencies": {
     "prop-types": "^15.5.6"
   },
