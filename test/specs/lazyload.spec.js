@@ -276,7 +276,7 @@ describe('LazyLoad', () => {
 
       // let `scroll` event handler done their job first
       setTimeout(() => {
-        expect(document.querySelectorAll('.test').length).to.equal(1);
+        expect(document.querySelectorAll('.test').length).to.equal(2);
         expect(document.querySelector('.lazyload-placeholder')).to.exist;
         done();
       }, 500);
