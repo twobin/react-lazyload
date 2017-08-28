@@ -117,6 +117,8 @@ const checkVisible = function checkVisible(component) {
     return;
   }
 
+  // used for shouldComponentUpdate diff, as previous !== current
+  component.previousVisibility = component.visible;
   const parent = scrollParent(node);
   const isOverflow = component.props.overflow &&
                      parent !== node.ownerDocument &&
@@ -177,6 +179,7 @@ class LazyLoad extends Component {
   constructor(props) {
     super(props);
 
+    this.previousVisibility = false;
     this.visible = false;
   }
 
@@ -254,8 +257,10 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate() {
-    return this.visible;
+  shouldComponentUpdate(nextProps) {
+    return this.visible &&
+      this.visible !== this.previousVisibility &&
+      this.props !== nextProps;
   }
 
   componentWillUnmount() {

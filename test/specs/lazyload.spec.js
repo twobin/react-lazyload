@@ -112,7 +112,7 @@ describe('LazyLoad', () => {
         , div);
 
         // Difference between the test above
-        expect(document.querySelector('.test1 .times').textContent).to.equal('3');
+        expect(document.querySelector('.test1 .times').textContent).to.equal('2');
         done();
       }, 500);
     });
