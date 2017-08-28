@@ -47,7 +47,7 @@ describe('LazyLoad', () => {
       expect(document.querySelector('.treasure')).to.not.exist;
     });
 
-    it('should NOT update when invisble', (done) => {
+    it('should NOT update when invisible', (done) => {
       ReactDOM.render(
         <div>
           <LazyLoad height={9999}><Test height={9999} id={1} /></LazyLoad>
@@ -111,7 +111,7 @@ describe('LazyLoad', () => {
           </div>
         , div);
 
-        // Differnce between the test above
+        // Difference between the test above
         expect(document.querySelector('.test1 .times').textContent).to.equal('3');
         done();
       }, 500);
