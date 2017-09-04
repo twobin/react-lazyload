@@ -47,7 +47,7 @@ describe('LazyLoad', () => {
       expect(document.querySelector('.treasure')).to.not.exist;
     });
 
-    it('should NOT update when invisble', (done) => {
+    it('should NOT update when invisible', (done) => {
       ReactDOM.render(
         <div>
           <LazyLoad height={9999}><Test height={9999} id={1} /></LazyLoad>
@@ -111,8 +111,8 @@ describe('LazyLoad', () => {
           </div>
         , div);
 
-        // Differnce between the test above
-        expect(document.querySelector('.test1 .times').textContent).to.equal('3');
+        // Difference between the test above
+        expect(document.querySelector('.test1 .times').textContent).to.equal('2');
         done();
       }, 500);
     });
@@ -276,7 +276,7 @@ describe('LazyLoad', () => {
 
       // let `scroll` event handler done their job first
       setTimeout(() => {
-        expect(document.querySelectorAll('.test').length).to.equal(1);
+        expect(document.querySelectorAll('.test').length).to.equal(2);
         expect(document.querySelector('.lazyload-placeholder')).to.exist;
         done();
       }, 500);

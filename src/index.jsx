@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
-import debounce from './utils/debounce';
-import throttle from './utils/throttle';
+import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
+import isEqual from 'lodash.isEqual';
 import PropTypes from 'prop-types'
 
 const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
@@ -117,6 +118,8 @@ const checkVisible = function checkVisible(component) {
     return;
   }
 
+  // used for shouldComponentUpdate diff, as previous !== current
+  component.previousVisibility = component.visible;
   const parent = scrollParent(node);
   const isOverflow = component.props.overflow &&
                      parent !== node.ownerDocument &&
@@ -159,13 +162,13 @@ const purgePending = function purgePending() {
 
 
 const lazyLoadHandler = () => {
+  // Remove `once` component in listeners
+  purgePending();
+
   for (let i = 0; i < listeners.length; ++i) {
     const listener = listeners[i];
     checkVisible(listener);
   }
-
-  // Remove `once` component in listeners
-  purgePending();
 };
 
 // Depending on component's props
@@ -177,6 +180,7 @@ class LazyLoad extends Component {
   constructor(props) {
     super(props);
 
+    this.previousVisibility = false;
     this.visible = false;
   }
 
@@ -254,8 +258,10 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate() {
-    return this.visible;
+  shouldComponentUpdate(nextProps) {
+    return this.visible &&
+      this.visible !== this.previousVisibility &&
+      !isEqual(this.props, nextProps);
   }
 
   componentWillUnmount() {
