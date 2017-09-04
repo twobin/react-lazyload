@@ -162,13 +162,13 @@ const purgePending = function purgePending() {
 
 
 const lazyLoadHandler = () => {
+  // Remove `once` component in listeners
+  purgePending();
+
   for (let i = 0; i < listeners.length; ++i) {
     const listener = listeners[i];
     checkVisible(listener);
   }
-
-  // Remove `once` component in listeners
-  purgePending();
 };
 
 // Depending on component's props
