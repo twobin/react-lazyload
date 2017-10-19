@@ -13,7 +13,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -23,7 +23,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -33,7 +33,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -43,7 +43,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -53,7 +53,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -63,7 +63,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -73,7 +73,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
@@ -83,7 +83,7 @@ export default class FadeIn extends Component {
           <Lazyload throttle={200} height={300}>
             <CSSTransitionGroup key="1"
               transitionName="fade"
-              transitionAppear={true}
+              transitionAppear
               transitionAppearTimeout={500}
               transitionEnter={false}
               transitionLeave={false}>
