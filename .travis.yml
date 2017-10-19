@@ -7,4 +7,4 @@ before_script:
   - sleep 3
 addons:
   firefox: "latest"
-script: "./node_modules/karma/bin/karma start test/karma.conf.js --browsers Firefox --single-run --no-auto-watch --capture-timeout 120000"
+script: "./node_modules/karma/bin/karma start test/karma.conf.js --browsers Firefox --single-run --no-auto-watch --capture-timeout 1200000"
