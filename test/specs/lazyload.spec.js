@@ -1,7 +1,7 @@
 /* eslint no-unused-expressions: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LazyLoad, { lazyload } from '../../src/';
+import LazyLoad, { lazyload } from '../../src/index';
 import spies from 'chai-spies';
 import Test from '../Test.component';
 
@@ -215,71 +215,6 @@ describe('LazyLoad', () => {
 
       expect(document.querySelectorAll('.test').length).to.equal(1);
       expect(document.querySelector('.lazyload-placeholder')).to.exist;
-    });
-  });
-
-  describe('Throttle & Debounce', () => {
-    it('should throttle scroll event by default', (done) => {
-      const windowHeight = window.innerHeight + 1;
-      ReactDOM.render(
-        <div>
-          <LazyLoad height={windowHeight}><Test height={windowHeight} /></LazyLoad>
-          <LazyLoad height={windowHeight}><Test height={windowHeight} /></LazyLoad>
-          <LazyLoad height={windowHeight}><Test height={windowHeight} /></LazyLoad>
-        </div>
-      , div);
-
-      window.scrollTo(0, 10);
-
-      setTimeout(() => {
-        window.scrollTo(0, 9999);
-      }, 50);
-
-      setTimeout(() => {
-        window.scrollTo(0, 10);
-      }, 50);
-
-      // let `scroll` event handler done their job first
-      setTimeout(() => {
-        expect(document.querySelectorAll('.test').length).to.equal(2);
-        done();
-      }, 500);
-    });
-
-    it('should debounce when `debounce` is set', (done) => {
-      const windowHeight = window.innerHeight + 20;
-      ReactDOM.render(
-        <div>
-          <LazyLoad height={windowHeight} debounce><Test height={windowHeight} /></LazyLoad>
-          <LazyLoad height={windowHeight} debounce><Test height={windowHeight} /></LazyLoad>
-          <LazyLoad height={windowHeight} debounce><Test height={windowHeight} /></LazyLoad>
-        </div>
-      , div);
-
-      window.scrollTo(0, 9999);
-
-      setTimeout(() => {
-        window.scrollTo(0, 9999);
-      }, 30);
-
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 30);
-
-      setTimeout(() => {
-        window.scrollTo(0, 9999);
-      }, 30);
-
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 30);
-
-      // let `scroll` event handler done their job first
-      setTimeout(() => {
-        expect(document.querySelectorAll('.test').length).to.equal(1);
-        expect(document.querySelector('.lazyload-placeholder')).to.exist;
-        done();
-      }, 500);
     });
   });
 

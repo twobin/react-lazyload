@@ -3,11 +3,11 @@
  */
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
-import PropTypes from 'prop-types'
 
 const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
 const LISTEN_FLAG = 'data-lazyload-listened';
@@ -17,12 +17,12 @@ let pending = [];
 // try to handle passive events
 let passiveEventSupported = false;
 try {
-  let opts = Object.defineProperty({}, 'passive', {
-    get: function () {
+  const opts = Object.defineProperty({}, 'passive', {
+    get() {
       passiveEventSupported = true;
     }
   });
-  window.addEventListener("test", null, opts);
+  window.addEventListener('test', null, opts);
 }
 catch (e) { }
 // if they are supported, setup the optional params
@@ -125,10 +125,8 @@ const checkVisible = function checkVisible(component) {
   const visible = isOverflow ?
                   checkOverflowVisible(component, parent) :
                   checkNormalVisible(component);
-
   if (visible) {
-    // Avoid extra render if previously is visible, yeah I mean `render` call,
-    // not actual DOM render
+    // Avoid extra render if previously is visible
     if (!component.visible) {
       if (component.props.once) {
         pending.push(component);
@@ -157,13 +155,11 @@ const purgePending = function purgePending() {
   pending = [];
 };
 
-
 const lazyLoadHandler = () => {
   for (let i = 0; i < listeners.length; ++i) {
     const listener = listeners[i];
     checkVisible(listener);
   }
-
   // Remove `once` component in listeners
   purgePending();
 };
@@ -213,20 +209,20 @@ class LazyLoad extends Component {
       finalLazyLoadHandler = null;
     }
 
-    if (!finalLazyLoadHandler && passiveEvent === false) {
+    if (!finalLazyLoadHandler) {
       if (this.props.debounce !== undefined) {
         finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
                                                          this.props.debounce :
                                                          300);
         delayType = 'debounce';
-      } else {
+      } else if (this.props.throttle !== undefined) {
         finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
                                                          this.props.throttle :
                                                          300);
         delayType = 'throttle';
+      } else {
+        finalLazyLoadHandler = lazyLoadHandler;
       }
-    } else {
-      finalLazyLoadHandler = lazyLoadHandler;
     }
 
     if (this.props.overflow) {
