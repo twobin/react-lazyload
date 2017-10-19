@@ -147,7 +147,7 @@ The lazy loaded component is unmounted and replaced by the placeholder when it i
 
 ### debounce/throttle
 
-Type: Bool / Number Default: true
+Type: Bool / Number Default: undefined
 
 Lazyload will try to use [passive event](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) by default to improve scroll/resize event handler's performance. If you prefer control this behaviour by yourself, you can set `debounce` or `throttle` to enable built in delay feature.
 
