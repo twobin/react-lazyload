@@ -108,11 +108,13 @@ module.exports = function (config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Firefox'],
 
-    browserNoActivityTimeout: 1200000,
+    browserNoActivityTimeout: 60000,
+    browserDisconnectTimeout: 60000,
+    browserDisconnectTolerance: 5,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
-    processKillTimeout: 1200000,
+    processKillTimeout: 60000,
   });
 };
