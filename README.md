@@ -39,7 +39,7 @@ const App = () => {
                                   experience
                                  */
       </LazyLoad>
-      <LazyLoad height={200} once >        
+      <LazyLoad height={200} once >
                                 /* Once this component is loaded, LazyLoad will
                                  not care about it anymore, set this to `true`
                                  if you're concerned about improving performance */
@@ -128,22 +128,6 @@ If lazy loading components inside a overflow container, set this to `true`. Also
 
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/overflow)
 
-### debounce
-
-Type: Bool / Number Default: true
-
-By default, LazyLoad will have all event handlers debounced in 300ms for better performance. You can disable this by setting `debounce` to `false`, or change debounce time by setting a number value.
-
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
-
-### throttle
-
-Type: Bool / Number Default: false
-
-If you prefer `throttle` rather than `debounce`, you can set this props to `true` or provide a specific number.
-
-**NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
-
 ### placeholder
 
 Type: Any Default: undefined
@@ -159,6 +143,19 @@ Specify a placeholder for your lazy loaded component.
 Type: Bool Default: false
 
 The lazy loaded component is unmounted and replaced by the placeholder when it is no longer visible in the viewport.
+
+
+### debounce/throttle
+
+Type: Bool / Number Default: true
+
+Lazyload will try to use [passive event](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) by default to improve scroll/resize event handler's performance. If you prefer control this behaviour by yourself, you can set `debounce` or `throttle` to enable built in delay feature.
+
+If you provide a number, that will be how many `ms` to wait; if you provide `true`, the wait time defaults to `300ms`.
+
+**NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
+
+[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
 
 ## Utility
 
