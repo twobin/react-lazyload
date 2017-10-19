@@ -6,5 +6,5 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
 addons:
-  firefox: "latest"
-script: "./node_modules/karma/bin/karma start test/karma.conf.js --browsers Firefox --single-run --no-auto-watch --capture-timeout 300000"
+  chrome: stable
+script: "./node_modules/karma/bin/karma start test/karma.conf.js --browsers Chrome --single-run --no-auto-watch --capture-timeout 300000"

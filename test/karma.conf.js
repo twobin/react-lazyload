@@ -63,7 +63,7 @@ module.exports = function (config) {
       'karma-coverage',
       'karma-chai',
       'karma-sourcemap-loader',
-      'karma-firefox-launcher',
+      'karma-chrome-launcher',
       'istanbul-instrumenter-loader',
       'karma-coveralls'
     ],
@@ -106,7 +106,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox'],
+    browsers: ['Chrome'],
 
     browserNoActivityTimeout: 300000,
     browserDisconnectTimeout: 300000,
