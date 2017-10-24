@@ -73,7 +73,7 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   }
 
   const offsetTop = top - intersectionTop; // element's top relative to intersection
-  const offsetLeft = top - intersectionTop; // element's top relative to intersection
+  const offsetLeft = left - intersectionLeft; // element's left relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
