@@ -40,38 +40,49 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
   let parentTop;
+  let parentLeft;
   let parentHeight;
+  let parentWidth;
+
 
   try {
-    ({ top: parentTop, height: parentHeight } = parent.getBoundingClientRect());
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect());
   } catch (e) {
-    ({ top: parentTop, height: parentHeight } = defaultBoundingClientRect);
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = defaultBoundingClientRect);
   }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const windowInnerWidth = window.innerWidth || document.documentElement.clientWidth;
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
+  const intersectionLeft = Math.max(parentLeft, 0); // intersection's left relative to viewport
   const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+  const intersectionWidth = Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // width
 
   // check whether the element is visible in the intersection
   let top;
+  let left;
   let height;
+  let width;
 
   try {
-    ({ top, height } = node.getBoundingClientRect());
+    ({ top, left, height, width } = node.getBoundingClientRect());
   } catch (e) {
-    ({ top, height } = defaultBoundingClientRect);
+    ({ top, left, height, width } = defaultBoundingClientRect);
   }
 
   const offsetTop = top - intersectionTop; // element's top relative to intersection
+  const offsetLeft = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0);
+         (offsetTop + height + offsets[1] >= 0) &&
+         (offsetLeft - offsets[0] <= intersectionWidth) &&
+         (offsetLeft + width + offsets[1] >= 0);
 };
 
 /**
