@@ -27,7 +27,8 @@ try {
 catch (e) { }
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
-const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
+// setting capture to true to enable events on desktop for narrower browser screen sizes (mobile & tablet)
+const passiveEvent = passiveEventSupported ? { capture: true, passive: true } : false;
 
 
 /**
@@ -238,6 +239,7 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
+        on(window, 'touchmove', finalLazyLoadHandler, passiveEvent);
         on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
