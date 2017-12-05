@@ -27,7 +27,8 @@ try {
 catch (e) { }
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
-const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
+// setting capture to true to enable events on desktop for narrower browser screen sizes (mobile & tablet)
+const passiveEvent = passiveEventSupported ? { capture: true, passive: true } : false;
 
 
 /**
