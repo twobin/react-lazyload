@@ -240,6 +240,7 @@ class LazyLoad extends Component {
       if (scroll) {
         on(window, 'touchmove', finalLazyLoadHandler, passiveEvent);
         on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+        on(document.body, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
