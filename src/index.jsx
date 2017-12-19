@@ -250,6 +250,13 @@ class LazyLoad extends Component {
       if(this.props.mouse) {
         on(window, 'mouseover', finalLazyLoadHandler, passiveEvent);
       }
+
+      if(this.props.customEvent) {
+        var myEventName = typeof this.props.customEvent === 'string' ? this.props.customEvent : 'triggerLazyLoad';
+        var customeEventImageLoad = document.createEvent('Event');
+        customeEventImageLoad.initEvent(myEventName, true, true);
+        on(window, myEventName, finalLazyLoadHandler, passiveEvent);
+      }
     }
 
     listeners.push(this);

@@ -157,6 +157,12 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
 
+### customEvent
+
+Type: String
+LazyLoad will attach a customEvent to the window, to be dispatched on demand. Default is `triggerLazyLoad` if passing prop `customEvent` and can be triggered with `window.dispatchEvent(new Event("triggerLazyLoad"));`. It can also be given a preferred string like `customEvent={"eventName"}` and then called with `window.dispatchEvent(new Event("eventName"));`.
+
+
 ## Utility
 
 ### forceCheck
