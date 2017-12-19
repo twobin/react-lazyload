@@ -238,6 +238,7 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
+        on(window, 'mouseover', finalLazyLoadHandler, passiveEvent);
         on(window, 'touchmove', finalLazyLoadHandler, passiveEvent);
         on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
         on(document.body, 'scroll', finalLazyLoadHandler, passiveEvent);
