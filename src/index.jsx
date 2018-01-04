@@ -284,7 +284,7 @@ class LazyLoad extends Component {
            this.props.children :
              this.props.placeholder ?
                 this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
+                <div style={{ height: this.props.height, minHeight: this.props.height }} className="lazyload-placeholder" />;
   }
 }
 
