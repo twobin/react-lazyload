@@ -221,7 +221,7 @@ describe('LazyLoad', () => {
   describe('Overflow', () => {
     // https://github.com/jasonslyvia/react-lazyload/issues/71
     // http://stackoverflow.com/a/6433475/761124
-    it('should not detect a overflow container when only one of the scroll property is auto\/scroll', () => {
+    it('should not detect an overflow container when only one of the scroll property is auto\/scroll', () => {
       ReactDOM.render(
         <div
           id="realOverflowContainer"
