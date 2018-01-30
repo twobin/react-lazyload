@@ -134,7 +134,8 @@ const checkVisible = function checkVisible(component) {
   if (visible) {
     // Avoid extra render if previously is visible
     if (!component.visible) {
-      if (component.props.children.type === "img") {
+      const type = component.props.children.type;
+      if (type === 'img' || (type.target && type.target === 'img')) {
         const source = component.props.children.props.src;
         if (!source) {
           return;
