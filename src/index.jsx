@@ -144,6 +144,9 @@ const checkVisible = function checkVisible(component) {
         image.onload = () => {
           setVisible();
         };
+        image.onerror = () => {
+          setVisible();
+        };
       } else {
         setVisible();
       }
