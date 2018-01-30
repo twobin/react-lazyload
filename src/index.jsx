@@ -116,7 +116,13 @@ const checkVisible = function checkVisible(component) {
   if (!node) {
     return;
   }
-
+  const setVisible = () => {
+    if (component.props.once) {
+      pending.push(component);
+    }
+    component.visible = true;
+    component.forceUpdate();
+  };
   const parent = scrollParent(node);
   const isOverflow = component.props.overflow &&
                      parent !== node.ownerDocument &&
@@ -128,12 +134,19 @@ const checkVisible = function checkVisible(component) {
   if (visible) {
     // Avoid extra render if previously is visible
     if (!component.visible) {
-      if (component.props.once) {
-        pending.push(component);
+      if (component.props.children.type === "img") {
+        const source = component.props.children.props.src;
+        if (!source) {
+          return;
+        }
+        const image = new Image();
+        image.src = source;
+        image.onload = () => {
+          setVisible();
+        };
+      } else {
+        setVisible();
       }
-
-      component.visible = true;
-      component.forceUpdate();
     }
   } else if (!(component.props.once && component.visible)) {
     component.visible = false;
