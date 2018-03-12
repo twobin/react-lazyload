@@ -86,6 +86,13 @@ So you can safely send request in your component's `componentDidMount` without w
 
 ## Props
 
+### children
+
+Type: Node Default: undefined
+
+**NOTICE**
+Only one child is allowed to be passed.
+
 ### height
 
 Type: Number/String Default: undefined
@@ -157,6 +164,11 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
 
+### wheel
+
+**DEPRECATED NOTICE**
+This props is not supported anymore, try set `overflow` for lazy loading in overflow containers.
+
 ## Utility
 
 ### forceCheck
@@ -174,7 +186,6 @@ Then call the function:
 ```javascript
 forceCheck();
 ```
-
 
 ## Scripts
 
