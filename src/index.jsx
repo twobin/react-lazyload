@@ -169,7 +169,6 @@ let delayType;
 let finalLazyLoadHandler = null;
 
 const isString = string => typeof string === 'string';
-// const isDomNode = domNode => domNode instanceof HTMLElement;
 
 class LazyLoad extends Component {
   constructor(props) {
@@ -187,13 +186,8 @@ class LazyLoad extends Component {
     } = this.props;
     if (scrollContainer) {
       if (isString(scrollContainer)) {
-        // selector
         scrollport = scrollport.document.querySelector(scrollContainer);
       }
-      //  else if (isDomNode(scrollContainer)) {
-      //   // is dom node
-      //   scrollport = scrollContainer;
-      // }
     }
     const needResetFinalLazyLoadHandler = (this.props.debounce !== undefined && delayType === 'throttle')
       || (delayType === 'debounce' && this.props.debounce === undefined);
