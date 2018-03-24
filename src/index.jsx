@@ -169,7 +169,7 @@ let delayType;
 let finalLazyLoadHandler = null;
 
 const isString = string => typeof string === 'string';
-const isDomNode = domNode => domNode instanceof HTMLElement;
+// const isDomNode = domNode => domNode instanceof HTMLElement;
 
 class LazyLoad extends Component {
   constructor(props) {
@@ -181,24 +181,25 @@ class LazyLoad extends Component {
   componentDidMount() {
     // It's unlikely to change delay type on the fly, this is mainly
     // designed for tests
-    let viewport = window;
+    let scrollport = window;
     const {
       scrollContainer,
     } = this.props;
     if (scrollContainer) {
       if (isString(scrollContainer)) {
         // selector
-        viewport = viewport.document.querySelector(scrollContainer);
-      } else if (isDomNode(scrollContainer)) {
-        // is dom node
-        viewport = scrollContainer;
+        scrollport = scrollport.document.querySelector(scrollContainer);
       }
+      //  else if (isDomNode(scrollContainer)) {
+      //   // is dom node
+      //   scrollport = scrollContainer;
+      // }
     }
     const needResetFinalLazyLoadHandler = (this.props.debounce !== undefined && delayType === 'throttle')
       || (delayType === 'debounce' && this.props.debounce === undefined);
 
     if (needResetFinalLazyLoadHandler) {
-      off(viewport, 'scroll', finalLazyLoadHandler, passiveEvent);
+      off(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
     }
@@ -232,7 +233,7 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
-        on(viewport, 'scroll', finalLazyLoadHandler, passiveEvent);
+        on(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
