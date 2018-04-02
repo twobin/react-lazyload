@@ -12,6 +12,7 @@ import throttle from './utils/throttle';
 const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
+let isWindowListenerAttached = false;
 let pending = [];
 
 // try to handle passive events
@@ -213,7 +214,8 @@ class LazyLoad extends Component {
         }
         parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
-    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+    }
+    if (!isWindowListenerAttached || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
@@ -223,6 +225,8 @@ class LazyLoad extends Component {
       if (resize) {
         on(window, 'resize', finalLazyLoadHandler, passiveEvent);
       }
+
+      isWindowListenerAttached = true;
     }
 
     listeners.push(this);
