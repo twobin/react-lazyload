@@ -259,6 +259,8 @@ class LazyLoad extends Component {
     if (listeners.length === 0) {
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+
+      isWindowListenerAttached = false;
     }
   }
 
