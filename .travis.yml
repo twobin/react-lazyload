@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "6"
+  - "8"
+  - "10"
 before_script:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
