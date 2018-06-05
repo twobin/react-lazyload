@@ -9,3 +9,4 @@ before_script:
 addons:
   chrome: stable
 script: "./node_modules/karma/bin/karma start test/karma.conf.js --browsers Chrome_travis_ci --single-run --no-auto-watch --capture-timeout 300000"
+cache: yarn
