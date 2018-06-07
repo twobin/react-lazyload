@@ -17,17 +17,14 @@ export default (node) => {
     }
 
     const style = window.getComputedStyle(parent);
-    const position = style.position;
-    const overflow = style.overflow;
-    const overflowX = style['overflow-x'];
-    const overflowY = style['overflow-y'];
+    const { position, overflow, overflowX, overflowY } = style;
 
     if (position === 'static' && excludeStaticParent) {
       parent = parent.parentNode;
       continue;
     }
 
-    if (overflowRegex.test(overflow) && overflowRegex.test(overflowX) && overflowRegex.test(overflowY)) {
+    if (overflowRegex.test(overflow + overflowX + overflowY)) {
       return parent;
     }
 
