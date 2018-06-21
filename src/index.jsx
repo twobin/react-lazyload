@@ -323,7 +323,12 @@ class LazyLoad extends Component {
         }
         parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
-    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+    }
+
+    // XXX when we are having overflow container, and it's not yet visible
+    // If we don't listen for window scroll
+    // -> The lazyload component will not be re-checked when its container is scrolled to the view
+    if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
