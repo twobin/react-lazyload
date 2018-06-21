@@ -176,6 +176,19 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     opacity: 1;
     transition: opacity .5s ease-in;
   }
+
+  .widget-list-horizontal {
+    height: 300px;
+    /* overflow-y: hidden; */
+    overflow-x: scroll;
+    white-space: nowrap;
+  }
+
+  .widget-list-horizontal .widget, .widget-list-horizontal .lazyload-placeholder, .widget-list-horizontal .placeholder {
+    height: 100%;
+    width: 200px;
+    display: inline-block;
+  }
   </style>
 </head>
 <body>
