@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; // eslint-disable-line
 
 import lazyload from './decorator';
 import { on, off } from './utils/event';
@@ -38,6 +38,9 @@ try {
 const passiveEvent = passiveEventSupported
   ? { capture: false, passive: true }
   : false;
+
+const getBoundingOffsets = offset =>
+  Array.isArray(offset) ? offset : [offset, offset, offset, offset];
 
 /**
  * Check if `component` is visible in overflow container `parent`
@@ -80,7 +83,7 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const intersectionHeight =
     Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
   const intersectionWidth =
-    Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // height
+    Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // width
 
   // check whether the element is visible in the intersection
   let top;
@@ -107,21 +110,15 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const offsetTop = top - intersectionTop; // element's top relative to intersection
   const offsetLeft = left - intersectionLeft;
 
-  const offsets = Array.isArray(component.props.offset)
-    ? component.props.offset
-    : [component.props.offset, component.props.offset]; // Be compatible with previous API
-
-  // horizontal lazy load
-  if (component.props.mode === 'horizontal') {
-    return (
-      offsetLeft - offsets[0] <= intersectionWidth &&
-      offsetLeft + elementWidth + offsets[1] >= 0
-    );
-  }
+  const offsets = getBoundingOffsets(component.props.offset); // Be compatible with previous API
+  const { checkHorizontal } = component.props;
 
   return (
     offsetTop - offsets[0] <= intersectionHeight &&
-    offsetTop + elementHeight + offsets[1] >= 0
+    offsetTop + elementHeight + offsets[1] >= 0 &&
+    (!checkHorizontal ||
+      (offsetLeft - offsets[2] <= intersectionWidth &&
+        offsetLeft + elementWidth + offsets[3] >= 0))
   );
 };
 
@@ -166,21 +163,17 @@ const checkNormalVisible = function checkNormalVisible(component) {
   const windowInnerWidth =
     window.innerWidth || document.documentElement.clientWidth;
 
-  const offsets = Array.isArray(component.props.offset)
-    ? component.props.offset
-    : [component.props.offset, component.props.offset]; // Be compatible with previous API
-
-  // horizontal lazy load
-  if (component.props.mode === 'horizontal') {
-    return (
-      left - offsets[0] <= windowInnerWidth &&
-      left + elementWidth + offsets[1] >= 0
-    );
-  }
+  const offsets = getBoundingOffsets(component.props.offset);
+  const { checkHorizontal } = component.props;
 
   return (
+    // vertical check
     top - offsets[0] <= windowInnerHeight &&
-    top + elementHeight + offsets[1] >= 0
+    top + elementHeight + offsets[1] >= 0 &&
+    // horizontal check
+    (!checkHorizontal ||
+      (left - offsets[2] <= windowInnerWidth &&
+        left + elementWidth + offsets[3] >= 0))
   );
 };
 
@@ -268,12 +261,6 @@ class LazyLoad extends Component {
         );
       }
 
-      if (this.props.wheel) {// eslint-disable-line
-        console.warn(
-          '[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.'
-        );
-      }
-
       // Warn the user if placeholder and height is not specified and the rendered height is 0
       if (
         !this.props.placeholder &&
@@ -348,6 +335,12 @@ class LazyLoad extends Component {
       }
     }
 
+    if (this.props.checkHorizontal && this.props.offset.length === 2) {
+      console.warn(
+        '[react-lazyload] To support `checkHorizontal` you need to specify left and right offset, offset format [up, down, left, right]'
+      );
+    }
+
     listeners.push(this);
     checkVisible(this);
   }
@@ -387,7 +380,7 @@ class LazyLoad extends Component {
   }
 
   getDOMNode() {
-    return ReactDom.findDOMNode(this);
+    return ReactDom.findDOMNode(this); // eslint-disable-line
   }
 
   render() {
@@ -396,14 +389,14 @@ class LazyLoad extends Component {
     return this.visible
       ? children
       : placeholder || (
-        <div
-          ref={(el) => {
-            this.domNode = el;
-          }}
-          style={{ height }}
-          className="lazyload-placeholder"
-        />
-      );
+      <div
+        ref={(el) => {
+          this.domNode = el;
+        }}
+        style={{ height }}
+        className="lazyload-placeholder"
+      />
+        );
   }
 }
 
@@ -421,7 +414,8 @@ LazyLoad.propTypes = {
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  checkHorizontal: PropTypes.bool
 };
 
 LazyLoad.defaultProps = {
@@ -430,7 +424,8 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
+  checkHorizontal: false
 };
 
 export default LazyLoad;
