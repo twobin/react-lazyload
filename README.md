@@ -12,6 +12,7 @@ Lazyload your Components, Images or anything matters the performance.
  - Decorator supported
  - Server Side Rendering friendly
  - Thoroughly tested
+ - Horizontal checking support
 
 ## Installation
 
@@ -156,6 +157,12 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 **NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
 
 [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
+
+### checkHorizontal
+
+Type: Bool / Number Default: false
+
+Lazyload will check horizontally for component visibility, this will be helpful for lazy carousel. Please note that, this will need to update offset to `[up, down, left, right]`
 
 ## Utility
 
