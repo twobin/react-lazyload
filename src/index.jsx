@@ -252,7 +252,7 @@ class LazyLoad extends Component {
       listeners.splice(index, 1);
     }
 
-    if (listeners.length === 0) {
+    if (listeners.length === 0 && window) {
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
     }
