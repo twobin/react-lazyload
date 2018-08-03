@@ -41,14 +41,18 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 
   let parentTop;
   let parentHeight;
+  let parentWidth;
 
   try {
-    ({ top: parentTop, height: parentHeight } = parent.getBoundingClientRect());
+    ({ top: parentTop, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect());
   } catch (e) {
-    ({ top: parentTop, height: parentHeight } = defaultBoundingClientRect);
+    ({ top: parentTop, height: parentHeight, width: parentWidth } = defaultBoundingClientRect);
   }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const xAxisLazyLoad = parent.classList.contains('lazyload-x-axis');
+  const isHandheldDevice = parent.classList.contains('lazyload-handheld');
+  const virtualWidth = (isHandheldDevice ? parentWidth : (parentWidth * 2));
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
@@ -57,9 +61,10 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   // check whether the element is visible in the intersection
   let top;
   let height;
+  let left;
 
   try {
-    ({ top, height } = node.getBoundingClientRect());
+    ({ top, height, left } = node.getBoundingClientRect());
   } catch (e) {
     ({ top, height } = defaultBoundingClientRect);
   }
@@ -71,7 +76,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0);
+         (offsetTop + height + offsets[1] >= 0) &&
+         (xAxisLazyLoad ? (left < virtualWidth && left >= 0) : true);
 };
 
 /**
