@@ -1,4 +1,4 @@
-# react-lazyload [![Build Status](https://travis-ci.org/jasonslyvia/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master)
+# react-lazyload [![Build Status](https://travis-ci.org/jasonslyvia/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
 
 Lazyload your Components, Images or anything matters the performance.
 
@@ -10,6 +10,7 @@ Lazyload your Components, Images or anything matters the performance.
  - Support both `one-time lazy load` and `continuous lazy load` mode
  - `scroll` / `resize` event handler is throttled so you won't suffer frequent update, you can switch to debounce mode too
  - Decorator supported
+ - Server Side Rendering friendly
  - Thoroughly tested
 
 ## Installation
@@ -77,9 +78,11 @@ class MyComponent extends React.Component {
 }
 ```
 
+## Special Tips
+
 You should aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered.
 
-So you can safely send request in your component's `componentDidMount` without worring about performance loss or add some pretty entering effect, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
+So you can safely send request in your component's `componentDidMount` without worrying about performance loss or add some pretty entering effects, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
 
 ## Props
 
@@ -185,9 +188,9 @@ $ npm run build
 
 ## Who should use it
 
-Let's say there is a `fixed` date picker on the page, when user pick a different date, all components displaying data should send ajax request with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one page.
+Let's say there is a `fixed` date picker on the page, when user picks a different date, all components displaying data should send ajax requests with new date parameter to retreive updated data, even many of them aren't visible in viewport. This makes server load furious when there are too many requests in one time.
 
-Using `LazyLoad` component will help ease this situation by only update components in viewport.
+Using `LazyLoad` component will help ease this situation by only updating components visible in viewport.
 
 ## Contributors
 

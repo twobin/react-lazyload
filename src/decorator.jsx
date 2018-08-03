@@ -1,7 +1,7 @@
-import LazyLoad from './index';
 import React, { Component } from 'react';
+import LazyLoad from './index';
 
-const getDisplayName = (WrappedComponent) => WrappedComponent.displayName || WrappedComponent.name || 'Component';
+const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
 export default (options = {}) => function lazyload(WrappedComponent) {
   return class LazyLoadDecorated extends Component {

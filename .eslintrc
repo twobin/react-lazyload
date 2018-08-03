@@ -2,7 +2,8 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "env": {
-    "mocha": true
+    "mocha": true,
+    "browser": true
   },
   "globals": {
     "chai": true
@@ -16,6 +17,7 @@
     "no-nested-ternary": 0,
     "no-param-reassign": 0,
     "prefer-rest-params": 0,
-    "max-len": 0
+    "max-len": 0,
+    "no-continue": 0
   }
 }

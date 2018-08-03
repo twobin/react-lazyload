@@ -1,16 +1,33 @@
 /**
  * react-lazyload
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
 
+const defaultBoundingClientRect = { top: 0, right: 0, bottom: 0, left: 0, width: 0, height: 0 };
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
 let pending = [];
+
+// try to handle passive events
+let passiveEventSupported = false;
+try {
+  const opts = Object.defineProperty({}, 'passive', {
+    get() {
+      passiveEventSupported = true;
+    }
+  });
+  window.addEventListener('test', null, opts);
+}
+catch (e) { }
+// if they are supported, setup the optional params
+// IMPORTANT: FALSE doubles as the default CAPTURE value!
+const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
 
 
 /**
@@ -22,7 +39,16 @@ let pending = [];
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top: parentTop, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect();
+  let parentTop;
+  let parentHeight;
+  let parentWidth;
+
+  try {
+    ({ top: parentTop, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect());
+  } catch (e) {
+    ({ top: parentTop, height: parentHeight, width: parentWidth } = defaultBoundingClientRect);
+  }
+
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
   const xAxisLazyLoad = parent.classList.contains('lazyload-x-axis');
   const isHandheldDevice = parent.classList.contains('lazyload-handheld');
@@ -33,7 +59,16 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
 
   // check whether the element is visible in the intersection
-  const { top, height, left } = node.getBoundingClientRect();
+  let top;
+  let height;
+  let left;
+
+  try {
+    ({ top, height, left } = node.getBoundingClientRect());
+  } catch (e) {
+    ({ top, height } = defaultBoundingClientRect);
+  }
+
   const offsetTop = top - intersectionTop; // element's top relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
@@ -53,7 +88,17 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 const checkNormalVisible = function checkNormalVisible(component) {
   const node = ReactDom.findDOMNode(component);
 
-  const { top, height: elementHeight } = node.getBoundingClientRect();
+  // If this element is hidden by css rules somehow, it's definitely invisible
+  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
+
+  let top;
+  let elementHeight;
+
+  try {
+    ({ top, height: elementHeight } = node.getBoundingClientRect());
+  } catch (e) {
+    ({ top, height: elementHeight } = defaultBoundingClientRect);
+  }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
@@ -79,17 +124,15 @@ const checkVisible = function checkVisible(component) {
   }
 
   const parent = scrollParent(node);
-  const isOverflow = parent !== node.ownerDocument &&
+  const isOverflow = component.props.overflow &&
+                     parent !== node.ownerDocument &&
                      parent !== document &&
                      parent !== document.documentElement;
-
   const visible = isOverflow ?
                   checkOverflowVisible(component, parent) :
                   checkNormalVisible(component);
-
   if (visible) {
-    // Avoid extra render if previously is visible, yeah I mean `render` call,
-    // not actual DOM render
+    // Avoid extra render if previously is visible
     if (!component.visible) {
       if (component.props.once) {
         pending.push(component);
@@ -108,7 +151,7 @@ const checkVisible = function checkVisible(component) {
 
 
 const purgePending = function purgePending() {
-  pending.forEach(component => {
+  pending.forEach((component) => {
     const index = listeners.indexOf(component);
     if (index !== -1) {
       listeners.splice(index, 1);
@@ -118,13 +161,11 @@ const purgePending = function purgePending() {
   pending = [];
 };
 
-
 const lazyLoadHandler = () => {
   for (let i = 0; i < listeners.length; ++i) {
     const listener = listeners[i];
     checkVisible(listener);
   }
-
   // Remove `once` component in listeners
   purgePending();
 };
@@ -139,7 +180,6 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
-
   }
 
   componentDidMount() {
@@ -170,8 +210,8 @@ class LazyLoad extends Component {
     }
 
     if (needResetFinalLazyLoadHandler) {
-      off(window, 'scroll', finalLazyLoadHandler);
-      off(window, 'resize', finalLazyLoadHandler);
+      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+      off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
     }
 
@@ -181,20 +221,22 @@ class LazyLoad extends Component {
                                                          this.props.debounce :
                                                          300);
         delayType = 'debounce';
-      } else {
+      } else if (this.props.throttle !== undefined) {
         finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
                                                          this.props.throttle :
                                                          300);
         delayType = 'throttle';
+      } else {
+        finalLazyLoadHandler = lazyLoadHandler;
       }
     }
 
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent) {
+      if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
         if (listenerCount === 1) {
-          parent.addEventListener('scroll', finalLazyLoadHandler);
+          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
         }
         parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
@@ -202,11 +244,11 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
-        on(window, 'scroll', finalLazyLoadHandler);
+        on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
-        on(window, 'resize', finalLazyLoadHandler);
+        on(window, 'resize', finalLazyLoadHandler, passiveEvent);
       }
     }
 
@@ -221,10 +263,10 @@ class LazyLoad extends Component {
   componentWillUnmount() {
     if (this.props.overflow) {
       const parent = scrollParent(ReactDom.findDOMNode(this));
-      if (parent) {
+      if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
-          parent.removeEventListener('scroll', finalLazyLoadHandler);
+          parent.removeEventListener('scroll', finalLazyLoadHandler, passiveEvent);
           parent.removeAttribute(LISTEN_FLAG);
         } else {
           parent.setAttribute(LISTEN_FLAG, listenerCount);
@@ -238,8 +280,8 @@ class LazyLoad extends Component {
     }
 
     if (listeners.length === 0) {
-      off(window, 'resize', finalLazyLoadHandler);
-      off(window, 'scroll', finalLazyLoadHandler);
+      off(window, 'resize', finalLazyLoadHandler, passiveEvent);
+      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
     }
   }
 
@@ -248,7 +290,7 @@ class LazyLoad extends Component {
            this.props.children :
              this.props.placeholder ?
                 this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder"></div>;
+                <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
   }
 }
 

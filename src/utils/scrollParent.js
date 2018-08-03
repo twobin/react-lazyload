@@ -4,7 +4,7 @@
 
 export default (node) => {
   if (!node) {
-    return document;
+    return document.documentElement;
   }
 
   const excludeStaticParent = node.style.position === 'absolute';
@@ -13,7 +13,7 @@ export default (node) => {
 
   while (parent) {
     if (!parent.parentNode) {
-      return node.ownerDocument || document;
+      return node.ownerDocument || document.documentElement;
     }
 
     const style = window.getComputedStyle(parent);
@@ -23,15 +23,16 @@ export default (node) => {
     const overflowY = style['overflow-y'];
 
     if (position === 'static' && excludeStaticParent) {
+      parent = parent.parentNode;
       continue;
     }
 
-    if (overflowRegex.test(overflow + overflowX + overflowY) || parent.classList.contains('lazyload-x-axis')) {
+    if ((overflowRegex.test(overflow) && overflowRegex.test(overflowX) && overflowRegex.test(overflowY)) || parent.classList.contains('lazyload-x-axis')) {
       return parent;
     }
 
     parent = parent.parentNode;
   }
 
-  return node.ownerDocument || node.documentElement || document;
+  return node.ownerDocument || node.documentElement || document.documentElement;
 };
