@@ -113,7 +113,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
  */
 const checkVisible = function checkVisible(component) {
   const node = ReactDom.findDOMNode(component);
-  if (!node) {
+  if (!(node instanceof HTMLElement)) {
     return;
   }
 

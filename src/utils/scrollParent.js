@@ -3,7 +3,7 @@
  */
 
 export default (node) => {
-  if (!node) {
+  if (!(node instanceof HTMLElement)) {
     return document.documentElement;
   }
 
