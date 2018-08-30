@@ -1,6 +1,7 @@
-# LOOKING FOR MAINTAINERS
+# Note
 
-Due to personal reason I can't put much focus on this project, so if you're interested in maintaining `react-lazyload`, feel free to open an issue to get in touch!
+This project is now currently maintained by 
+@ameerthehacker, please react out to him on any issues or help.
 
 ----
 
