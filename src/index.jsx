@@ -168,6 +168,7 @@ const lazyLoadHandler = () => {
 let delayType;
 let finalLazyLoadHandler = null;
 
+const isString = string => typeof string === 'string';
 
 class LazyLoad extends Component {
   constructor(props) {
@@ -179,11 +180,20 @@ class LazyLoad extends Component {
   componentDidMount() {
     // It's unlikely to change delay type on the fly, this is mainly
     // designed for tests
+    let scrollport = window;
+    const {
+      scrollContainer,
+    } = this.props;
+    if (scrollContainer) {
+      if (isString(scrollContainer)) {
+        scrollport = scrollport.document.querySelector(scrollContainer);
+      }
+    }
     const needResetFinalLazyLoadHandler = (this.props.debounce !== undefined && delayType === 'throttle')
       || (delayType === 'debounce' && this.props.debounce === undefined);
 
     if (needResetFinalLazyLoadHandler) {
-      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+      off(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
     }
@@ -217,7 +227,7 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
-        on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+        on(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
@@ -278,6 +288,7 @@ LazyLoad.propTypes = {
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
+  scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   unmountIfInvisible: PropTypes.bool
 };
 

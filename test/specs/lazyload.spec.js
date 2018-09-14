@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import LazyLoad, { lazyload } from '../../src/index';
 import spies from 'chai-spies';
 import Test from '../Test.component';
+import * as event from '../../src/utils/event';
 
 chai.use(spies);
 const expect = chai.expect;
@@ -243,6 +244,53 @@ describe('LazyLoad', () => {
       expect(container.querySelector('.something')).to.exist;
       expect(container.querySelector('.lazyload-placeholder')).not.to.exist;
       expect(container.querySelector('.treasure')).to.exist;
+    });
+  });
+
+  describe('scrollContainer', () => {
+    it('should focus on a different scroll container', (done) => {
+      const $body = document.body;
+      const $html = $body.parentNode;
+      const $els = [$body, $html, div];
+      setStyle('100%');
+      ReactDOM.render(
+        <div
+          id="scroll-container"
+          style={{ height: '100%', width: '100%', overflow: 'auto' }}>
+          <div
+            id="scroller"
+            style={{ height: 10000 }}>
+            <div
+              id="spacer"
+              style={{ height: 10000 - 200 }}></div>
+            <LazyLoad
+              height={200}
+              scrollContainer="#scroll-container">
+              <div id="content" style={{ height: 200, width: '100%' }}></div>
+            </LazyLoad>
+          </div>
+        </div>
+      , div);
+      const $container = document.querySelector('#scroll-container');
+      event.on($container, 'scroll', scroller);
+      expect($container.querySelector('.lazyload-placeholder')).to.exist;
+      expect($container.querySelector('#content')).not.to.exist;
+      $container.scrollTop = $container.scrollHeight - window.innerHeight;
+
+      function setStyle(value) {
+        $els.forEach($el => {
+          $el.style.height = value;
+          $el.style.width = value;
+        });
+      }
+
+      function scroller() {
+        expect($container.querySelector('.lazyload-placeholder')).not.to.exist;
+        expect($container.querySelector('#content')).to.exist;
+        setStyle('');
+        event.off($container, 'scroll', scroller);
+        done();
+      }
     });
   });
 });
