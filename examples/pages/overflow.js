@@ -19,7 +19,7 @@ export default class Overflow extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -35,7 +35,7 @@ export default class Overflow extends Component {
   render() {
     return (
       <div className="wrapper overflow-wrapper">
-        <Operation type="overflow" onClickUpdate={::this.handleClick} />
+        <Operation type="overflow" onClickUpdate={this.handleClick} />
         <h1>LazyLoad in Overflow Container</h1>
         <div className="widget-list overflow">
           {this.state.arr.map((el, index) => {
@@ -50,4 +50,3 @@ export default class Overflow extends Component {
     );
   }
 }
-

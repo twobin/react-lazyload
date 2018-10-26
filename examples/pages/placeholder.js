@@ -20,7 +20,7 @@ export default class Placeholder extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -36,7 +36,7 @@ export default class Placeholder extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Operation type="placeholder" onClickUpdate={::this.handleClick} />
+        <Operation type="placeholder" onClickUpdate={this.handleClick} />
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (

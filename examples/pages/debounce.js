@@ -19,7 +19,7 @@ export default class Debounce extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -35,7 +35,7 @@ export default class Debounce extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Operation type="debounce" onClickUpdate={::this.handleClick} />
+        <Operation type="debounce" onClickUpdate={this.handleClick} />
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (

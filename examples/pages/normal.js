@@ -19,7 +19,7 @@ export default class Normal extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -35,7 +35,7 @@ export default class Normal extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Operation type="normal" onClickUpdate={::this.handleClick} />
+        <Operation type="normal" onClickUpdate={this.handleClick} />
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (

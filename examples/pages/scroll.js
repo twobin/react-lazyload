@@ -17,7 +17,7 @@ export default class Scroll extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -39,7 +39,7 @@ export default class Scroll extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Operation type="scroll" onClickUpdate={::this.handleClick} />
+        <Operation type="scroll" onClickUpdate={this.handleClick} />
         <div className="quick-jump">
           <h4>Quick jump to: </h4>
           {this.state.arr.map((el, index) => (

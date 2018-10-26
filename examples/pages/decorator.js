@@ -27,7 +27,7 @@ export default class Decorator extends Component {
     };
   }
 
-  handleClick() {
+  handleClick = () => {
     const id = uniqueId();
 
     this.setState({
@@ -41,7 +41,7 @@ export default class Decorator extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Operation type="decorator" onClickUpdate={::this.handleClick} />
+        <Operation type="decorator" onClickUpdate={this.handleClick} />
         <div className="widget-list">
           {this.state.arr.map((el, index) => {
             return (

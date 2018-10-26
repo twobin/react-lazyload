@@ -2,7 +2,7 @@
 // Generated on Wed Mar 18 2015 11:41:18 GMT+0800 (CST)
 'use strict';
 
-module.exports = function (config) {
+module.exports = function setConfig(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -30,32 +30,34 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.js': ['webpack', 'sourcemap'],
+      'test/**/*.js': ['webpack', 'sourcemap']
     },
 
     webpack: {
+      mode: 'none',
       devtool: 'inline-source-map',
       module: {
-        loaders: [{
-          test: /\.jsx?$/,
-          include: /src|test|demo/,
-          query: {
-            presets: ['stage-0', 'es2015', 'react'],
-            plugins: ['transform-decorators-legacy']
+        rules: [
+          {
+            test: /\.(js|jsx)$/,
+            include: /src|test|demo/,
+            loader: require.resolve('babel-loader')
           },
-          loader: 'babel'
-        }],
-        postLoaders: [{
-          test: /\.js$/,
-          include: /src/,
-          loader: 'istanbul-instrumenter'
-        }]
+          {
+            enforce: 'post',
+            test: /\.js$/,
+            include: /src/,
+            use: {
+              loader: 'istanbul-instrumenter-loader',
+              options: { esModules: true }
+            }
+          },
+        ]
       },
       resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
       }
     },
-
 
     plugins: [
       'karma-webpack',
