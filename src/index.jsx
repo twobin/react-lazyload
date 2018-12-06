@@ -301,7 +301,25 @@ LazyLoad.defaultProps = {
   unmountIfInvisible: false
 };
 
-import decorator from './decorator';
-export const lazyload = decorator;
+const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+const decorator = (options = {}) => function lazyload(WrappedComponent) {
+  return class LazyLoadDecorated extends Component {
+    constructor() {
+      super();
+      this.displayName = `LazyLoad${getDisplayName(WrappedComponent)}`;
+    }
+
+    render() {
+      return (
+        <LazyLoad {...options}>
+          <WrappedComponent {...this.props} />
+        </LazyLoad>
+      );
+    }
+  };
+};
+
+export { decorator as lazyload };
 export default LazyLoad;
 export { lazyLoadHandler as forceCheck };
