@@ -1,7 +1,7 @@
 # Note
 
 This project is now currently maintained by 
-@ameerthehacker, please reach out to him on any issues or help.
+[@ameerthehacker](https://github.com/ameerthehacker), please reach out to him on any issues or help.
 
 ----
 
