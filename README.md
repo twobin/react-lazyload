@@ -9,7 +9,7 @@ This project is now currently maintained by
 
 Lazyload your Components, Images or anything matters the performance.
 
-[Demo](//jasonslyvia.github.io/react-lazyload/examples/)
+[Demo](//twobin.github.io/react-lazyload/examples/)
 
 ## Why it's better
 
@@ -22,7 +22,7 @@ Lazyload your Components, Images or anything matters the performance.
 
 ## Installation
 
-> 2.0.0 is finally out, read [Upgrade Guide](https://github.com/jasonslyvia/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
+> 2.0.0 is finally out, read [Upgrade Guide](https://github.com/twobin/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
 
 ```
 $ npm install --save react-lazyload
@@ -89,7 +89,7 @@ class MyComponent extends React.Component {
 
 You should be aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered.
 
-So you can safely send request in your component's `componentDidMount` without worrying about performance loss or add some pretty entering effects, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
+So you can safely send request in your component's `componentDidMount` without worrying about performance loss or add some pretty entering effects, see this [demo](https://twobin.github.io/react-lazyload/examples/#/fadein) for more detail.
 
 ## Props
 
@@ -140,7 +140,7 @@ Type: Bool Default: false
 
 If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/overflow)
+[demo](https://twobin.github.io/react-lazyload/examples/#/overflow)
 
 ### placeholder
 
@@ -148,7 +148,7 @@ Type: Any Default: undefined
 
 Specify a placeholder for your lazy loaded component.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/placeholder)
+[demo](https://twobin.github.io/react-lazyload/examples/#/placeholder)
 
 **If you provide your own placeholder, do remember add appropriate `height` or `minHeight` to your placeholder element for better lazyload performance.**
 
@@ -169,7 +169,7 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 **NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
+[demo](https://twobin.github.io/react-lazyload/examples/#/debounce)
 
 ### wheel
 
