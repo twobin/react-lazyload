@@ -5,7 +5,7 @@ This project is now currently maintained by
 
 ----
 
-# react-lazyload [![Build Status](https://travis-ci.org/twobin/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
+# react-lazyload [![Build Status](https://travis-ci.org/twobin/react-lazyload.svg)](https://travis-ci.org/twobin/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
 
 Lazyload your Components, Images or anything matters the performance.
 
