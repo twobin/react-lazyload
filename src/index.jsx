@@ -269,11 +269,14 @@ class LazyLoad extends Component {
   }
 
   render() {
-    return this.visible ?
-           this.props.children :
-             this.props.placeholder ?
-                this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
+    const { children, placeholder, render, height } = this.props;
+    if (!this.visible) {
+      return placeholder || <div style={{ height }} className="lazyload-placeholder" />;
+    }
+    if (render) {
+      return render();
+    }
+    return children;
   }
 }
 
@@ -285,6 +288,7 @@ LazyLoad.propTypes = {
   resize: PropTypes.bool,
   scroll: PropTypes.bool,
   children: PropTypes.node,
+  render: PropTypes.func,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
