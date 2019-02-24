@@ -1,8 +1,9 @@
 /* eslint no-unused-expressions: 0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LazyLoad, { lazyload } from '../../src/index';
 import spies from 'chai-spies';
+
+import LazyLoad, { lazyload } from '../../src/index';
 import Test from '../Test.component';
 import * as event from '../../src/utils/event';
 
@@ -46,6 +47,49 @@ describe('LazyLoad', () => {
       expect(document.querySelector('.something')).to.exist;
       expect(document.querySelector('.lazyload-placeholder')).to.exist;
       expect(document.querySelector('.treasure')).to.not.exist;
+    });
+
+    it('still mounts children when children not visible', () => {
+      const spy = chai.spy();
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={9999}><Test height={9999} className="something">123</Test></LazyLoad>
+          <LazyLoad height={9999}>
+            <Test
+              className="something"
+              height={9999}
+              mounted={spy}
+            >
+              123
+            </Test>
+          </LazyLoad>
+        </div>
+      , div);
+
+      expect(spy).to.have.been.called;
+    });
+
+    it('does not mount rendered components when not visible', () => {
+      const spy = chai.spy();
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={9999}><Test height={9999} className="something">123</Test></LazyLoad>
+          <LazyLoad
+            height={9999}
+            render={() => (
+              <Test
+                className="something"
+                height={9999}
+                mounted={spy}
+              >
+                123
+              </Test>
+            )}
+          />
+        </div>
+      , div);
+
+      expect(spy).to.not.have.been.called;
     });
 
     it('should NOT update when invisble', (done) => {
@@ -162,6 +206,45 @@ describe('LazyLoad', () => {
 
       setTimeout(() => {
         expect(document.querySelector('.lazyload-placeholder')).to.not.exist;
+        expect(document.querySelector('.treasure')).to.exist;
+        done();
+      }, 1000);
+    });
+
+    it.skip('should use render prop when scrolled visible', (done) => {
+      const windowHeight = window.innerHeight + 20;
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={windowHeight} render={() => <Test className="something" height={windowHeight}>123</Test>} />
+          <LazyLoad height={windowHeight} render={() => <Test className="treasure" height={windowHeight}>123</Test>} />
+        </div>
+      , div);
+
+      expect(document.querySelector('.lazyload-placeholder')).to.exist;
+      window.scrollTo(0, 50);
+
+      setTimeout(() => {
+        expect(document.querySelector('.lazyload-placeholder')).to.not.exist;
+        expect(document.querySelector('.treasure')).to.exist;
+        done();
+      }, 1000);
+    });
+
+    it.skip('should use render prop when both children and render are provided and scrolled visible', (done) => {
+      const windowHeight = window.innerHeight + 20;
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={windowHeight}><Test className="something" height={windowHeight}>123</Test></LazyLoad>
+          <LazyLoad height={windowHeight} render={() => <Test className="treasure" height={windowHeight}>123</Test>}><Test className="junk" height={windowHeight}>123</Test></LazyLoad>
+        </div>
+      , div);
+
+      expect(document.querySelector('.lazyload-placeholder')).to.exist;
+      window.scrollTo(0, 50);
+
+      setTimeout(() => {
+        expect(document.querySelector('.lazyload-placeholder')).to.not.exist;
+        expect(document.querySelector('.junk')).to.not.exist;
         expect(document.querySelector('.treasure')).to.exist;
         done();
       }, 1000);
