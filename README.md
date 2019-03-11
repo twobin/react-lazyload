@@ -100,6 +100,12 @@ Type: Node Default: undefined
 **NOTICE**
 Only one child is allowed to be passed.
 
+### scrollContainer
+
+Type: String/DOM node Default: undefined
+
+Pass a query selector string or DOM node. LazyLoad will attach to the window object's scroll events if no container is passed.
+
 ### height
 
 Type: Number/String Default: undefined
