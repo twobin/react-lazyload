@@ -100,6 +100,16 @@ Type: Node Default: undefined
 **NOTICE**
 Only one child is allowed to be passed.
 
+### group
+
+Type: String Default: window
+
+Group is used to specify different settings (props) for multiple lazy load list on single page. 
+
+Useful when you need to have one lazyload list rendered in page body and attached to window scroll container and another lazyload list rendered in page modal body attached to scrollable modal body container.  
+
+
+
 ### scrollContainer
 
 Type: String/DOM node Default: undefined
