@@ -2,7 +2,6 @@
  * react-lazyload
  */
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
@@ -37,7 +36,7 @@ const passiveEvent = passiveEventSupported ? { capture: false, passive: true } :
  * @return {bool}
  */
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
 
   let parentTop;
   let parentHeight;
@@ -77,10 +76,10 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
 /**
  * Check if `component` is visible in document
  * @param  {node} component React component
- * @return {bool}
+ * @return {boolean}
  */
 const checkNormalVisible = function checkNormalVisible(component) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
 
   // If this element is hidden by css rules somehow, it's definitely invisible
   if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
@@ -112,7 +111,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
  * @param  {React} component   React component that respond to scroll and resize
  */
 const checkVisible = function checkVisible(component) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
   if (!(node instanceof HTMLElement)) {
     return;
   }
@@ -175,6 +174,7 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
+    this.setRef = this.setRef.bind(this);
   }
 
   componentDidMount() {
@@ -215,7 +215,7 @@ class LazyLoad extends Component {
     }
 
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
         if (listenerCount === 1) {
@@ -245,7 +245,7 @@ class LazyLoad extends Component {
 
   componentWillUnmount() {
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      const parent = scrollParent(this);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
@@ -268,12 +268,16 @@ class LazyLoad extends Component {
     }
   }
 
+  setRef(element) {
+    this.ref = element;
+  }
+
   render() {
     return this.visible ?
            this.props.children :
              this.props.placeholder ?
                 this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
+                <div style={{ height: this.props.height }} className="lazyload-placeholder" ref={this.setRef} />;
   }
 }
 
