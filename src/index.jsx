@@ -269,7 +269,9 @@ class LazyLoad extends Component {
   }
 
   setRef(element) {
-    this.ref = element;
+    if (element) {
+      this.ref = element;
+    }
   }
 
   render() {
