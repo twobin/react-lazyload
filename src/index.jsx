@@ -124,7 +124,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
  */
 const checkVisible = function checkVisible(component) {
   const node = ReactDom.findDOMNode(component);
-  if (!node) {
+  if (!(node instanceof HTMLElement)) {
     return;
   }
 
@@ -179,6 +179,7 @@ const lazyLoadHandler = () => {
 let delayType;
 let finalLazyLoadHandler = null;
 
+const isString = string => typeof string === 'string';
 
 class LazyLoad extends Component {
   constructor(props) {
@@ -188,34 +189,22 @@ class LazyLoad extends Component {
   }
 
   componentDidMount() {
-    if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
-      if (React.Children.count(this.props.children) > 1) {
-        console.warn('[react-lazyload] Only one child is allowed to be passed to `LazyLoad`.');
-      }
-
-      if (this.props.wheel) { // eslint-disable-line
-        console.warn('[react-lazyload] Props `wheel` is not supported anymore, try set `overflow` for lazy loading in overflow containers.');
-      }
-
-      // Warn the user if placeholder and height is not specified and the rendered height is 0
-      if (!this.props.placeholder && this.props.height === undefined && ReactDom.findDOMNode(this).offsetHeight === 0) {
-        console.warn('[react-lazyload] Please add `height` props to <LazyLoad> for better performance.');
-      }
-    }
-
     // It's unlikely to change delay type on the fly, this is mainly
     // designed for tests
-    let needResetFinalLazyLoadHandler = false;
-    if (this.props.debounce !== undefined && delayType === 'throttle') {
-      console.warn('[react-lazyload] Previous delay function is `throttle`, now switching to `debounce`, try setting them unanimously');
-      needResetFinalLazyLoadHandler = true;
-    } else if (delayType === 'debounce' && this.props.debounce === undefined) {
-      console.warn('[react-lazyload] Previous delay function is `debounce`, now switching to `throttle`, try setting them unanimously');
-      needResetFinalLazyLoadHandler = true;
+    let scrollport = window;
+    const {
+      scrollContainer,
+    } = this.props;
+    if (scrollContainer) {
+      if (isString(scrollContainer)) {
+        scrollport = scrollport.document.querySelector(scrollContainer);
+      }
     }
+    const needResetFinalLazyLoadHandler = (this.props.debounce !== undefined && delayType === 'throttle')
+      || (delayType === 'debounce' && this.props.debounce === undefined);
 
     if (needResetFinalLazyLoadHandler) {
-      off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+      off(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
     }
@@ -249,7 +238,7 @@ class LazyLoad extends Component {
       const { scroll, resize } = this.props;
 
       if (scroll) {
-        on(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+        on(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       }
 
       if (resize) {
@@ -284,7 +273,7 @@ class LazyLoad extends Component {
       listeners.splice(index, 1);
     }
 
-    if (listeners.length === 0) {
+    if (listeners.length === 0 && typeof window !== 'undefined') {
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
     }
@@ -310,6 +299,7 @@ LazyLoad.propTypes = {
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
+  scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   unmountIfInvisible: PropTypes.bool
 };
 
@@ -322,7 +312,25 @@ LazyLoad.defaultProps = {
   unmountIfInvisible: false
 };
 
-import decorator from './decorator';
-export const lazyload = decorator;
+const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+const decorator = (options = {}) => function lazyload(WrappedComponent) {
+  return class LazyLoadDecorated extends Component {
+    constructor() {
+      super();
+      this.displayName = `LazyLoad${getDisplayName(WrappedComponent)}`;
+    }
+
+    render() {
+      return (
+        <LazyLoad {...options}>
+          <WrappedComponent {...this.props} />
+        </LazyLoad>
+      );
+    }
+  };
+};
+
+export { decorator as lazyload };
 export default LazyLoad;
 export { lazyLoadHandler as forceCheck };

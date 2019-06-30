@@ -1,8 +1,15 @@
-# react-lazyload [![Build Status](https://travis-ci.org/jasonslyvia/react-lazyload.svg)](https://travis-ci.org/jasonslyvia/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
+# Note
+
+This project is now currently maintained by 
+[@ameerthehacker](https://github.com/ameerthehacker), please reach out to him on any issues or help.
+
+----
+
+# react-lazyload [![Build Status](https://travis-ci.org/twobin/react-lazyload.svg)](https://travis-ci.org/twobin/react-lazyload) [![npm version](https://badge.fury.io/js/react-lazyload.svg)](http://badge.fury.io/js/react-lazyload) [![Coverage Status](https://coveralls.io/repos/github/jasonslyvia/react-lazyload/badge.svg?branch=master)](https://coveralls.io/github/jasonslyvia/react-lazyload?branch=master) [![npm downloads](https://img.shields.io/npm/dm/react-lazyload.svg)](https://www.npmjs.com/package/react-lazyload)
 
 Lazyload your Components, Images or anything matters the performance.
 
-[Demo](//jasonslyvia.github.io/react-lazyload/examples/)
+[Demo](//twobin.github.io/react-lazyload/examples/)
 
 ## Why it's better
 
@@ -15,7 +22,7 @@ Lazyload your Components, Images or anything matters the performance.
 
 ## Installation
 
-> 2.0.0 is finally out, read [Upgrade Guide](https://github.com/jasonslyvia/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
+> 2.0.0 is finally out, read [Upgrade Guide](https://github.com/twobin/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
 
 ```
 $ npm install --save react-lazyload
@@ -80,11 +87,24 @@ class MyComponent extends React.Component {
 
 ## Special Tips
 
-You should aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered.
+You should be aware that your component will only be mounted when it's visible in viewport, before that a placeholder will be rendered.
 
-So you can safely send request in your component's `componentDidMount` without worrying about performance loss or add some pretty entering effects, see this [demo](https://jasonslyvia.github.io/react-lazyload/examples/#/fadein) for more detail.
+So you can safely send request in your component's `componentDidMount` without worrying about performance loss or add some pretty entering effects, see this [demo](https://twobin.github.io/react-lazyload/examples/#/fadein) for more detail.
 
 ## Props
+
+### children
+
+Type: Node Default: undefined
+
+**NOTICE**
+Only one child is allowed to be passed.
+
+### scrollContainer
+
+Type: String/DOM node Default: undefined
+
+Pass a query selector string or DOM node. LazyLoad will attach to the window object's scroll events if no container is passed.
 
 ### height
 
@@ -104,7 +124,9 @@ Type: Number/Array(Number) Default: 0
 
 Say if you want to preload a component even if it's 100px below the viewport (user have to scroll 100px more to see this component), you can set `offset` props to `100`. On the other hand, if you want to delay loading a component even if it's top edge has already appeared at viewport, set `offset` to negative number.
 
-If you provide this props with array like `[200, 200]`, it will set top edge offset and bottom edge offset respectively.
+Library supports horizontal lazy load out of the box. So when you provide this prop with number like `100` it will automatically set left edge offset to `100` and top edge to `100`;
+
+If you provide this prop with array like `[100, 200]`, it will set left edge offset to `100` and top offset to `200`.
 
 ### scroll
 
@@ -126,7 +148,7 @@ Type: Bool Default: false
 
 If lazy loading components inside a overflow container, set this to `true`. Also make sure a `position` property other than `static` has been set to your overflow container.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/overflow)
+[demo](https://twobin.github.io/react-lazyload/examples/#/overflow)
 
 ### placeholder
 
@@ -134,7 +156,7 @@ Type: Any Default: undefined
 
 Specify a placeholder for your lazy loaded component.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/placeholder)
+[demo](https://twobin.github.io/react-lazyload/examples/#/placeholder)
 
 **If you provide your own placeholder, do remember add appropriate `height` or `minHeight` to your placeholder element for better lazyload performance.**
 
@@ -155,7 +177,12 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 **NOTICE** Set `debounce` / `throttle` to all lazy loaded components unanimously, if you don't, the first occurrence is respected.
 
-[demo](https://jasonslyvia.github.io/react-lazyload/examples/#/debounce)
+[demo](https://twobin.github.io/react-lazyload/examples/#/debounce)
+
+### wheel
+
+**DEPRECATED NOTICE**
+This props is not supported anymore, try set `overflow` for lazy loading in overflow containers.
 
 ## Utility
 
@@ -174,7 +201,6 @@ Then call the function:
 ```javascript
 forceCheck();
 ```
-
 
 ## Scripts
 
