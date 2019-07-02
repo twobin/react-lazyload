@@ -176,6 +176,39 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     opacity: 1;
     transition: opacity .5s ease-in;
   }
+
+  .gallery {
+    height: 1231px;
+    width: 690px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-items-list {
+    list-style: none;
+    white-space: nowrap;
+    display: flex;
+    transition: transform 200ms ease-in-out;
+  }
+
+  .gallery-item {
+    display: inline-flex;
+  }
+
+  .gallery-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .galley-control.left {
+    left: 0;
+  }
+
+  .gallery-control.right {
+    right: 0;
+  }
+
   </style>
 </head>
 <body>
