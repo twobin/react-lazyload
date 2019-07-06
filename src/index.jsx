@@ -137,7 +137,7 @@ const checkVisible = function checkVisible(component) {
                   checkNormalVisible(component);
   if (visible) {
     // Avoid extra render if previously is visible
-    if (!component.visible) {
+    if (!component.visible && !component.preventLoading) {
       if (component.props.once) {
         pending.push(component);
       }
@@ -186,6 +186,7 @@ class LazyLoad extends Component {
 
     this.visible = false;
     this.setRef = this.setRef.bind(this);
+    this.preventLoading = props.preventLoading;
   }
 
   componentDidMount() {
@@ -250,7 +251,12 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate({ preventLoading }) {
+    if (preventLoading !== this.props.preventLoading) {
+      this.preventLoading = preventLoading;
+      checkVisible(this);
+    }
+
     return this.visible;
   }
 
@@ -306,7 +312,8 @@ LazyLoad.propTypes = {
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
   scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  preventLoading: PropTypes.bool
 };
 
 LazyLoad.defaultProps = {
@@ -315,7 +322,8 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
+  preventLoading: false,
 };
 
 const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
