@@ -2,7 +2,6 @@
  * react-lazyload
  */
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
@@ -23,8 +22,7 @@ try {
     }
   });
   window.addEventListener('test', null, opts);
-}
-catch (e) { }
+} catch (e) { }
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
 const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
@@ -37,50 +35,61 @@ const passiveEvent = passiveEventSupported ? { capture: false, passive: true } :
  * @return {bool}
  */
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
 
   let parentTop;
+  let parentLeft;
   let parentHeight;
+  let parentWidth;
+
 
   try {
-    ({ top: parentTop, height: parentHeight } = parent.getBoundingClientRect());
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = parent.getBoundingClientRect());
   } catch (e) {
-    ({ top: parentTop, height: parentHeight } = defaultBoundingClientRect);
+    ({ top: parentTop, left: parentLeft, height: parentHeight, width: parentWidth } = defaultBoundingClientRect);
   }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const windowInnerWidth = window.innerWidth || document.documentElement.clientWidth;
 
   // calculate top and height of the intersection of the element's scrollParent and viewport
   const intersectionTop = Math.max(parentTop, 0); // intersection's top relative to viewport
+  const intersectionLeft = Math.max(parentLeft, 0); // intersection's left relative to viewport
   const intersectionHeight = Math.min(windowInnerHeight, parentTop + parentHeight) - intersectionTop; // height
+  const intersectionWidth = Math.min(windowInnerWidth, parentLeft + parentWidth) - intersectionLeft; // width
 
   // check whether the element is visible in the intersection
   let top;
+  let left;
   let height;
+  let width;
 
   try {
-    ({ top, height } = node.getBoundingClientRect());
+    ({ top, left, height, width } = node.getBoundingClientRect());
   } catch (e) {
-    ({ top, height } = defaultBoundingClientRect);
+    ({ top, left, height, width } = defaultBoundingClientRect);
   }
 
   const offsetTop = top - intersectionTop; // element's top relative to intersection
+  const offsetLeft = left - intersectionLeft; // element's left relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0);
+         (offsetTop + height + offsets[1] >= 0) &&
+         (offsetLeft - offsets[0] <= intersectionWidth) &&
+         (offsetLeft + width + offsets[1] >= 0);
 };
 
 /**
  * Check if `component` is visible in document
  * @param  {node} component React component
- * @return {bool}
+ * @return {boolean}
  */
 const checkNormalVisible = function checkNormalVisible(component) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
 
   // If this element is hidden by css rules somehow, it's definitely invisible
   if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
@@ -112,7 +121,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
  * @param  {React} component   React component that respond to scroll and resize
  */
 const checkVisible = function checkVisible(component) {
-  const node = ReactDom.findDOMNode(component);
+  const node = component.ref;
   if (!(node instanceof HTMLElement)) {
     return;
   }
@@ -127,7 +136,7 @@ const checkVisible = function checkVisible(component) {
                   checkNormalVisible(component);
   if (visible) {
     // Avoid extra render if previously is visible
-    if (!component.visible) {
+    if (!component.visible && !component.preventLoading) {
       if (component.props.once) {
         pending.push(component);
       }
@@ -156,10 +165,7 @@ const purgePending = function purgePending() {
 };
 
 const lazyLoadHandler = () => {
-  for (let i = 0; i < listeners.length; ++i) {
-    const listener = listeners[i];
-    checkVisible(listener);
-  }
+  listeners.forEach(listener => checkVisible(listener));
   // Remove `once` component in listeners
   purgePending();
 };
@@ -175,6 +181,8 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
+    this.setRef = this.setRef.bind(this);
+    this.preventLoading = props.preventLoading;
   }
 
   componentDidMount() {
@@ -215,7 +223,7 @@ class LazyLoad extends Component {
     }
 
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
         if (listenerCount === 1) {
@@ -239,13 +247,18 @@ class LazyLoad extends Component {
     checkVisible(this);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate({ preventLoading }) {
+    if (preventLoading !== this.props.preventLoading) {
+      this.preventLoading = preventLoading;
+      checkVisible(this);
+    }
+
     return this.visible;
   }
 
   componentWillUnmount() {
     if (this.props.overflow) {
-      const parent = scrollParent(ReactDom.findDOMNode(this));
+      const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
@@ -262,16 +275,22 @@ class LazyLoad extends Component {
       listeners.splice(index, 1);
     }
 
-    if (listeners.length === 0) {
+    if (listeners.length === 0 && typeof window !== 'undefined') {
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+    }
+  }
+
+  setRef(element) {
+    if (element) {
+      this.ref = element;
     }
   }
 
   render() {
     const { children, placeholder, render, height } = this.props;
     if (!this.visible) {
-      return placeholder || <div style={{ height }} className="lazyload-placeholder" />;
+      return placeholder || <div style={{ height }} className="lazyload-placeholder" ref={this.setRef} />;
     }
     if (render) {
       return render();
@@ -293,7 +312,8 @@ LazyLoad.propTypes = {
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
   scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  preventLoading: PropTypes.bool
 };
 
 LazyLoad.defaultProps = {
@@ -302,7 +322,8 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
+  preventLoading: false,
 };
 
 const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';

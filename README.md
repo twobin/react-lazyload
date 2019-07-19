@@ -100,6 +100,12 @@ Type: Node Default: undefined
 **NOTICE**
 Only one child is allowed to be passed.
 
+### scrollContainer
+
+Type: String/DOM node Default: undefined
+
+Pass a query selector string or DOM node. LazyLoad will attach to the window object's scroll events if no container is passed.
+
 ### height
 
 Type: Number/String Default: undefined
@@ -118,7 +124,9 @@ Type: Number/Array(Number) Default: 0
 
 Say if you want to preload a component even if it's 100px below the viewport (user have to scroll 100px more to see this component), you can set `offset` props to `100`. On the other hand, if you want to delay loading a component even if it's top edge has already appeared at viewport, set `offset` to negative number.
 
-If you provide this props with array like `[200, 200]`, it will set top edge offset and bottom edge offset respectively.
+Library supports horizontal lazy load out of the box. So when you provide this prop with number like `100` it will automatically set left edge offset to `100` and top edge to `100`;
+
+If you provide this prop with array like `[100, 200]`, it will set left edge offset to `100` and top offset to `200`.
 
 ### scroll
 
@@ -175,6 +183,16 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 **DEPRECATED NOTICE**
 This props is not supported anymore, try set `overflow` for lazy loading in overflow containers.
+
+### preventLoading
+
+Type: Bool Default: false
+
+If set to true your component will not be mounted even if it is visible in the viewport. Use it when you want to have a manual control over when your component is lazyloaded. 
+
+One use case for that would be in galleries, for instance, you may want the visible item to be loaded when in viewport but the not yet visible items to only be loaded when the user interacts with the gallery.
+
+[demo](https://twobin.github.io/react-lazyload/examples/#/preventLoading)
 
 ## Utility
 

@@ -175,6 +175,17 @@ describe('LazyLoad', () => {
 
       expect(document.querySelector('.my-placeholder')).to.exist;
     });
+
+    it('should NOT render if `preventLoading` is set', () => {
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={9999} preventLoading><span className="noboby-can-see-this">123</span></LazyLoad>
+        </div>
+      , div);
+
+      expect(document.querySelector('.noboby-can-see-this')).to.not.exist;
+      expect(document.querySelector('.lazyload-placeholder')).to.exist;
+    });
   });
 
   describe('Checking visibility', () => {
