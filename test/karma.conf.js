@@ -1,9 +1,9 @@
 // Karma configuration
 // Generated on Wed Mar 18 2015 11:41:18 GMT+0800 (CST)
-'use strict';
+
 
 module.exports = function (config) {
-  config.set({
+  const karmaConfig = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '../',
@@ -121,5 +121,11 @@ module.exports = function (config) {
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
     processKillTimeout: 300000,
-  });
+  };
+
+  if (process.env.TRAVIS) {
+    karmaConfig.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(karmaConfig);
 };
