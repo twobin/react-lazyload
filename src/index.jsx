@@ -22,8 +22,7 @@ try {
     }
   });
   window.addEventListener('test', null, opts);
-}
-catch (e) { }
+} catch (e) { }
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
 const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
@@ -226,16 +225,9 @@ class LazyLoad extends Component {
       }
     }
 
-    if (this.props.overflow) {
-      const parent = scrollParent(this.ref);
-      if (parent && typeof parent.getAttribute === 'function') {
-        const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
-        if (listenerCount === 1) {
-          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
-        }
-        parent.setAttribute(LISTEN_FLAG, listenerCount);
-      }
-    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+    const noOverflow = !this.props.overflow;
+    const noListeners = listeners.length === 0;
+    if (noOverflow && (noListeners || needResetFinalLazyLoadHandler)) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
@@ -244,6 +236,15 @@ class LazyLoad extends Component {
 
       if (resize) {
         on(window, 'resize', finalLazyLoadHandler, passiveEvent);
+      }
+    } else if (this.props.overflow) {
+      const parent = scrollParent(this.ref);
+      if (parent && typeof parent.getAttribute === 'function') {
+        const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
+        if (listenerCount === 1) {
+          parent.addEventListener('scroll', finalLazyLoadHandler, passiveEvent);
+        }
+        parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
     }
 
