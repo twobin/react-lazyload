@@ -184,6 +184,16 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 **DEPRECATED NOTICE**
 This props is not supported anymore, try set `overflow` for lazy loading in overflow containers.
 
+### preventLoading
+
+Type: Bool Default: false
+
+If set to true your component will not be mounted even if it is visible in the viewport. Use it when you want to have a manual control over when your component is lazyloaded. 
+
+One use case for that would be in galleries, for instance, you may want the visible item to be loaded when in viewport but the not yet visible items to only be loaded when the user interacts with the gallery.
+
+[demo](https://twobin.github.io/react-lazyload/examples/#/preventLoading)
+
 ## Utility
 
 ### forceCheck
