@@ -22,8 +22,7 @@ try {
     }
   });
   window.addEventListener('test', null, opts);
-}
-catch (e) { }
+} catch (e) { }
 // if they are supported, setup the optional params
 // IMPORTANT: FALSE doubles as the default CAPTURE value!
 const passiveEvent = passiveEventSupported ? { capture: false, passive: true } : false;
@@ -166,10 +165,7 @@ const purgePending = function purgePending() {
 };
 
 const lazyLoadHandler = () => {
-  for (let i = 0; i < listeners.length; ++i) {
-    const listener = listeners[i];
-    checkVisible(listener);
-  }
+  listeners.forEach(listener => checkVisible(listener));
   // Remove `once` component in listeners
   purgePending();
 };
@@ -292,11 +288,14 @@ class LazyLoad extends Component {
   }
 
   render() {
-    return this.visible ?
-           this.props.children :
-             this.props.placeholder ?
-                this.props.placeholder :
-                <div style={{ height: this.props.height }} className="lazyload-placeholder" ref={this.setRef} />;
+    const { children, placeholder, render, height } = this.props;
+    if (!this.visible) {
+      return placeholder || <div style={{ height }} className="lazyload-placeholder" ref={this.setRef} />;
+    }
+    if (render) {
+      return render();
+    }
+    return children;
   }
 }
 
@@ -308,6 +307,7 @@ LazyLoad.propTypes = {
   resize: PropTypes.bool,
   scroll: PropTypes.bool,
   children: PropTypes.node,
+  render: PropTypes.func,
   throttle: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,

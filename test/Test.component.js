@@ -4,7 +4,7 @@ export default class Test extends React.Component {
   constructor() {
     super();
     this.state = {
-      times: 1
+      times: 1,
     };
   }
 
@@ -12,6 +12,13 @@ export default class Test extends React.Component {
     this.setState({
       times: this.state.times + 1
     });
+  }
+
+  componentDidMount() {
+    const { mounted } = this.props;
+    if (mounted) {
+      mounted();
+    }
   }
 
   render() {
