@@ -96,22 +96,27 @@ const checkNormalVisible = function checkNormalVisible(component) {
   if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
 
   let top;
+  let left;
+  let width;
   let elementHeight;
 
   try {
-    ({ top, height: elementHeight } = node.getBoundingClientRect());
+    ({ top, left, width, height: elementHeight } = node.getBoundingClientRect());
   } catch (e) {
-    ({ top, height: elementHeight } = defaultBoundingClientRect);
+    ({ top, left, width, height: elementHeight } = defaultBoundingClientRect);
   }
 
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
+  const windowInnerWidth = window.innerWidth || document.documentElement.clientWidth;
 
   const offsets = Array.isArray(component.props.offset) ?
                 component.props.offset :
                 [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (top - offsets[0] <= windowInnerHeight) &&
-         (top + elementHeight + offsets[1] >= 0);
+         (top + elementHeight + offsets[1] >= 0) &&
+         (left - offsets[0] <= windowInnerWidth) &&
+         (left + width + offsets[1] >= 0);
 };
 
 
