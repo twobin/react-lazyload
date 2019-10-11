@@ -197,9 +197,9 @@ class LazyLoad extends Component {
       scrollContainer,
     } = this.props;
     if (scrollContainer) {
-      if (isString(scrollContainer)) {
-        scrollport = scrollport.document.querySelector(scrollContainer);
-      }
+      scrollport = isString(scrollContainer) ?
+        scrollport.document.querySelector(scrollContainer) :
+        scrollContainer;
     }
     const needResetFinalLazyLoadHandler = (this.props.debounce !== undefined && delayType === 'throttle')
       || (delayType === 'debounce' && this.props.debounce === undefined);
