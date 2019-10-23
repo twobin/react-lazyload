@@ -295,7 +295,7 @@ class LazyLoad extends Component {
     return this.visible ?
            this.props.children :
              this.props.placeholder ?
-                this.props.placeholder :
+                <div ref={this.setRef}>this.props.placeholder</div> :
                 <div style={{ height: this.props.height }} className="lazyload-placeholder" ref={this.setRef} />;
   }
 }
