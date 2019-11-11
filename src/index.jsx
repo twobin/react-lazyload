@@ -122,6 +122,10 @@ const checkNormalVisible = function checkNormalVisible(component) {
  * @param  {React} component   React component that respond to scroll and resize
  */
 const checkVisible = function checkVisible(component) {
+  if(!component) {
+    return;
+  }
+  
   const node = component.ref;
   if (!(node instanceof HTMLElement)) {
     return;
