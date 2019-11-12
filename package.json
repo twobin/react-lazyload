@@ -60,7 +60,7 @@
     "react-router": "^3",
     "react-transition-group": "1.x",
     "webpack": "~1.11.0",
-    "webpack-dev-server": "~1.10.1"
+    "webpack-dev-server": "~3.1.11"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
