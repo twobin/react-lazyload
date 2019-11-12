@@ -3493,8 +3493,8 @@ rc@^1.1.7:
     strip-json-comments "~2.0.1"
 
 react-dom@^16:
-  version "16.0.0"
-  resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.0.0.tgz#9cc3079c3dcd70d4c6e01b84aab2a7e34c303f58"
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.1.tgz#bd2fc18d2bb81645cb807bb27a03a14d8b796e6d"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
