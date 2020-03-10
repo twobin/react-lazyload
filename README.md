@@ -202,6 +202,20 @@ Then call the function:
 forceCheck();
 ```
 
+### forceVisible
+
+Forces the component to display regardless of whether the element is visible in the viewport.
+
+```javascript
+import { forceVisible } from 'react-lazyload';
+```
+
+Then call the function:
+
+```javascript
+forceVisible();
+```
+
 ## Scripts
 
 ```
