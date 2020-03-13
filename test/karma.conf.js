@@ -2,6 +2,9 @@
 // Generated on Wed Mar 18 2015 11:41:18 GMT+0800 (CST)
 'use strict';
 
+const process = require('process');
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 module.exports = function (config) {
   config.set({
 
@@ -105,14 +108,14 @@ module.exports = function (config) {
 
     customLaunchers: {
       Chrome_travis_ci: {
-        base: 'Chrome',
+        base: 'ChromeHeadless',
         flags: ['--no-sandbox']
       }
     },
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'ChromeHeadless'],
 
     browserNoActivityTimeout: 300000,
     browserDisconnectTimeout: 300000,
