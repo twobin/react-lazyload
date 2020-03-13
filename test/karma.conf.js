@@ -105,7 +105,7 @@ module.exports = function (config) {
 
     customLaunchers: {
       Chrome_travis_ci: {
-        base: 'Chrome',
+        base: 'ChromeHeadless',
         flags: [
           '--disable-web-security',
           '--disable-gpu',
@@ -116,7 +116,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'ChromeHeadless'],
 
     browserNoActivityTimeout: 300000,
     browserDisconnectTimeout: 300000,
