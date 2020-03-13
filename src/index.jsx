@@ -175,6 +175,19 @@ const lazyLoadHandler = () => {
   purgePending();
 };
 
+/**
+ * Forces the component to display regardless of whether the element is visible in the viewport.
+ */
+const forceVisible = () => {
+  for (let i = 0; i < listeners.length; ++i) {
+    const listener = listeners[i];
+    listener.visible = true;
+    listener.forceUpdate();
+  }
+  // Remove `once` component in listeners
+  purgePending();
+}
+
 // Depending on component's props
 let delayType;
 let finalLazyLoadHandler = null;
@@ -334,3 +347,4 @@ const decorator = (options = {}) => function lazyload(WrappedComponent) {
 export { decorator as lazyload };
 export default LazyLoad;
 export { lazyLoadHandler as forceCheck };
+export { forceVisible };

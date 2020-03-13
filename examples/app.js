@@ -10,6 +10,7 @@ import Image from './pages/image';
 import Debounce from './pages/debounce';
 import Placeholder from './pages/placeholder';
 import FadeIn from './pages/fadein';
+import ForceVisible from './pages/forcevisible';
 
 const Home = () => (
   <ul className="nav">
@@ -21,6 +22,7 @@ const Home = () => (
     <li><Link to="/debounce">using <code>debounce</code></Link></li>
     <li><Link to="/placeholder">custom placeholder</Link></li>
     <li><Link to="/fadein">cool <code>fadeIn</code> effect</Link></li>
+    <li><Link to="/forcevisible">using forceVisible</Link></li>
   </ul>
 );
 
@@ -35,6 +37,7 @@ const routes = (
     <Route path="/debounce" component={Debounce} />
     <Route path="/placeholder" component={Placeholder} />
     <Route path="/fadein" component={FadeIn} />
+    <Route path="/forcevisible" component={ForceVisible} />
   </Router>
 );
 
