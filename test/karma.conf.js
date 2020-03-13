@@ -2,6 +2,9 @@
 // Generated on Wed Mar 18 2015 11:41:18 GMT+0800 (CST)
 'use strict';
 
+const process = require('process');
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 module.exports = function (config) {
   config.set({
 
