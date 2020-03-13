@@ -106,11 +106,7 @@ module.exports = function (config) {
     customLaunchers: {
       Chrome_travis_ci: {
         base: 'ChromeHeadless',
-        flags: [
-          '--disable-web-security',
-          '--disable-gpu',
-          '--no-sandbox'
-        ]
+        flags: ['--no-sandbox']
       }
     },
 
@@ -120,7 +116,6 @@ module.exports = function (config) {
 
     browserNoActivityTimeout: 300000,
     browserDisconnectTimeout: 300000,
-    browserDisconnectTolerance: 3,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
