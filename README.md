@@ -233,6 +233,7 @@ Using `LazyLoad` component will help ease this situation by only updating compon
 
 1. [lancehub](https://github.com/lancehub)
 2. [doug-wade](https://github.com/doug-wade)
+3. [ameerthehacker](https://github.com/ameerthehacker)
 
 
 ## License
