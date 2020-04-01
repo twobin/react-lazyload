@@ -2,6 +2,7 @@
  * react-lazyload
  */
 import React, { Component } from 'react';
+import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
@@ -36,7 +37,8 @@ const passiveEvent = passiveEventSupported ? { capture: false, passive: true } :
  * @return {bool}
  */
 const checkOverflowVisible = function checkOverflowVisible(component, parent) {
-  const node = component.ref;
+  const node = ReactDom.findDOMNode(component);
+  // const node = component.ref;
 
   let parentTop;
   let parentLeft;
@@ -75,13 +77,13 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
   const offsetLeft = left - intersectionLeft; // element's left relative to intersection
 
   const offsets = Array.isArray(component.props.offset) ?
-                component.props.offset :
-                [component.props.offset, component.props.offset]; // Be compatible with previous API
+    component.props.offset :
+    [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (offsetTop - offsets[0] <= intersectionHeight) &&
-         (offsetTop + height + offsets[1] >= 0) &&
-         (offsetLeft - offsets[0] <= intersectionWidth) &&
-         (offsetLeft + width + offsets[1] >= 0);
+    (offsetTop + height + offsets[1] >= 0) &&
+    (offsetLeft - offsets[0] <= intersectionWidth) &&
+    (offsetLeft + width + offsets[1] >= 0);
 };
 
 /**
@@ -90,7 +92,8 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
  * @return {bool}
  */
 const checkNormalVisible = function checkNormalVisible(component) {
-  const node = component.ref;
+  const node = ReactDom.findDOMNode(component);
+  // const node = component.ref;
 
   // If this element is hidden by css rules somehow, it's definitely invisible
   if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) return false;
@@ -107,11 +110,11 @@ const checkNormalVisible = function checkNormalVisible(component) {
   const windowInnerHeight = window.innerHeight || document.documentElement.clientHeight;
 
   const offsets = Array.isArray(component.props.offset) ?
-                component.props.offset :
-                [component.props.offset, component.props.offset]; // Be compatible with previous API
+    component.props.offset :
+    [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (top - offsets[0] <= windowInnerHeight) &&
-         (top + elementHeight + offsets[1] >= 0);
+    (top + elementHeight + offsets[1] >= 0);
 };
 
 
@@ -122,19 +125,20 @@ const checkNormalVisible = function checkNormalVisible(component) {
  * @param  {React} component   React component that respond to scroll and resize
  */
 const checkVisible = function checkVisible(component) {
-  const node = component.ref;
+  const node = ReactDom.findDOMNode(component);
+  // const node = component.ref;
   if (!(node instanceof HTMLElement)) {
     return;
   }
 
   const parent = scrollParent(node);
   const isOverflow = component.props.overflow &&
-                     parent !== node.ownerDocument &&
-                     parent !== document &&
-                     parent !== document.documentElement;
+    parent !== node.ownerDocument &&
+    parent !== document &&
+    parent !== document.documentElement;
   const visible = isOverflow ?
-                  checkOverflowVisible(component, parent) :
-                  checkNormalVisible(component);
+    checkOverflowVisible(component, parent) :
+    checkNormalVisible(component);
   if (visible) {
     // Avoid extra render if previously is visible
     if (!component.visible) {
@@ -198,14 +202,14 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
-    this.setRef = this.setRef.bind(this);
+    // this.setRef = this.setRef.bind(this);
   }
 
-  setRef(element) {
-    if (element) {
-      this.ref = element;
-    }
-  }
+  // setRef(element) {
+  //   if (element) {
+  //     this.ref = element;
+  //   }
+  // }
 
   componentDidMount() {
     // It's unlikely to change delay type on the fly, this is mainly
@@ -231,13 +235,13 @@ class LazyLoad extends Component {
     if (!finalLazyLoadHandler) {
       if (this.props.debounce !== undefined) {
         finalLazyLoadHandler = debounce(lazyLoadHandler, typeof this.props.debounce === 'number' ?
-                                                         this.props.debounce :
-                                                         300);
+          this.props.debounce :
+          300);
         delayType = 'debounce';
       } else if (this.props.throttle !== undefined) {
         finalLazyLoadHandler = throttle(lazyLoadHandler, typeof this.props.throttle === 'number' ?
-                                                         this.props.throttle :
-                                                         300);
+          this.props.throttle :
+          300);
         delayType = 'throttle';
       } else {
         finalLazyLoadHandler = lazyLoadHandler;
@@ -245,7 +249,8 @@ class LazyLoad extends Component {
     }
 
     if (this.props.overflow) {
-      const parent = scrollParent(this.ref);
+      const parent = scrollParent(ReactDom.findDOMNode(this));
+      // const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + (+parent.getAttribute(LISTEN_FLAG));
         if (listenerCount === 1) {
@@ -275,7 +280,8 @@ class LazyLoad extends Component {
 
   componentWillUnmount() {
     if (this.props.overflow) {
-      const parent = scrollParent(this.ref);
+      const parent = scrollParent(ReactDom.findDOMNode(this));
+      // const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = (+parent.getAttribute(LISTEN_FLAG)) - 1;
         if (listenerCount === 0) {
@@ -300,12 +306,14 @@ class LazyLoad extends Component {
 
   render() {
     return this.visible ?
-           this.props.children :
-             this.props.placeholder ?
-                <span ref={this.setRef} className="lazyload-custom-placeholder">
-                  {this.props.placeholder}
-                </span>:
-                <div ref={this.setRef} style={{ height: this.props.height }} className="lazyload-placeholder" />;
+      this.props.children :
+      this.props.placeholder ?
+        this.props.placeholder :
+        <div style={{ height: this.props.height }} className="lazyload-placeholder" />;
+    // <span ref={this.setRef} className="lazyload-custom-placeholder">
+    //   {this.props.placeholder}
+    // </span> :
+    // <div ref={this.setRef} style={{ height: this.props.height }} className="lazyload-placeholder" />;
   }
 }
 
