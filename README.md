@@ -9,6 +9,8 @@ This project is now currently maintained by
 
 Lazyload your Components, Images or anything matters the performance.
 
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/react-lazyload?tab=posts)
+
 [Demo](//twobin.github.io/react-lazyload/examples/)
 
 ## Why it's better
