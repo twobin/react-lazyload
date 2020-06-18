@@ -185,7 +185,7 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 Type: String Default: `lazyload`
 
-While rendering, Lazyload will add some elements to the component tree in addition to the wrapped component(childrendered children).
+While rendering, Lazyload will add some elements to the component tree in addition to the wrapped component children.
 
 The `classNamePrefix` prop allows the user to supply their own custom class prefix to help:
     # Avoid class conflicts on an implementing app

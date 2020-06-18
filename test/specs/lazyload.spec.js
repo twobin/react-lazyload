@@ -141,7 +141,7 @@ describe('LazyLoad', () => {
             <span className="invisible">123</span>
           </LazyLoad>
         </div>, div);
-      
+      console.log(div.innerHTML);
       expect(document.querySelector('.custom-lazyload-wrapper')).to.exist;
       expect(document.querySelector('.custom-lazyload-placeholder')).to.exist;
     });
