@@ -329,16 +329,23 @@ class LazyLoad extends Component {
   }
 
   render() {
+    const {
+      height,
+      children,
+      placeholder,
+      classNamePrefix
+    } = this.props;
+
     return (
-      <span className="lazyload-wrapper" ref={this.setRef}>
+      <span className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
         {this.visible ? (
-          this.props.children
-        ) : this.props.placeholder ? (
-          this.props.placeholder
+          children
+        ) : placeholder ? (
+          placeholder
         ) : (
           <div
-            style={{ height: this.props.height }}
-            className="lazyload-placeholder"
+            style={{ height: height }}
+            className={`${classNamePrefix}-placeholder`}
           />
         )}
       </span>
@@ -347,6 +354,7 @@ class LazyLoad extends Component {
 }
 
 LazyLoad.propTypes = {
+  classNamePrefix: PropTypes.string,
   once: PropTypes.bool,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   offset: PropTypes.oneOfType([
@@ -365,6 +373,7 @@ LazyLoad.propTypes = {
 };
 
 LazyLoad.defaultProps = {
+  classNamePrefix: 'lazyload',
   once: false,
   offset: 0,
   overflow: false,
