@@ -181,6 +181,19 @@ If you provide a number, that will be how many `ms` to wait; if you provide `tru
 
 [demo](https://twobin.github.io/react-lazyload/examples/#/debounce)
 
+### classNamePrefix
+
+Type: String Default: `lazyload`
+
+While rendering, Lazyload will add some elements to the component tree in addition to the wrapped component children.
+
+The `classNamePrefix` prop allows the user to supply their own custom class prefix to help:
+    # Avoid class conflicts on an implementing app
+    # Allow easier custom styling
+
+These being:
+    # A wrapper div, which is present at all times (default )
+
 ### wheel
 
 **DEPRECATED NOTICE**
