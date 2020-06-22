@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 import Lazyload from '../../src/';
 import Operation from '../components/Operation';
