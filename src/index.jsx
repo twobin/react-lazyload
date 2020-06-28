@@ -337,7 +337,7 @@ class LazyLoad extends Component {
     } = this.props;
 
     return (
-      <span className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
+      <div className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
         {this.visible ? (
           children
         ) : placeholder ? (
@@ -348,7 +348,7 @@ class LazyLoad extends Component {
             className={`${classNamePrefix}-placeholder`}
           />
         )}
-      </span>
+      </div>
     );
   }
 }
