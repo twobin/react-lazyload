@@ -30,7 +30,7 @@ Lazyload your Components, Images or anything matters the performance.
 * Now we have an extra div wrapping the lazy loaded component for the React ref to work 
 * We can understand that it is an extra DOM node, and we are working to optimize that if possible
 * It might break your UI or snapshot tests based on your usage
-* To customize the styling to the extra div please refer [here](###classNamePrefix)
+* To customize the styling to the extra div please refer [here](#classNamePrefix)
 * Found any other problem, please feel free to leave a comment over [here](https://github.com/twobin/react-lazyload/issues/310)
 
 ```
