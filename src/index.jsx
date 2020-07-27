@@ -333,11 +333,12 @@ class LazyLoad extends Component {
       height,
       children,
       placeholder,
+      className,
       classNamePrefix
     } = this.props;
 
     return (
-      <div className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
+      <div className={`${classNamePrefix}-wrapper ${className || ''}`} ref={this.setRef}>
         {this.visible ? (
           children
         ) : placeholder ? (
