@@ -307,4 +307,28 @@ describe('LazyLoad', () => {
       }
     });
   });
+
+  describe('Changing element type', () => {
+
+      it('should render using table', () => {
+          ReactDOM.render(<table><tbody><LazyLoad wrapperElementType={'tr'}><td className="test">Test table row</td></LazyLoad></tbody></table>, div);
+          expect(document.querySelector('td.test')).to.exist;
+      })
+
+    });
+
+  describe('Using custom render', () => {
+      it('should render using table', () => {
+          ReactDOM.render(<table><tbody><LazyLoad render={(renderProps) => {
+              return (
+                  <tr ref={renderProps.ref}>
+                      {renderProps.visible
+                          ? renderProps.children
+                          : renderProps.placeholder}
+                  </tr>
+              );
+          }}><td className="test">Test table row</td></LazyLoad></tbody></table>, div);
+          expect(document.querySelector('td.test')).to.exist;
+      })
+  });
 });

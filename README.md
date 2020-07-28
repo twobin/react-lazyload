@@ -206,6 +206,40 @@ These being:
 **DEPRECATED NOTICE**
 This props is not supported anymore, try set `overflow` for lazy loading in overflow containers.
 
+### wrapperElementType
+
+Type: String Default: `div`
+
+Element type used as a wrapper. Useful if you cannot use `div` as wrapper (ie. for styling reasons or using different element structure like table) 
+
+### render
+Type: function Default: undefined
+
+When provided it replaces default render method completely so be careful. You should remember to assign `ref` to your element to make library work. 
+
+Example:
+```javascript
+<table>
+    <tbody>
+        <LazyLoad 
+            placeholder={<td>Loading...</td>}
+            render={(props) => (
+                  <tr ref={props.ref}>
+                      {props.visible ? props.children : props.placeholder}
+                  </tr>
+              )}
+          >
+            <td className="test">Test table row</td>
+        </LazyLoad>
+    </tbody>
+</table>
+```
+Props available:
+- all passed to `<LazyLoad` component plus
+  - `visible: boolean` - whether component is visible on screen
+  -  `ref : React ref` - reference to DOM node that wraps `children`
+
+
 ## Utility
 
 ### forceCheck
