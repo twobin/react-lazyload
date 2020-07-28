@@ -1,7 +1,7 @@
 /**
  * react-lazyload
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
@@ -115,8 +115,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
   const node = component.ref;
 
   // If this element is hidden by css rules somehow, it's definitely invisible
-  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length))
-    return false;
+  if (!(node.offsetWidth || node.offsetHeight || node.getClientRects().length)) { return false; }
 
   let top;
   let elementHeight;
@@ -180,7 +179,7 @@ const checkVisible = function checkVisible(component) {
 };
 
 const purgePending = function purgePending() {
-  pending.forEach(component => {
+  pending.forEach((component) => {
     const index = listeners.indexOf(component);
     if (index !== -1) {
       listeners.splice(index, 1);
@@ -330,25 +329,24 @@ class LazyLoad extends Component {
 
   render() {
     const {
+      render,
       height,
       children,
       placeholder,
-      classNamePrefix
+      classNamePrefix,
+      wrapperElementType,
     } = this.props;
 
-    return (
-      <div className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
-        {this.visible ? (
-          children
-        ) : placeholder ? (
-          placeholder
-        ) : (
-          <div
-            style={{ height: height }}
-            className={`${classNamePrefix}-placeholder`}
-          />
-        )}
-      </div>
+    if (render) {
+      return render({ ...this.props, visible: this.visible, ref: this.setRef });
+    }
+    const defaultPlaceholder = (<div style={{ height }} className={`${classNamePrefix}-placeholder`} />);
+    const content = (<Fragment>{this.visible ? children : placeholder || defaultPlaceholder}</Fragment>);
+
+    return React.createElement(
+      wrapperElementType,
+      { className: `${classNamePrefix}-wrapper`, ref: this.setRef, style: { height: height } },
+      content
     );
   }
 }
@@ -369,7 +367,9 @@ LazyLoad.propTypes = {
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
   scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  wrapperElementType: PropTypes.string,
+  render: PropTypes.func,
 };
 
 LazyLoad.defaultProps = {
@@ -379,7 +379,8 @@ LazyLoad.defaultProps = {
   overflow: false,
   resize: false,
   scroll: true,
-  unmountIfInvisible: false
+  unmountIfInvisible: false,
+  wrapperElementType: 'div',
 };
 
 const getDisplayName = WrappedComponent =>
