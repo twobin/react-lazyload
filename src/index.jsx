@@ -290,6 +290,7 @@ class LazyLoad extends Component {
   }
 
   shouldComponentUpdate() {
+    console.log('shouldComponentUpdate()');
     return this.visible;
   }
 
