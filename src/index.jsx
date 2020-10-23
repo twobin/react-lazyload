@@ -333,11 +333,12 @@ class LazyLoad extends Component {
       height,
       children,
       placeholder,
-      classNamePrefix
+      classNamePrefix,
+      style
     } = this.props;
 
     return (
-      <div className={`${classNamePrefix}-wrapper`} ref={this.setRef}>
+      <div className={`${classNamePrefix}-wrapper`} ref={this.setRef} style={style}>
         {this.visible ? (
           children
         ) : placeholder ? (
@@ -369,7 +370,8 @@ LazyLoad.propTypes = {
   debounce: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   placeholder: PropTypes.node,
   scrollContainer: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  unmountIfInvisible: PropTypes.bool
+  unmountIfInvisible: PropTypes.bool,
+  style: PropTypes.object
 };
 
 LazyLoad.defaultProps = {
