@@ -47,7 +47,7 @@ describe('LazyLoad', () => {
       expect(document.querySelector('.lazyload-placeholder')).to.exist;
       expect(document.querySelector('.treasure')).to.not.exist;
     });
- 
+
     it('should NOT update when invisble', (done) => {
       ReactDOM.render(
         <div>
@@ -145,6 +145,16 @@ describe('LazyLoad', () => {
       expect(document.querySelector('.custom-lazyload-wrapper')).to.exist;
       expect(document.querySelector('.custom-lazyload-placeholder')).to.exist;
     });
+    it('should render wrapper with `style` when provided', () => {
+      ReactDOM.render(
+        <div>
+          <LazyLoad height={9999} classNamePrefix="custom-lazyload" style={{height: 200}}>
+            <span>123</span>
+          </LazyLoad>
+        </div>, div);
+      console.log(div.innerHTML);
+      expect(document.querySelector('.custom-lazyload-wrapper').getBoundingClientRect().height).to.equal(200);
+    })
  });
 
   describe('Checking visibility', () => {
