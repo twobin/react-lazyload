@@ -200,6 +200,12 @@ The `classNamePrefix` prop allows the user to supply their own custom class pref
 
 These being:
     # A wrapper div, which is present at all times (default )
+    
+### style
+
+Type: Object Default: undefined
+
+Similar to [classNamePrefix](#classNamePrefix), the `style` prop allows users to pass custom CSS styles to wrapper div. 
 
 ### wheel
 
