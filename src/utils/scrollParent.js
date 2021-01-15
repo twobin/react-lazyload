@@ -2,8 +2,10 @@
  * @fileOverview Find scroll parent
  */
 
+import isElement from './isElement';
+
 export default (node) => {
-  if (!(node instanceof HTMLElement)) {
+  if (!isElement(node)) {
     return document.documentElement;
   }
 
