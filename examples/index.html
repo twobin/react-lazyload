@@ -28,6 +28,16 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
+  .widget-list.horizontal{
+    position: relative;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: row;
+  }
+  .widget-list.horizontal .widget{
+    width: 500px;
+  }
   .widget {
     position: relative;
     border: 1px #ccc solid;
