@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
@@ -339,7 +340,7 @@ class LazyLoad extends Component {
     } = this.props;
 
     return (
-      <div className={`${classNamePrefix}-wrapper ${className}`} ref={this.setRef} style={style}>
+      <div className={classNames(`${classNamePrefix}-wrapper`, className)} ref={this.setRef} style={style}>
         {this.visible ? (
           children
         ) : placeholder ? (
