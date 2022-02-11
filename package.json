@@ -43,7 +43,7 @@
     "eslint-plugin-react": "^6.10.0",
     "istanbul": "~0.4.5",
     "istanbul-instrumenter-loader": "^0.2.0",
-    "karma": "^0.13.22",
+    "karma": "^6.3.14",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^0.5.5",
