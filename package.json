@@ -47,7 +47,7 @@
     "karma-mocha": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
-    "mocha": "^2.2.5",
+    "mocha": "^10.1.0",
     "prop-types": "^15.5.6",
     "puppeteer": "^2.1.1",
     "react": "^16",
