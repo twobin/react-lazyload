@@ -233,7 +233,9 @@ class LazyLoad extends Component {
     const { scrollContainer } = this.props;
     if (scrollContainer) {
       if (isString(scrollContainer)) {
-        scrollport = scrollport.document.querySelector(scrollContainer);
+        scrollport = scrollport.document.querySelector(scrollContainer) || window;
+      } else {
+        scrollport = scrollContainer;
       }
     }
     const needResetFinalLazyLoadHandler =
