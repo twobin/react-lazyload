@@ -7,6 +7,7 @@ import { on, off } from './utils/event';
 import scrollParent from './utils/scrollParent';
 import debounce from './utils/debounce';
 import throttle from './utils/throttle';
+import isElement from './utils/isElement';
 
 const defaultBoundingClientRect = {
   top: 0,
@@ -233,7 +234,9 @@ class LazyLoad extends Component {
     const { scrollContainer } = this.props;
     if (scrollContainer) {
       if (isString(scrollContainer)) {
-        scrollport = scrollport.document.querySelector(scrollContainer);
+        scrollport = scrollport.document.querySelector(scrollContainer) || scrollport;
+      } else if (isElement(scrollContainer)) {
+        scrollport = scrollContainer;
       }
     }
     const needResetFinalLazyLoadHandler =
