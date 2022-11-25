@@ -18,6 +18,7 @@ const defaultBoundingClientRect = {
 };
 const LISTEN_FLAG = 'data-lazyload-listened';
 const listeners = [];
+let isWindowListenerAttached = false;
 let pending = [];
 
 // try to handle passive events
@@ -244,6 +245,7 @@ class LazyLoad extends Component {
       off(scrollport, 'scroll', finalLazyLoadHandler, passiveEvent);
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       finalLazyLoadHandler = null;
+      isWindowListenerAttached = true;
     }
 
     if (!finalLazyLoadHandler) {
@@ -273,7 +275,8 @@ class LazyLoad extends Component {
         }
         parent.setAttribute(LISTEN_FLAG, listenerCount);
       }
-    } else if (listeners.length === 0 || needResetFinalLazyLoadHandler) {
+    }
+    if (!isWindowListenerAttached || needResetFinalLazyLoadHandler) {
       const { scroll, resize } = this.props;
 
       if (scroll) {
@@ -283,6 +286,8 @@ class LazyLoad extends Component {
       if (resize) {
         on(window, 'resize', finalLazyLoadHandler, passiveEvent);
       }
+
+      isWindowListenerAttached = true;
     }
 
     listeners.push(this);
@@ -319,6 +324,8 @@ class LazyLoad extends Component {
     if (listeners.length === 0 && typeof window !== 'undefined') {
       off(window, 'resize', finalLazyLoadHandler, passiveEvent);
       off(window, 'scroll', finalLazyLoadHandler, passiveEvent);
+
+      isWindowListenerAttached = false;
     }
   }
 
