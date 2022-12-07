@@ -152,6 +152,10 @@ const checkVisible = function checkVisible(component) {
     return;
   }
 
+  if(component.visible) {
+    component.visibleHeight = node.clientHeight;
+  }
+
   const parent = scrollParent(node);
   const isOverflow =
     component.props.overflow &&
@@ -223,6 +227,7 @@ class LazyLoad extends Component {
     super(props);
 
     this.visible = false;
+    this.visibleHeight = null;
     this.setRef = this.setRef.bind(this);
   }
 
@@ -346,7 +351,7 @@ class LazyLoad extends Component {
           placeholder
         ) : (
           <div
-            style={{ height: height }}
+            style={{ height: this.visibleHeight || height }}
             className={`${classNamePrefix}-placeholder`}
           />
         )}
