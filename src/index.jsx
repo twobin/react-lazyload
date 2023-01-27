@@ -264,7 +264,7 @@ class LazyLoad extends Component {
       }
     }
 
-    if (this.props.overflow) {
+    if (this.props.overflow && !scrollContainer) {
       const parent = scrollParent(this.ref);
       if (parent && typeof parent.getAttribute === 'function') {
         const listenerCount = 1 + +parent.getAttribute(LISTEN_FLAG);

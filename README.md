@@ -1,6 +1,6 @@
 # Note
 
-This project is now currently maintained by 
+This project is now currently maintained by
 [@ameerthehacker](https://github.com/ameerthehacker), please reach out to him on any issues or help.
 
 ----
@@ -27,7 +27,7 @@ Lazyload your Components, Images or anything matters the performance.
 > 2.0.0 is finally out, read [Upgrade Guide](https://github.com/twobin/react-lazyload/wiki/Upgrade-Guide), it's almost painless to upgrade!
 > 3.0.0 fixes the findDomNode warning through usage of React ref, and the following are the changes you need to be aware of
 
-* Now we have an extra div wrapping the lazy loaded component for the React ref to work 
+* Now we have an extra div wrapping the lazy loaded component for the React ref to work
 * We can understand that it is an extra DOM node, and we are working to optimize that if possible
 * It might break your UI or snapshot tests based on your usage
 * To customize the styling to the extra div please refer [here](#classNamePrefix)
@@ -115,6 +115,9 @@ Type: String/DOM node Default: undefined
 
 Pass a query selector string or DOM node. LazyLoad will attach to the window object's scroll events if no container is passed.
 
+**NOTICE**
+If scrollContainer is defined, the overflow option will be ignored.
+
 ### height
 
 Type: Number/String Default: undefined
@@ -200,12 +203,12 @@ The `classNamePrefix` prop allows the user to supply their own custom class pref
 
 These being:
     # A wrapper div, which is present at all times (default )
-    
+
 ### style
 
 Type: Object Default: undefined
 
-Similar to [classNamePrefix](#classNamePrefix), the `style` prop allows users to pass custom CSS styles to wrapper div. 
+Similar to [classNamePrefix](#classNamePrefix), the `style` prop allows users to pass custom CSS styles to wrapper div.
 
 ### wheel
 
