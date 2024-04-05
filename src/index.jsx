@@ -99,10 +99,10 @@ const checkOverflowVisible = function checkOverflowVisible(component, parent) {
     : [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (
-    offsetTop - offsets[0] <= intersectionHeight &&
+    offsetTop - offsets[1] <= intersectionHeight &&
     offsetTop + height + offsets[1] >= 0 &&
     offsetLeft - offsets[0] <= intersectionWidth &&
-    offsetLeft + width + offsets[1] >= 0
+    offsetLeft + width + offsets[0] >= 0
   );
 };
 
@@ -135,7 +135,7 @@ const checkNormalVisible = function checkNormalVisible(component) {
     : [component.props.offset, component.props.offset]; // Be compatible with previous API
 
   return (
-    top - offsets[0] <= windowInnerHeight &&
+    top - offsets[1] <= windowInnerHeight &&
     top + elementHeight + offsets[1] >= 0
   );
 };
