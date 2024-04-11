@@ -289,7 +289,8 @@ describe('LazyLoad', () => {
               style={{ height: 10000 - 200 }}></div>
             <LazyLoad
               height={200}
-              scrollContainer="#scroll-container">
+              scrollContainer="#scroll-container"
+              overflow>
               <div id="content" style={{ height: 200, width: '100%' }}></div>
             </LazyLoad>
           </div>
