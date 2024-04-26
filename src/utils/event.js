@@ -1,4 +1,7 @@
 export function on(el, eventName, callback, opts) {
+  if(!el){
+    return;
+  }
   opts = opts || false;
   if (el.addEventListener) {
     el.addEventListener(eventName, callback, opts);
@@ -10,6 +13,9 @@ export function on(el, eventName, callback, opts) {
 }
 
 export function off(el, eventName, callback, opts) {
+  if(!el){
+    return;
+  }
   opts = opts || false;
   if (el.removeEventListener) {
     el.removeEventListener(eventName, callback, opts);
