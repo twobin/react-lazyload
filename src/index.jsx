@@ -161,7 +161,8 @@ const checkVisible = function checkVisible(component) {
   const visible = isOverflow
     ? checkOverflowVisible(component, parent)
     : checkNormalVisible(component);
-  if (visible) {
+  const hasPosition = node.offsetParent !== null; // check for display:none
+  if (hasPosition && visible) {
     // Avoid extra render if previously is visible
     if (!component.visible) {
       if (component.props.once) {
